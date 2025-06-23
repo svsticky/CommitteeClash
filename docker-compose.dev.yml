@@ -1,0 +1,81 @@
+networks:
+  my_network:
+    name: my_network
+    driver: bridge
+
+services:
+  # Start database
+  database:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    tmpfs:
+      - /var/lib/postgresql/data
+    networks:
+      - my_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Start backend after database
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "8080:8080"
+    environment:
+      - OAUTH_PROVIDER_URL=${OAUTH_PROVIDER_URL:-https://koala.dev.svsticky.nl}
+      - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
+      - OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET}
+      - HOST_URL=${HOST_URL:-http://localhost:3000}
+      - ASPNETCORE_ENVIRONMENT=Development
+      - CONNECTION_STRING=Host=database;Port=5432;Username=postgres;Password=postgres;Database=postgres;Include Error Detail=true
+    volumes:
+      - ./backend:/app
+      - /app/bin
+      - /app/obj
+      - ./testdata:/app/testdata
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - my_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/status"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 150s
+
+  # Start frontend after backend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: development
+      no_cache: true
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_OAUTH_PROVIDER_URL=${OAUTH_PROVIDER_URL}
+      - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
+      - OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET}
+      - NODE_ENV=development
+      - WATCHPACK_POLLING=true
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - my_network

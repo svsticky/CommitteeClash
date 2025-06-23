@@ -1,0 +1,67 @@
+# --- Backend (ASP.NET) ---
+
+# Build output folders
+/backend/bin/
+/backend/obj/
+
+# User-specific files
+/backend/*.user
+/backend/*.suo
+
+# Submitted images
+/backend/submittedimages/*
+!/backend/submittedimages/.gitkeep
+
+# VSCode & Rider config (optioneel)
+/.vscode/
+/.idea/
+
+# NuGet packages folder
+/backend/packages/
+
+# Logs
+/backend/*.log
+
+# Publish folder
+/backend/publish/
+
+# dotnet user secrets
+/backend/Properties/launchSettings.json
+
+# Others
+/backend/*.vs
+
+# --- Frontend (Next.js) ---
+
+# Node modules
+/frontend/node_modules/
+
+# Next.js build output
+/frontend/.next/
+/frontend/out/
+
+# Logs
+/frontend/npm-debug.log*
+/frontend/yarn-debug.log*
+/frontend/yarn-error.log*
+
+# dotenv environment variables files
+/frontend/.env
+/frontend/.env.local
+/frontend/.env.development.local
+/frontend/.env.test.local
+/frontend/.env.production.local
+
+# Optional: VSCode settings
+/.vscode/
+
+# --- General ---
+
+# Mac system files
+.DS_Store
+
+# Windows system files
+Thumbs.db
+
+# Environment variables
+.env
