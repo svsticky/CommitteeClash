@@ -13,7 +13,7 @@ To get everything to work, you have to create a .env file in the root of the rep
 - POSTGRES_PASSWORD: The password for the database (only needed for production mode)
 
 For testing set the HOST_URL to http://localhost:3000.
-For Sticky members, the OAUTH variables for testing can be set up on https://koala.dev.svsticky.nl.
+Sticky members can setup the OAUTH variables on https://koala.dev.svsticky.nl.
 
 # Docker
 
