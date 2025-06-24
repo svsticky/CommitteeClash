@@ -11,9 +11,13 @@ import { useEffect } from 'react';
  */
 export default function SignOutPage() {
   useEffect(() => {
+    // Get the redirect URL from the query parameters or default to '/loggedOut'
+    const searchParams = new URLSearchParams(window.location.search);
+    const redirectUrl = searchParams.get('redirect') || '/loggedOut';
+
     // handle the sign out process
     const handleSignOut = async () => {
-      await signOut({ redirect: true, callbackUrl: '/loggedOut' });
+      await signOut({ redirect: true, callbackUrl: redirectUrl });
     };
 
     // Call the sign out function

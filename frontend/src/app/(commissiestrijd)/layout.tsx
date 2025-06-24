@@ -26,6 +26,12 @@ export default async function CommissiestrijdLayout({
     return null;
   }
 
+  // If the session has expired, logout to remove the session and redirect to the login page
+  if (new Date(session.expires) < new Date()) {
+    redirect(`/logout?redirect=${encodeURIComponent('/login')}`);
+    return null;
+  }
+
   return (
     <div className="flex flex-col w-screen h-screen">
       {/* Render the header */}
