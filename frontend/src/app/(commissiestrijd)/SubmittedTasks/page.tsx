@@ -1,4 +1,4 @@
-import SubmittedTasksClient from '@/components/submitted-task-client';
+import SubmittedTasksClient from '@/components/submitted-tasks-client';
 import { FetchWithValidation } from '@/lib/fetchWithValidation';
 import { CommitteeListSchema } from '@/types/Committee';
 import { PossibleTaskListSchema } from '@/types/PossibleTask';
