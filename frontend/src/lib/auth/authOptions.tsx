@@ -21,7 +21,8 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, account, profile }) {
       if (account && profile) {
-        token.accessToken = account.access_token;
+        token.accessToken = account.access_token!;
+        token.accessTokenExpires = 1000 * (account.expires_at ?? 0);
         const typedProfile = profile as { is_admin: boolean };
         token.is_admin = typedProfile.is_admin;
       }
@@ -30,6 +31,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       session.accessToken = token.accessToken;
       session.is_admin = token.is_admin;
+      session.accessTokenExpires = token.accessTokenExpires;
       return session;
     },
   },
