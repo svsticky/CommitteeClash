@@ -31,3 +31,17 @@ After starting up development, you can find the home page on http://localhost:30
 ## Swagger
 
 You can find and test the Web API endpoints with the help of swagger when running development mode. Swagger is accessable on http://localhost:8080/docs.
+
+# Documentation
+
+After starting up development, you can find the home page on http://localhost:3001.
+
+## Update documentation
+
+There are scripts to generate automatic documentation based on summaries and function headers.
+To update the documentation site, please run the following commands before composing the docker containers:
+
+- Frontend: `node docs/scripts/generate-frontend-docs.mjs`
+- Backend: `node docs/scripts/generate-backend-docs.js`
+
+The API documentation is updated automatically when running development.

@@ -1,0 +1,39 @@
+---
+title: Default
+sidebar_position: 1
+---
+
+import { CodeBlock } from '@/components/code-block'
+
+[**frontend**](../../../../..)
+
+***
+
+[frontend](../../../../..) / [app/commissiestrijd/Admin/layout](..) / default
+
+# Function: default()
+
+<CodeBlock language="ts">
+{ `function default(props): Promise\<null \| Element\>` }
+</CodeBlock>
+
+Defined in: [src/app/commissiestrijd/Admin/layout.tsx:13](https://github.com/svsticky/CommitteeClash/blob/f974faa16c13593c1cc0eea50bf89b045abdabb5/frontend/src/app/commissiestrijd/Admin/layout.tsx#L13)
+
+Root layout for the admin section of the application.
+This layout checks if the user is an admin before rendering the children components.
+
+## Parameters
+
+### props
+<CodeBlock language="ts">
+{`Readonly\<\{ children: React.ReactNode; \}\>`}
+</CodeBlock>
+
+The props for the layout component.
+
+## Returns
+<CodeBlock language="ts">
+{`Promise\<null \| Element\>`}
+</CodeBlock>
+
+- Returns the children if the user is an admin, otherwise redirects to the home page.

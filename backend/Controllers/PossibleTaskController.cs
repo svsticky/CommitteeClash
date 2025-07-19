@@ -3,6 +3,7 @@ using Commissiestrijd.Models;
 using Commissiestrijd.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Commissiestrijd.Controllers;
 
@@ -55,10 +56,14 @@ public class PossibleTaskController : Controller
     /// returned.
     /// </response>
     [HttpGet("GetPossibleTasks")]
+    [SwaggerOperation(Summary = "Get Possible Tasks", Description = "This endpoint retrieves all possible tasks from the database.")]
+    [SwaggerResponse(200, "Returns a list of possible tasks.")]
+    [ProducesResponseType(typeof(List<PossibleTask>), 200)]
+    [SwaggerResponse(500, "If an error occurs while retrieving the tasks, a 500 Internal Server Error response is returned.")]
     public IActionResult GetPossibleTasks()
     {
         _logger.LogInformation("GetPossibleTasks called");
-        
+
         List<PossibleTask> tasks = _context.PossibleTasks.ToList();
 
         _logger.LogInformation("Retrieved {Count} possible tasks", tasks.Count);
@@ -94,6 +99,13 @@ public class PossibleTaskController : Controller
     /// returned.
     /// </response>
     [HttpGet("GetActivePossibleTasks")]
+    [SwaggerOperation(Summary = "Get Active Possible Tasks", Description = "This endpoint retrieves all active possible tasks from the database.")]
+    [SwaggerResponse(200, "Returns a list of active possible tasks.")]
+    [ProducesResponseType(typeof(List<PossibleTask>), 200)]
+    [SwaggerResponse(400, "BadRequest if the description or short description is empty or longer than 500 characters, or if the point value is not between 1 and 100.")]
+    [SwaggerResponse(401, "Unauthorized if the user is not an admin.")]
+    [SwaggerResponse(404, "NotFound if the task is not found.")]
+    [SwaggerResponse(500, "If an error occurs while retrieving the tasks, a 500 Internal Server Error response is returned.")]
     public IActionResult GetActivePossibleTasks()
     {
         _logger.LogInformation("GetActivePossibleTasks called");
@@ -147,6 +159,12 @@ public class PossibleTaskController : Controller
     /// returned.
     /// </response>
     [HttpPost("CreatePossibleTask")]
+    [SwaggerOperation(Summary = "Create Possible Task", Description = "This endpoint allows an admin user to create a new possible task.")]
+    [SwaggerResponse(201, "Returns the created task.")]
+    [ProducesResponseType(typeof(PossibleTask), 201)]
+    [SwaggerResponse(400, "BadRequest if the description or short description is empty or longer than the allowed character limits, or if the point value is not between 1 and 100.")]
+    [SwaggerResponse(401, "Unauthorized if the user is not an admin.")]
+    [SwaggerResponse(500, "If an error occurs while creating the task, a 500 Internal Server Error response is returned.")]
     public async Task<IActionResult> CreateCommitteeTask([FromQuery] string Description, [FromQuery] string ShortDescription, [FromQuery] int Points, [FromQuery] int? MaxPerPeriod = null)
     {
         _logger.LogInformation("CreatePossibleTask called with Description: {Description}, ShortDescription: {ShortDescription}, Points: {Points}, MaxPerPeriod: {MaxPerPeriod}", Description, ShortDescription, Points, MaxPerPeriod);
@@ -273,6 +291,13 @@ public class PossibleTaskController : Controller
     /// returned.
     /// </response>
     [HttpPut("EditPossibleTask")]
+    [SwaggerOperation(Summary = "Edit Possible Task", Description = "This endpoint allows an admin user to edit an existing possible task.")]
+    [SwaggerResponse(200, "Returns the updated task.")]
+    [ProducesResponseType(typeof(PossibleTask), 200)]
+    [SwaggerResponse(400, "BadRequest if the task ID is empty, the description or short description is empty or longer than the allowed character limits, or if the point value is not between 1 and 100.")]
+    [SwaggerResponse(401, "Unauthorized if the user is not an admin.")]
+    [SwaggerResponse(404, "NotFound if the task is not found.")]
+    [SwaggerResponse(500, "If an error occurs while editing the task, a 500 Internal Server Error response is returned.")]
     public async Task<IActionResult> EditPossibleTask([FromQuery] Guid TaskId, [FromQuery] string Description, [FromQuery] string ShortDescription, [FromQuery] int Points, [FromQuery] bool IsActive, [FromQuery] int? MaxPerPeriod = null)
     {
         _logger.LogInformation("EditPossibleTask called with TaskId: {TaskId}, Description: {Description}, ShortDescription: {ShortDescription}, Points: {Points}, IsActive: {IsActive}, MaxPerPeriod: {MaxPerPeriod}", TaskId, Description, ShortDescription, Points, IsActive, MaxPerPeriod);
@@ -385,6 +410,13 @@ public class PossibleTaskController : Controller
     /// returned.
     /// </response>
     [HttpGet("GetPossibleTask")]
+    [SwaggerOperation(Summary = "Get Possible Task", Description = "This endpoint retrieves a possible task by its ID.")]
+    [SwaggerResponse(200, "Returns the possible task with the specified ID.")]
+    [ProducesResponseType(typeof(PossibleTask), 200)]
+    [SwaggerResponse(400, "BadRequest if the task ID is empty.")]
+    [SwaggerResponse(401, "Unauthorized if the user is not an admin.")]
+    [SwaggerResponse(404, "NotFound if the task is not found.")]
+    [SwaggerResponse(500, "If an error occurs while retrieving the task, a 500 Internal Server Error response is returned.")]
     public IActionResult GetPossibleTask([FromQuery] Guid TaskId)
     {
         _logger.LogInformation("GetPossibleTask called with TaskId: {TaskId}", TaskId);
@@ -441,8 +473,14 @@ public class PossibleTaskController : Controller
     /// <response code="500">
     /// If an error occurs while updating the task state, a 500 Internal Server Error result
     /// is returned.
-    /// </summary>
+    /// </response>
     [HttpPost("SetPossibleTaskState")]
+    [SwaggerOperation(Summary = "Set Possible Task State", Description = "This endpoint allows an admin user to activate or deactivate a possible task.")]
+    [SwaggerResponse(204, "NoContent if the task state is successfully updated.")]
+    [SwaggerResponse(400, "BadRequest if the task ID is empty.")]
+    [SwaggerResponse(401, "Unauthorized if the user is not an admin.")]
+    [SwaggerResponse(404, "NotFound if the task is not found.")]
+    [SwaggerResponse(500, "If an error occurs while updating the task state, a 500 Internal Server Error response is returned.")]
     public async Task<IActionResult> SetPossibleTaskState([FromQuery] Guid TaskId, [FromQuery] bool State)
     {
         _logger.LogInformation("SetPossibleTaskState called with TaskId: {TaskId}, State: {State}", TaskId, State);

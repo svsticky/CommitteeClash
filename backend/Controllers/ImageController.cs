@@ -2,6 +2,7 @@ using Commissiestrijd.Data;
 using Commissiestrijd.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Commissiestrijd.Controllers;
 
@@ -43,6 +44,7 @@ public class ImageController : Controller
     /// The image is expected to be stored in the "submittedimages" directory within the current working directory.
     /// If the image exists, it is returned with the appropriate MIME type based on its file extension.
     /// If the image does not exist, a 404 Not Found response is returned.
+    /// </summary>
     /// <param name="filename">
     /// The name of the image file to retrieve.</param>
     /// <returns>
@@ -59,8 +61,14 @@ public class ImageController : Controller
     /// </response>
     /// <response code="500">
     /// If an error occurs while processing the request, a 500 Internal Server Error result is returned.
-    /// </summary>
+    /// </response>
     [HttpGet("GetImage/{filename}")]
+    [SwaggerOperation(Summary = "Get Image", Description = "This endpoint retrieves an image by its filename.")]
+    [SwaggerResponse(200, "Returns the image file with the appropriate MIME type.")]
+    [ProducesResponseType(typeof(FileResult), 200)]
+    [SwaggerResponse(401, "Unauthorized if the user is not an admin.")]
+    [SwaggerResponse(404, "NotFound if the image file does not exist.")]
+    [SwaggerResponse(500, "Internal Server Error if an error occurs while processing the request.")]
     public async Task<IActionResult> GetImage(string filename)
     {
         _logger.LogInformation("GetImage called with filename: {Filename}", filename);
@@ -72,7 +80,7 @@ public class ImageController : Controller
             _logger.LogWarning("Unauthorized access attempt to GetImage");
             return Unauthorized("You do not have permission to delete committees.");
         }
-        
+
         // Get the path to the uploaded images folder
         string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "submittedimages");
         string filePath = Path.Combine(uploadsFolder, filename);

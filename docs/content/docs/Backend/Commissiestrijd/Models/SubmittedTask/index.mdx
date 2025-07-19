@@ -1,0 +1,184 @@
+---
+title: SubmittedTask
+description: This is a namespace
+---
+import { CollapsibleInherited } from "@/components/collapsible"
+import { TypeTable } from "@/components/type_table"
+import { CSharpType } from "@/components/csharp_type"
+
+Parent namespace: <a href='.'>Commissiestrijd.Models</a>
+
+
+
+Namespace: <a href='SubmittedTask/../../Models'>Commissiestrijd.Models</a>  
+Assembly: backend.dll  
+
+Represents a submitted task in the application.
+This class is used to define the properties of a task that has been submitted by a user
+including its unique identifier, the ID of the possible task it relates to,
+the date it was submitted, the committee it was submitted to,
+the path to the image associated with the submission, its status, points awarded,
+and any rejection reason if applicable.
+The Id property serves as the primary key for the submitted task,
+the PossibleTaskId property is a foreign key linking to the PossibleTask entity,
+the SubmittedAt property indicates when the task was submitted,
+the Committee property indicates which committee the task was submitted to,
+the ImagePath property stores the path to the image associated with the submission,
+the Status property indicates the current status of the task (Pending, Approved, or Rejected),
+the Points property indicates the points awarded for the task,
+and the RejectionReason property provides a reason for rejection if the task was not approved.
+The MaxPerPeriod property indicates the maximum number of times this task can be completed in a given period.
+
+```csharp
+public class SubmittedTask
+```
+
+#### Inheritance
+
+<a href='https://learn.microsoft.com/dotnet/api/system.object' target='_blank' className="no-underline text-inherit hover:text-inherit inline"><CSharpType type='object' /></a> ← <a href='SubmittedTask/' target='_self' className="no-underline text-inherit hover:text-inherit inline"><CSharpType type='SubmittedTask' /></a>
+
+
+
+<CollapsibleInherited title='Show Inherited Members (7)'>
+[object.Equals\(object?\)](https://learn.microsoft.com/dotnet/api/system.object.equals\#system\-object\-equals\(system\-object\)), 
+[object.Equals\(object?, object?\)](https://learn.microsoft.com/dotnet/api/system.object.equals\#system\-object\-equals\(system\-object\-system\-object\)), 
+[object.GetHashCode\(\)](https://learn.microsoft.com/dotnet/api/system.object.gethashcode), 
+[object.GetType\(\)](https://learn.microsoft.com/dotnet/api/system.object.gettype), 
+[object.MemberwiseClone\(\)](https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone), 
+[object.ReferenceEquals\(object?, object?\)](https://learn.microsoft.com/dotnet/api/system.object.referenceequals), 
+[object.ToString\(\)](https://learn.microsoft.com/dotnet/api/system.object.tostring)
+</CollapsibleInherited>
+
+---
+## Properties
+
+---
+###  Committee
+
+```csharp
+[Column("Committee")]
+[ForeignKey("Committee")]
+[Required(ErrorMessage = "Committee is required.")]
+public required string Committee { get; set; }
+```
+
+---
+#### Property Value
+
+ <a href='https://learn.microsoft.com/dotnet/api/system.string' target='_blank' className="no-underline text-inherit hover:text-inherit inline"><CSharpType type='string' /></a>
+
+---
+###  Id
+
+```csharp
+[Column("Id")]
+[Key]
+public required Guid Id { get; set; }
+```
+
+---
+#### Property Value
+
+ <a href='https://learn.microsoft.com/dotnet/api/system.guid' target='_blank' className="no-underline text-inherit hover:text-inherit inline"><CSharpType type='Guid' /></a>
+
+---
+###  ImagePath
+
+```csharp
+[Column("ImagePath")]
+[StringLength(255, ErrorMessage = "Image path cannot exceed 255 characters.")]
+[Required(ErrorMessage = "Image path is required.")]
+public required string ImagePath { get; set; }
+```
+
+---
+#### Property Value
+
+ <a href='https://learn.microsoft.com/dotnet/api/system.string' target='_blank' className="no-underline text-inherit hover:text-inherit inline"><CSharpType type='string' /></a>
+
+---
+###  MaxPerPeriod
+
+```csharp
+[Column("MaxPerPeriod")]
+public int? MaxPerPeriod { get; set; }
+```
+
+---
+#### Property Value
+
+ <a href='https://learn.microsoft.com/dotnet/api/system.int32' target='_blank' className="no-underline text-inherit hover:text-inherit inline"><CSharpType type='int' /></a>?
+
+---
+###  Points
+
+```csharp
+[Column("Points")]
+[Range(1, 100, ErrorMessage = "Points must be greater than zero and max 100.")]
+[Required(ErrorMessage = "Points are required.")]
+public required int Points { get; set; }
+```
+
+---
+#### Property Value
+
+ <a href='https://learn.microsoft.com/dotnet/api/system.int32' target='_blank' className="no-underline text-inherit hover:text-inherit inline"><CSharpType type='int' /></a>
+
+---
+###  PossibleTaskId
+
+```csharp
+[Column("PossibleTaskId")]
+[ForeignKey("PossibleTask")]
+[Required(ErrorMessage = "Possible Task ID is required.")]
+public required Guid PossibleTaskId { get; set; }
+```
+
+---
+#### Property Value
+
+ <a href='https://learn.microsoft.com/dotnet/api/system.guid' target='_blank' className="no-underline text-inherit hover:text-inherit inline"><CSharpType type='Guid' /></a>
+
+---
+###  RejectionReason
+
+```csharp
+[Column("RejectionReason")]
+[StringLength(500, ErrorMessage = "Rejection reason cannot exceed 500 characters.")]
+public string? RejectionReason { get; set; }
+```
+
+---
+#### Property Value
+
+ <a href='https://learn.microsoft.com/dotnet/api/system.string' target='_blank' className="no-underline text-inherit hover:text-inherit inline"><CSharpType type='string' /></a>?
+
+---
+###  Status
+
+```csharp
+[Column("Status")]
+[Required(ErrorMessage = "Task status is required.")]
+[EnumDataType(typeof(SubmittedTask.TaskStatus), ErrorMessage = "Invalid task status.")]
+public required SubmittedTask.TaskStatus Status { get; set; }
+```
+
+---
+#### Property Value
+
+ <a href='SubmittedTask/' target='_self' className="no-underline text-inherit hover:text-inherit inline"><CSharpType type='SubmittedTask' /></a>.<a href='SubmittedTask/TaskStatus' target='_self' className="no-underline text-inherit hover:text-inherit inline"><CSharpType type='TaskStatus' /></a>
+
+---
+###  SubmittedAt
+
+```csharp
+[Column("SubmittedAt")]
+[Required(ErrorMessage = "Submission date is required.")]
+public required DateTime SubmittedAt { get; set; }
+```
+
+---
+#### Property Value
+
+ <a href='https://learn.microsoft.com/dotnet/api/system.datetime' target='_blank' className="no-underline text-inherit hover:text-inherit inline"><CSharpType type='DateTime' /></a>
+

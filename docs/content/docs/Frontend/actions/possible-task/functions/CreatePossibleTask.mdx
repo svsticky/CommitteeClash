@@ -1,0 +1,63 @@
+---
+title: CreatePossibleTask
+sidebar_position: 1
+---
+
+import { CodeBlock } from '@/components/code-block'
+
+[**frontend**](../../..)
+
+***
+
+[frontend](../../..) / [actions/possible-task](..) / CreatePossibleTask
+
+# Function: CreatePossibleTask()
+
+<CodeBlock language="ts">
+{ `function CreatePossibleTask(description, shortDescription, points, isActive, maxPerPeriod): Promise\<[Response](../../../types/Response/type-aliases/Response)\<void\>\>` }
+</CodeBlock>
+
+Defined in: [src/actions/possible-task.tsx:65](https://github.com/svsticky/CommitteeClash/blob/f974faa16c13593c1cc0eea50bf89b045abdabb5/frontend/src/actions/possible-task.tsx#L65)
+
+Creates a new possible task with the specified parameters.
+
+## Parameters
+
+### description
+<CodeBlock language="ts">
+{`string`}
+</CodeBlock>
+The description of the possible task.
+
+### shortDescription
+<CodeBlock language="ts">
+{`string`}
+</CodeBlock>
+A short description of the possible task.
+
+### points
+<CodeBlock language="ts">
+{`number`}
+</CodeBlock>
+The points associated with the possible task.
+
+### isActive
+<CodeBlock language="ts">
+{`boolean = true`}
+</CodeBlock>
+
+Whether the possible task is active (default is true).
+
+### maxPerPeriod
+
+The maximum number of times this task can be completed per period, or null if unlimited.
+<CodeBlock language="ts">
+{`null | number`}
+</CodeBlock>
+
+## Returns
+<CodeBlock language="ts">
+{`Promise\<[Response](../../../types/Response/type-aliases/Response)\<void\>\>`}
+</CodeBlock>
+
+- A promise that resolves to a response object indicating success or failure.

@@ -1,0 +1,20 @@
+---
+title: SubmittedTaskListSchema
+sidebar_position: 1
+---
+
+import { CodeBlock } from '@/components/code-block'
+
+[**frontend**](../../..)
+
+***
+
+[frontend](../../..) / [types/SubmittedTask](..) / SubmittedTaskListSchema
+
+# Variable: SubmittedTaskListSchema
+
+<CodeBlock language="ts">
+{`const SubmittedTaskListSchema: ZodArray\<ZodObject\<\{ committee: ZodString; id: ZodString; imagePath: ZodString; maxPerPeriod: ZodNullable\<ZodOptional\<ZodNumber\>\>; points: ZodNumber; possibleTaskId: ZodString; rejectionReason: ZodNullable\<ZodOptional\<ZodString\>\>; status: ZodEnum\<\["Pending", "Approved", "Rejected"\]\>; submittedAt: ZodString; \}, "strip", ZodTypeAny, \{ committee: string; id: string; imagePath: string; maxPerPeriod?: null \| number; points: number; possibleTaskId: string; rejectionReason?: null \| string; status: "Pending" \| "Approved" \| "Rejected"; submittedAt: string; \}, \{ committee: string; id: string; imagePath: string; maxPerPeriod?: null \| number; points: number; possibleTaskId: string; rejectionReason?: null \| string; status: "Pending" \| "Approved" \| "Rejected"; submittedAt: string; \}\>, "many"\>`}
+</CodeBlock>
+
+Defined in: [src/types/SubmittedTask.tsx:29](https://github.com/svsticky/CommitteeClash/blob/f974faa16c13593c1cc0eea50bf89b045abdabb5/frontend/src/types/SubmittedTask.tsx#L29)

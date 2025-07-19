@@ -1,0 +1,17 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": ["backend.csproj"],
+          "cwd": "."
+        }
+      ],
+      "dest": "../docs/docfx-files",
+      "outputFormat": "markdown",
+      "disableGitFeatures": true,
+      "categoryLayout": "nested",
+      "namespaceLayout": "nested"
+    }
+  ]
+}

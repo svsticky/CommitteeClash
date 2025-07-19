@@ -1,0 +1,54 @@
+---
+title: Default
+sidebar_position: 1
+---
+
+import { CodeBlock } from '@/components/code-block'
+
+[**frontend**](../../../..)
+
+***
+
+[frontend](../../../..) / [components/menu/menu-item](..) / default
+
+# Function: default()
+
+<CodeBlock language="ts">
+{ `function default(props): Element` }
+</CodeBlock>
+
+Defined in: [src/components/menu/menu-item.tsx:13](https://github.com/svsticky/CommitteeClash/blob/f974faa16c13593c1cc0eea50bf89b045abdabb5/frontend/src/components/menu/menu-item.tsx#L13)
+
+MenuItem component that renders a link with an icon.
+
+## Parameters
+
+### props
+
+The properties for the MenuItem component.
+
+#### href?
+<CodeBlock language="ts">
+{`string = ''`}
+</CodeBlock>
+
+The URL to link to.
+
+#### icon
+<CodeBlock language="ts">
+{`ComponentType\<SVGProps\<SVGSVGElement\>\>`}
+</CodeBlock>
+
+The icon component to display.
+
+#### isActive?
+<CodeBlock language="ts">
+{`boolean`}
+</CodeBlock>
+Whether the menu item is active (applies styles if true).
+
+## Returns
+<CodeBlock language="ts">
+{`Element`}
+</CodeBlock>
+The rendered MenuItem component.

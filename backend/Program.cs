@@ -116,6 +116,10 @@ namespace Commissiestrijd
         /// </remarks>
         private static void ConfigureSwagger(SwaggerGenOptions c)
         {
+            var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            c.IncludeXmlComments(xmlPath);
+
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "Commissiestrijd", Version = "v1" });
             c.EnableAnnotations();
 

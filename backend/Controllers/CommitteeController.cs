@@ -4,6 +4,7 @@ using Commissiestrijd.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage;
+using Swashbuckle.AspNetCore.Annotations;
 
 /// <summary>
 /// Controller for managing committees.
@@ -60,6 +61,7 @@ public class CommitteeController : Controller
     /// Internal server error if there is an issue retrieving the committees.
     /// </response>
     [HttpGet("GetCommittees")]
+    [SwaggerOperation(Summary = "Get Committees", Description = "This endpoint returns a list of committees ordered by their names. It does not require any parameters and is accessible to all authenticated users. Returns a JSON response containing the list of committees.")]
     public IActionResult GetCommittees()
     {
         _logger.LogInformation("Fetching list of committees.");
@@ -99,6 +101,13 @@ public class CommitteeController : Controller
     /// Internal server error if there is an issue creating the committee.
     /// </response>
     [HttpPost("CreateCommittee")]
+    [SwaggerOperation(Summary = "Create Committee", Description = "This endpoint allows an admin user to create a new committee with a specified name.")]
+    [SwaggerResponse(201, "Returns the created committee if successful.")]
+    [ProducesResponseType(typeof(Committee), 201)]
+    [SwaggerResponse(400, "BadRequest if the name is empty or already exists.")]
+    [SwaggerResponse(401, "Unauthorized if the user is not an admin.")]
+    [SwaggerResponse(500, "Internal server error if there is an issue creating the committee.")]
+    
     public async Task<IActionResult> CreateCommittee([FromQuery] string Name)
     {
         _logger.LogInformation("Attempting to create a new committee.");
@@ -111,7 +120,7 @@ public class CommitteeController : Controller
 
             return Unauthorized("You do not have permission to create committees.");
         }
-        
+
         // Trim the name to remove leading and trailing whitespace
         string trimmedName = Name?.Trim() ?? string.Empty;
 
@@ -171,6 +180,11 @@ public class CommitteeController : Controller
     /// Internal server error if there is an issue deleting the committee.
     /// </response>
     [HttpDelete("DeleteCommittee")]
+    [SwaggerOperation(Summary = "Delete Committee", Description = "This endpoint allows an admin user to delete a committee with a specified name.")]
+    [SwaggerResponse(200, "Returns a success message if the committee is deleted successfully.")]
+    [SwaggerResponse(401, "Unauthorized if the user is not an admin.")]
+    [SwaggerResponse(404, "NotFound if the committee does not exist.")]
+    [SwaggerResponse(500, "Internal server error if there is an issue deleting the committee.")]
     public async Task<IActionResult> DeleteCommittee([FromQuery] string name)
     {
         _logger.LogInformation("Attempting to delete a committee.");
@@ -237,6 +251,12 @@ public class CommitteeController : Controller
     /// Internal server error if there is an issue renaming the committee.
     /// </response>
     [HttpPut("RenameCommittee")]
+    [SwaggerOperation(Summary = "Rename Committee", Description = "This endpoint allows an admin user to rename a committee.")]
+    [SwaggerResponse(200, "Returns the new name of the committee if renamed successfully.")]
+    [SwaggerResponse(400, "BadRequest if the new name is empty or already exists.")]
+    [SwaggerResponse(401, "Unauthorized if the user is not an admin.")]
+    [SwaggerResponse(404, "NotFound if the committee does not exist.")]
+    [SwaggerResponse(500, "Internal server error if there is an issue renaming the committee.")]
     public async Task<IActionResult> RenameCommittee([FromQuery] string name, [FromQuery] string newName)
     {
         _logger.LogInformation("Attempting to rename a committee.");

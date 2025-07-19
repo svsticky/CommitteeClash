@@ -3,6 +3,7 @@ using Commissiestrijd.Models;
 using Commissiestrijd.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Commissiestrijd.Controllers;
 
@@ -57,7 +58,12 @@ public class PeriodController : Controller
     /// <response code="500">
     /// If an error occurs while retrieving the periods, a 500 Internal Server Error response is returned.
     /// </response>
+    /// </summary>
     [HttpGet("GetPeriods")]
+    [SwaggerOperation(Summary = "Get Periods", Description = "This endpoint retrieves all periods from the database and sorts them into future, current, and past periods based on the current date in the Netherlands timezone.")]
+    [SwaggerResponse(200, "Returns a list of sorted periods.")]
+    [ProducesResponseType(typeof(List<Period>), 200)]
+    [SwaggerResponse(500, "If an error occurs while retrieving the periods, a 500 Internal Server Error response is returned.")]
     public IActionResult GetPeriods()
     {
         _logger.LogInformation("Retrieving periods");
@@ -128,6 +134,11 @@ public class PeriodController : Controller
     /// If an error occurs while creating the period, a 500 Internal Server Error response is returned.
     /// </response>
     [HttpPost("CreatePeriod")]
+    [SwaggerOperation(Summary = "Create Period", Description = "This endpoint allows an admin user to create a new period with a specified name, start date, and end date.")]
+    [SwaggerResponse(201, "Returns the created period.")]
+    [SwaggerResponse(400, "If the name is empty, the start date is after the end date, or a period with the same name already exists, a BadRequest response is returned with an error message.")]
+    [SwaggerResponse(401, "If the user is not an admin, an Unauthorized response is returned.")]
+    [SwaggerResponse(500, "If an error occurs while creating the period, a 500 Internal Server Error response is returned.")]
     public async Task<IActionResult> CreatePeriod([FromQuery] string Name, DateTime StartDate, DateTime EndDate)
     {
         _logger.LogInformation("CreatePeriod called with Name: {Name}, StartDate: {StartDate}, EndDate: {EndDate}", Name, StartDate, EndDate);
@@ -208,6 +219,11 @@ public class PeriodController : Controller
     /// If an error occurs while retrieving the period, a 500 Internal Server Error response is returned.
     /// </summary>
     [HttpGet("GetPeriod")]
+    [SwaggerOperation(Summary = "Get Period", Description = "This endpoint retrieves a specific period by its ID.")]
+    [SwaggerResponse(200, "Returns the period if found.")]
+    [ProducesResponseType(typeof(Period), 200)]
+    [SwaggerResponse(404, "If the period does not exist, a NotFound response is returned with an error message.")]
+    [SwaggerResponse(500, "If an error occurs while retrieving the period, a 500 Internal Server Error response is returned.")]
     public IActionResult GetPeriod([FromQuery] Guid PeriodId)
     {
         _logger.LogInformation("GetPeriod called with PeriodId: {PeriodId}", PeriodId);
@@ -253,6 +269,11 @@ public class PeriodController : Controller
     /// returned.
     /// </response>
     [HttpDelete("DeletePeriod")]
+    [SwaggerOperation(Summary = "Delete Period", Description = "This endpoint allows an admin user to delete a specific period by its ID.")]
+    [SwaggerResponse(200, "Returns a success message if the period is deleted successfully.")]
+    [SwaggerResponse(401, "If the user is not an admin, an Unauthorized response is returned with an error message indicating that the user does not have permission to delete committees.")]
+    [SwaggerResponse(404, "If the period does not exist, a NotFound response is returned with an error message indicating that the period was not found.")]
+    [SwaggerResponse(500, "If an error occurs while deleting the period, a 500 Internal Server Error response is returned.")]
     public async Task<IActionResult> DeletePeriod([FromQuery] Guid PeriodId)
     {
         _logger.LogInformation("DeletePeriod called with PeriodId: {PeriodId}", PeriodId);
@@ -323,6 +344,13 @@ public class PeriodController : Controller
     /// returned.
     /// </response>
     [HttpPut("UpdatePeriod")]
+    [SwaggerOperation(Summary = "Update Period", Description = "This endpoint allows an admin user to update an existing period with a specified ID, name, start date, and end date.")]
+    [SwaggerResponse(200, "Returns the updated period if the update is successful.")]
+    [ProducesResponseType(typeof(Period), 200)]
+    [SwaggerResponse(400, "If the name is empty, the start date is after the end date, or a period with the same name already exists, a BadRequest response is returned with an error message.")]
+    [SwaggerResponse(401, "If the user is not an admin, an Unauthorized response is returned.")]
+    [SwaggerResponse(404, "If the period does not exist, a NotFound response is returned with an error message.")]
+    [SwaggerResponse(500, "If an error occurs while updating the period, a 500 Internal Server Error response is returned.")]
     public async Task<IActionResult> UpdatePeriod([FromQuery] Guid PeriodId, [FromQuery] string Name, [FromQuery] DateTime StartDate, [FromQuery] DateTime EndDate)
     {
         _logger.LogInformation("UpdatePeriod called with PeriodId: {PeriodId}, Name: {Name}, StartDate: {StartDate}, EndDate: {EndDate}", PeriodId, Name, StartDate, EndDate);
@@ -334,7 +362,7 @@ public class PeriodController : Controller
             _logger.LogWarning("Unauthorized attempt to update period with ID: {PeriodId}", PeriodId);
             return Unauthorized("You do not have permission to delete committees.");
         }
-        
+
         // Trim the name
         string trimmedName = Name?.Trim() ?? string.Empty;
 

@@ -1,0 +1,67 @@
+---
+title: Program
+---
+import { CollapsibleInherited } from "@/components/collapsible"
+import { TypeTable } from "@/components/type_table"
+import { CSharpType } from "@/components/csharp_type"
+
+
+Namespace: <a href='../Commissiestrijd' target='_self' className="no-underline text-inherit hover:text-inherit inline"><CSharpType type='Commissiestrijd' /></a>  
+Assembly: backend.dll  
+
+Represents the main entry point of the Commissiestrijd application.
+This class sets up the web application, configures services, logging, and middleware,
+and runs the application.
+
+```csharp
+public class Program
+```
+
+#### Inheritance
+
+<a href='https://learn.microsoft.com/dotnet/api/system.object' target='_blank' className="no-underline text-inherit hover:text-inherit inline"><CSharpType type='object' /></a> ← <a href='' target='_self' className="no-underline text-inherit hover:text-inherit inline"><CSharpType type='Program' /></a>
+
+
+
+<CollapsibleInherited title='Show Inherited Members (7)'>
+[object.Equals\(object?\)](https://learn.microsoft.com/dotnet/api/system.object.equals\#system\-object\-equals\(system\-object\)), 
+[object.Equals\(object?, object?\)](https://learn.microsoft.com/dotnet/api/system.object.equals\#system\-object\-equals\(system\-object\-system\-object\)), 
+[object.GetHashCode\(\)](https://learn.microsoft.com/dotnet/api/system.object.gethashcode), 
+[object.GetType\(\)](https://learn.microsoft.com/dotnet/api/system.object.gettype), 
+[object.MemberwiseClone\(\)](https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone), 
+[object.ReferenceEquals\(object?, object?\)](https://learn.microsoft.com/dotnet/api/system.object.referenceequals), 
+[object.ToString\(\)](https://learn.microsoft.com/dotnet/api/system.object.tostring)
+</CollapsibleInherited>
+
+---
+## Properties
+
+---
+###  HostUrl
+
+```csharp
+public static string HostUrl { get; }
+```
+
+---
+#### Property Value
+
+ <a href='https://learn.microsoft.com/dotnet/api/system.string' target='_blank' className="no-underline text-inherit hover:text-inherit inline"><CSharpType type='string' /></a>
+
+---
+## Methods
+
+---
+###  Main\(string\[\]\)
+
+The main entry point for the application.
+This method initializes the web application,
+configures services, logging, and middleware,
+and starts the application.
+
+```csharp
+public static void Main(string[] args)
+```
+
+<h4 className='mb-0 ml-1'>Parameters</h4>
+<TypeTable types={[{"name":"args","type":"string","links":["https://learn.microsoft.com/dotnet/api/system.string"],"description":"Command-line arguments passed to the application."}]} />

@@ -1,0 +1,49 @@
+---
+title: SubmitTaskAction
+sidebar_position: 1
+---
+
+import { CodeBlock } from '@/components/code-block'
+
+[**frontend**](../../..)
+
+***
+
+[frontend](../../..) / [actions/submit-task](..) / SubmitTaskAction
+
+# Function: SubmitTaskAction()
+
+<CodeBlock language="ts">
+{ `function SubmitTaskAction(taskId, committee, photo): Promise\<[Response](../../../types/Response/type-aliases/Response)\<void\>\>` }
+</CodeBlock>
+
+Defined in: [src/actions/submit-task.tsx:16](https://github.com/svsticky/CommitteeClash/blob/f974faa16c13593c1cc0eea50bf89b045abdabb5/frontend/src/actions/submit-task.tsx#L16)
+
+Submits a task with the given ID, committee, and photo.
+
+## Parameters
+
+### taskId
+<CodeBlock language="ts">
+{`string`}
+</CodeBlock>
+The ID of the task to submit.
+
+### committee
+<CodeBlock language="ts">
+{`string`}
+</CodeBlock>
+The committee associated with the task.
+
+### photo
+<CodeBlock language="ts">
+{`File`}
+</CodeBlock>
+The photo file to submit with the task.
+
+## Returns
+<CodeBlock language="ts">
+{`Promise\<[Response](../../../types/Response/type-aliases/Response)\<void\>\>`}
+</CodeBlock>
+
+- A promise that resolves to a response object indicating success or failure.

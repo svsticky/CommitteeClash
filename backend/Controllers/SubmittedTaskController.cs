@@ -3,6 +3,7 @@ using Commissiestrijd.Models;
 using Microsoft.AspNetCore.Mvc;
 using Commissiestrijd.Data;
 using Commissiestrijd.Utils;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Commissiestrijd.Controllers;
 
@@ -70,9 +71,15 @@ public class SubmittedTaskController : Controller
     /// returned with an appropriate error message.
     /// </response>
     [HttpPost("SubmitTask")]
+    [SwaggerOperation(Summary = "Submit Task", Description = "This endpoint allows users to submit a task for a committee.")]
+    [SwaggerResponse(200, "Returns the submitted task with its details if the submission is successful.")]
+    [ProducesResponseType(typeof(SubmittedTask), 200)]
+    [SwaggerResponse(400, "BadRequest if the request parameters are invalid, such as empty task ID, committee name, or missing image file.")]
+    [SwaggerResponse(404, "NotFound if the specified committee or task does not exist.")]
+    [SwaggerResponse(500, "Internal Server Error if an error occurs while processing the request.")]
     public async Task<IActionResult> SubmitTask([FromForm] SubmitTaskRequestDto SubmitTaskRequestDto)
     {
-        _logger.LogInformation("Received task submission request for TaskId: {TaskId}, Committee: {Committee}", 
+        _logger.LogInformation("Received task submission request for TaskId: {TaskId}, Committee: {Committee}",
             SubmitTaskRequestDto.TaskId, SubmitTaskRequestDto.Committee);
 
         // Validate the request parameters
@@ -105,7 +112,7 @@ public class SubmittedTaskController : Controller
         string fileExtension = Path.GetExtension(SubmitTaskRequestDto.Image.FileName).ToLowerInvariant();
         if (!imageExtensions.Contains(fileExtension))
         {
-            _logger.LogWarning("Invalid image file type: {FileExtension}. Allowed types are: {AllowedExtensions}", 
+            _logger.LogWarning("Invalid image file type: {FileExtension}. Allowed types are: {AllowedExtensions}",
                 fileExtension, string.Join(", ", imageExtensions));
             return BadRequest("Invalid image file type. Allowed types are: " + string.Join(", ", imageExtensions));
         }
@@ -113,7 +120,7 @@ public class SubmittedTaskController : Controller
         // validate size of image
         if (SubmitTaskRequestDto.Image.Length > maxFileSize)
         {
-            _logger.LogWarning("Image file size exceeds the maximum limit of 5 MB. Size: {FileSize} bytes", 
+            _logger.LogWarning("Image file size exceeds the maximum limit of 5 MB. Size: {FileSize} bytes",
                 SubmitTaskRequestDto.Image.Length);
             return BadRequest("Image file size exceeds the maximum limit of 5 MB.");
         }
@@ -206,9 +213,16 @@ public class SubmittedTaskController : Controller
     /// returned with an appropriate error message.
     /// </response>
     [HttpPut("ApproveTask")]
+    [SwaggerOperation(Summary = "Approve Task", Description = "This endpoint allows an admin to approve a submitted task.")]
+    [SwaggerResponse(200, "Returns the approved task with its details if the approval is successful.")]
+    [ProducesResponseType(typeof(SubmittedTask), 200)]
+    [SwaggerResponse(400, "BadRequest if the request parameters are invalid, such as empty task ID, invalid points value, or points exceeding the maximum limit.")]
+    [SwaggerResponse(401, "Unauthorized if the user is not an admin.")]
+    [SwaggerResponse(404, "NotFound if the specified task does not exist.")]
+    [SwaggerResponse(500, "Internal Server Error if an error occurs while processing the request.")]
     public async Task<IActionResult> ApproveTask([FromQuery] Guid TaskId, [FromQuery] int Points, [FromQuery] int? MaxPerPeriod = null)
     {
-        _logger.LogInformation("ApproveTask called with TaskId: {TaskId}, Points: {Points}, MaxPerPeriod: {MaxPerPeriod}", 
+        _logger.LogInformation("ApproveTask called with TaskId: {TaskId}, Points: {Points}, MaxPerPeriod: {MaxPerPeriod}",
             TaskId, Points, MaxPerPeriod);
 
         // Check if the user is an admin
@@ -291,6 +305,13 @@ public class SubmittedTaskController : Controller
     /// returned with an appropriate error message.
     /// </response>
     [HttpPut("RejectTask")]
+    [SwaggerOperation(Summary = "Reject Task", Description = "This endpoint allows an admin to reject a submitted task.")]
+    [SwaggerResponse(200, "Returns the rejected task with its details if the rejection is successful.")]
+    [ProducesResponseType(typeof(SubmittedTask), 200)]
+    [SwaggerResponse(400, "BadRequest if the request parameters are invalid, such as empty task ID or reason.")]
+    [SwaggerResponse(401, "Unauthorized if the user is not an admin.")]
+    [SwaggerResponse(404, "NotFound if the specified task does not exist.")]
+    [SwaggerResponse(500, "Internal Server Error if an error occurs while processing the request.")]
     public async Task<IActionResult> RejectTask([FromQuery] Guid TaskId, string Reason)
     {
         _logger.LogInformation("RejectTask called with TaskId: {TaskId}, Reason: {Reason}", TaskId, Reason);
@@ -317,7 +338,7 @@ public class SubmittedTaskController : Controller
             return NotFound("Submitted task not found.");
         }
 
-        if( string.IsNullOrEmpty(Reason))
+        if (string.IsNullOrEmpty(Reason))
         {
             _logger.LogWarning("Rejection reason is empty for TaskId: {TaskId}", TaskId);
             return BadRequest("Rejection reason cannot be empty.");
@@ -355,6 +376,10 @@ public class SubmittedTaskController : Controller
     /// returned with an appropriate error message.
     /// </response>
     [HttpGet("GetSubmittedTasks")]
+    [SwaggerOperation(Summary = "Get Submitted Tasks", Description = "This endpoint retrieves all submitted tasks from the database.")]
+    [SwaggerResponse(200, "Returns a list of submitted tasks.")]
+    [ProducesResponseType(typeof(List<SubmittedTask>), 200)]
+    [SwaggerResponse(500, "Internal Server Error if an error occurs while retrieving the tasks.")]
     public IActionResult GetSubmittedTasks([FromQuery] string? committee = null)
     {
         _logger.LogInformation("GetSubmittedTasks called with Committee: {Committee}", committee);
@@ -406,6 +431,12 @@ public class SubmittedTaskController : Controller
     /// returned with an appropriate error message.
     /// </response>
     [HttpGet("GetSubmittedTask")]
+    [SwaggerOperation(Summary = "Get Submitted Task", Description = "This endpoint retrieves a submitted task by its ID.")]
+    [SwaggerResponse(200, "Returns the submitted task with its details if found.")]
+    [ProducesResponseType(typeof(SubmittedTask), 200)]
+    [SwaggerResponse(400, "BadRequest if the request parameters are invalid, such as an empty task ID.")]
+    [SwaggerResponse(404, "NotFound if the specified task does not exist.")]
+    [SwaggerResponse(500, "Internal Server Error if an error occurs while processing the request.")]
     public IActionResult GetSubmittedTask([FromQuery] Guid TaskId)
     {
         _logger.LogInformation("GetSubmittedTask called with TaskId: {TaskId}", TaskId);
@@ -452,6 +483,10 @@ public class SubmittedTaskController : Controller
     /// returned with an appropriate error message.
     /// </response>
     [HttpGet("GetPendingTasks")]
+    [SwaggerOperation(Summary = "Get Pending Tasks", Description = "This endpoint retrieves all pending tasks from the database.")]
+    [SwaggerResponse(200, "Returns a list of pending tasks.")]
+    [ProducesResponseType(typeof(List<SubmittedTask>), 200)]
+    [SwaggerResponse(500, "Internal Server Error if an error occurs while retrieving the tasks.")]
     public IActionResult GetPendingTasks([FromQuery] string? committee = null)
     {
         _logger.LogInformation("GetPendingTasks called with Committee: {Committee}", committee);
@@ -497,6 +532,10 @@ public class SubmittedTaskController : Controller
     /// returned with an appropriate error message.
     /// </response>
     [HttpGet("GetApprovedTasks")]
+    [SwaggerOperation(Summary = "Get Approved Tasks", Description = "This endpoint retrieves all approved tasks from the database.")]
+    [SwaggerResponse(200, "Returns a list of approved tasks.")]
+    [ProducesResponseType(typeof(List<SubmittedTask>), 200)]
+    [SwaggerResponse(500, "Internal Server Error if an error occurs while retrieving the tasks.")]
     public IActionResult GetApprovedTasks([FromQuery] string? committee = null)
     {
         _logger.LogInformation("GetApprovedTasks called with Committee: {Committee}", committee);
@@ -542,6 +581,10 @@ public class SubmittedTaskController : Controller
     /// returned with an appropriate error message.
     /// </response> 
     [HttpGet("GetRejectedTasks")]
+    [SwaggerOperation(Summary = "Get Rejected Tasks", Description = "This endpoint retrieves all rejected tasks from the database.")]
+    [SwaggerResponse(200, "Returns a list of rejected tasks.")]
+    [ProducesResponseType(typeof(List<SubmittedTask>), 200)]
+    [SwaggerResponse(500, "Internal Server Error if an error occurs while retrieving the tasks.")]
     public IActionResult GetRejectedTasks([FromQuery] string? committee = null)
     {
         _logger.LogInformation("GetRejectedTasks called with Committee: {Committee}", committee);

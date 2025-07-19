@@ -1,0 +1,37 @@
+---
+title: GetSubmittedTasks
+sidebar_position: 1
+---
+
+import { CodeBlock } from '@/components/code-block'
+
+[**frontend**](../../..)
+
+***
+
+[frontend](../../..) / [actions/submit-task](..) / GetSubmittedTasks
+
+# Function: GetSubmittedTasks()
+
+<CodeBlock language="ts">
+{ `function GetSubmittedTasks(committee): Promise\<[Response](../../../types/Response/type-aliases/Response)\<object[]\>\>` }
+</CodeBlock>
+
+Defined in: [src/actions/submit-task.tsx:73](https://github.com/svsticky/CommitteeClash/blob/f974faa16c13593c1cc0eea50bf89b045abdabb5/frontend/src/actions/submit-task.tsx#L73)
+
+Retrieves the list of submitted tasks for a given committee.
+
+## Parameters
+
+### committee
+<CodeBlock language="ts">
+{`string`}
+</CodeBlock>
+The name of the committee to get submitted tasks for.
+
+## Returns
+<CodeBlock language="ts">
+{`Promise\<[Response](../../../types/Response/type-aliases/Response)\<object[]\>\>`}
+</CodeBlock>
+
+- A promise that resolves to a response object containing the list of submitted tasks or an error message.

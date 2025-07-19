@@ -1,0 +1,78 @@
+---
+title: Default
+sidebar_position: 1
+---
+
+import { CodeBlock } from '@/components/code-block'
+
+[**frontend**](../../../..)
+
+***
+
+[frontend](../../../..) / [components/manage-possible-tasks/possible-task-item](..) / default
+
+# Function: default()
+
+<CodeBlock language="ts">
+{ `function default(props): Element` }
+</CodeBlock>
+
+Defined in: [src/components/manage-possible-tasks/possible-task-item.tsx:17](https://github.com/svsticky/CommitteeClash/blob/f974faa16c13593c1cc0eea50bf89b045abdabb5/frontend/src/components/manage-possible-tasks/possible-task-item.tsx#L17)
+
+PossibleTaskItem component that displays a possible task with its details
+and provides an option to edit the task.
+
+## Parameters
+
+### props
+
+The properties passed to the component.
+
+#### className?
+<CodeBlock language="ts">
+{`string = ''`}
+</CodeBlock>
+
+Optional additional class names for styling.
+
+#### possibleTask
+
+\{ `description`: `string`; `id`: `string`; `isActive`: `boolean`; `maxPerPeriod?`: `null` \| `number`; `points`: `number`; `shortDescription`: `string`; \}
+
+The possible task object containing its details.
+
+#### possibleTask.description
+<CodeBlock language="ts">
+{`string = ...`}
+</CodeBlock>
+
+#### possibleTask.id
+<CodeBlock language="ts">
+{`string = ...`}
+</CodeBlock>
+
+#### possibleTask.isActive
+<CodeBlock language="ts">
+{`boolean = ...`}
+</CodeBlock>
+
+#### possibleTask.maxPerPeriod?
+<CodeBlock language="ts">
+{`null \| number = ...`}
+</CodeBlock>
+
+#### possibleTask.points
+<CodeBlock language="ts">
+{`number = ...`}
+</CodeBlock>
+
+#### possibleTask.shortDescription
+<CodeBlock language="ts">
+{`string = ...`}
+</CodeBlock>
+
+## Returns
+<CodeBlock language="ts">
+{`Element`}
+</CodeBlock>
+A JSX element that represents a possible task item.

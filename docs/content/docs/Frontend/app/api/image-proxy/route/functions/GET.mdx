@@ -1,0 +1,38 @@
+---
+title: GET
+sidebar_position: 1
+---
+
+import { CodeBlock } from '@/components/code-block'
+
+[**frontend**](../../../../..)
+
+***
+
+[frontend](../../../../..) / [app/api/image-proxy/route](..) / GET
+
+# Function: GET()
+
+<CodeBlock language="ts">
+{ `function GET(req): Promise\<NextResponse\<unknown\>\>` }
+</CodeBlock>
+
+Defined in: [src/app/api/image-proxy/route.tsx:12](https://github.com/svsticky/CommitteeClash/blob/f974faa16c13593c1cc0eea50bf89b045abdabb5/frontend/src/app/api/image-proxy/route.tsx#L12)
+
+API route to proxy image requests to the backend service.
+It retrieves the image by filename and returns it with the appropriate content type.
+
+## Parameters
+
+### req
+<CodeBlock language="ts">
+{`NextRequest`}
+</CodeBlock>
+The incoming request object.
+
+## Returns
+<CodeBlock language="ts">
+{`Promise\<NextResponse\<unknown\>\>`}
+</CodeBlock>
+
+- A promise that resolves to a NextResponse containing the image data or an error message.

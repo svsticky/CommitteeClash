@@ -1,0 +1,49 @@
+---
+title: Default
+sidebar_position: 1
+---
+
+import { CodeBlock } from '@/components/code-block'
+
+[**frontend**](../../../..)
+
+***
+
+[frontend](../../../..) / [components/leaderboard/podium-component](..) / default
+
+# Function: default()
+
+<CodeBlock language="ts">
+{ `function default(props): Element` }
+</CodeBlock>
+
+Defined in: [src/components/leaderboard/podium-component.tsx:13](https://github.com/svsticky/CommitteeClash/blob/f974faa16c13593c1cc0eea50bf89b045abdabb5/frontend/src/components/leaderboard/podium-component.tsx#L13)
+
+Podium component that displays the top three committees in the leaderboard.
+It shows the committee names and their respective points, along with podium emojis.
+
+## Parameters
+
+### props
+
+The properties passed to the component.
+
+#### className?
+<CodeBlock language="ts">
+{`string = ''`}
+</CodeBlock>
+
+Optional additional class names for styling.
+
+#### leaderboard
+<CodeBlock language="ts">
+{`object[]`}
+</CodeBlock>
+
+The leaderboard data containing committee names and points.
+
+## Returns
+<CodeBlock language="ts">
+{`Element`}
+</CodeBlock>
+A JSX element that represents the podium display.

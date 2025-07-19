@@ -1,0 +1,43 @@
+---
+title: Cn
+sidebar_position: 1
+---
+
+import { CodeBlock } from '@/components/code-block'
+
+[**frontend**](../../..)
+
+***
+
+[frontend](../../..) / [lib/utils](..) / cn
+
+# Function: cn()
+
+<CodeBlock language="ts">
+{ `function cn(...inputs): string` }
+</CodeBlock>
+
+Defined in: [src/lib/utils.tsx:13](https://github.com/svsticky/CommitteeClash/blob/f974faa16c13593c1cc0eea50bf89b045abdabb5/frontend/src/lib/utils.tsx#L13)
+
+Combines multiple class names into a single string, merging Tailwind CSS classes.
+
+## Parameters
+
+### inputs
+
+...`ClassValue`[]
+
+The class names to combine.
+
+## Returns
+<CodeBlock language="ts">
+{`string`}
+</CodeBlock>
+- A single string containing all class names, with duplicates merged.
+
+## Example
+
+<CodeBlock language="ts">
+{ `cn('bg-red-500', 'text-white', 'bg-red-500'); // returns 'bg-red-500 text-white'
+` }
+</CodeBlock>

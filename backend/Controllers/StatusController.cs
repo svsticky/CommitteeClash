@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Commissiestrijd.Controllers;
 
@@ -28,6 +29,9 @@ public class StatusController : Controller
     /// with an appropriate error message.
     /// </response>
     [HttpGet]
+    [SwaggerOperation(Summary = "Status", Description = "This endpoint checks if the application is online.")]
+    [SwaggerResponse(200, "Returns the status message 'online'.")]
+    [SwaggerResponse(500, "If the application is not running, a 500 Internal Server Error response is returned.")]
     public IActionResult Status()
     {
         return Ok("online");

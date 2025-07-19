@@ -1,0 +1,49 @@
+---
+title: CreatePeriodAction
+sidebar_position: 1
+---
+
+import { CodeBlock } from '@/components/code-block'
+
+[**frontend**](../../..)
+
+***
+
+[frontend](../../..) / [actions/period](..) / CreatePeriodAction
+
+# Function: CreatePeriodAction()
+
+<CodeBlock language="ts">
+{ `function CreatePeriodAction(name, startDate, endDate): Promise\<[Response](../../../types/Response/type-aliases/Response)\<void\>\>` }
+</CodeBlock>
+
+Defined in: [src/actions/period.tsx:59](https://github.com/svsticky/CommitteeClash/blob/f974faa16c13593c1cc0eea50bf89b045abdabb5/frontend/src/actions/period.tsx#L59)
+
+Creates a new period with the specified name, start date, and end date.
+
+## Parameters
+
+### name
+<CodeBlock language="ts">
+{`string`}
+</CodeBlock>
+The name of the period to create.
+
+### startDate
+<CodeBlock language="ts">
+{`string`}
+</CodeBlock>
+The start date of the period in ISO format.
+
+### endDate
+<CodeBlock language="ts">
+{`string`}
+</CodeBlock>
+The end date of the period in ISO format.
+
+## Returns
+<CodeBlock language="ts">
+{`Promise\<[Response](../../../types/Response/type-aliases/Response)\<void\>\>`}
+</CodeBlock>
+
+- A promise that resolves to a response object indicating success or failure.
