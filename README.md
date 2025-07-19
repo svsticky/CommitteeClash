@@ -44,4 +44,4 @@ To update the documentation site, please run the following commands before compo
 - Frontend: `node docs/scripts/generate-frontend-docs.mjs`
 - Backend: `node docs/scripts/generate-backend-docs.js`
 
-The API documentation is updated automatically when running development.
+The API documentation is updated automatically when starting development.

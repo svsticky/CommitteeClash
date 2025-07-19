@@ -196,7 +196,16 @@ async function convertMarkdownToMdx(srcDir, destDir) {
             }
 
             // replace folder links with [...something] to something
-            content = content.replace(/\/\[\.\.\.(.+?)\]/g, "/$1");
+            content = content
+                .split("\n")
+                .map((line) => {
+                    if (line.includes("Defined in:")) {
+                        return line;
+                    } else {
+                        return line.replace(/\/\\?\[\.\.\.(.+?)\\?\]/g, "/$1");
+                    }
+                })
+                .join("\n");
 
             const frontmatter = `---\ntitle: ${title}\nsidebar_position: 1\n---\n\n`;
 
@@ -208,14 +217,30 @@ async function convertMarkdownToMdx(srcDir, destDir) {
             if (destName === "index.mdx") {
                 content = content
                     .replace(/\(([^()\/]+\/)/g, `(./${rawName}/$1`) // Add title to links
-                    .replace(/\[\.\.\.(.+?)\]/g, "$1"); // Remove [...something] from links
+                    .split("\n")
+                    .map((line) => {
+                        if (line.includes("Defined in:")) {
+                            return line;
+                        } else {
+                            return line.replace(/\[\.\.\.(.+?)\]/g, "$1"); // Fix links with [...something] to /something
+                        }
+                    })
+                    .join("\n");
             }
 
             const destPath = path
                 .join(destDir, destName)
                 .replace(/\/\(([^)]+)\)/g, "/$1")
                 .replace(/\\\(([^)]+)\)/g, "\\$1")
-                .replace(/\[\.\.\.(.+?)\]/g, "$1");
+                .split("\n")
+                .map((line) => {
+                    if (line.includes("Defined in:")) {
+                        return line;
+                    } else {
+                        return line.replace(/\[\.\.\.(.+?)\]/g, "$1"); // Fix path with [...something] to /something
+                    }
+                })
+                .join("\n");
 
             await fs.mkdir(path.dirname(destPath), { recursive: true });
             await fs.writeFile(destPath, frontmatter + content, "utf-8");
