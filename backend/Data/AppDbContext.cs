@@ -22,9 +22,28 @@ public class AppDbContext : DbContext
     /// </param>
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
+    /// <summary>
+    /// This property represents the set of possible tasks that can be submitted.
+    /// It is used to query and save instances of the PossibleTask entity in the database.
+    /// </summary>
     public DbSet<PossibleTask> PossibleTasks { get; set; } = null!;
+
+    /// <summary>
+    /// This property represents the set of submitted tasks in the application.
+    /// It is used to query and save instances of the SubmittedTask entity in the database.
+    /// </summary>
     public DbSet<SubmittedTask> SubmittedTasks { get; set; } = null!;
+
+    /// <summary>
+    /// This property represents the set of committees in the application.
+    /// It is used to query and save instances of the Committee entity in the database.
+    /// </summary>
     public DbSet<Committee> Committees { get; set; } = null!;
+
+    /// <summary>
+    /// This property represents the set of periods in the application.
+    /// It is used to query and save instances of the Period entity in the database.
+    /// </summary>
     public DbSet<Period> Periods { get; set; } = null!;
 
     /// <summary>

@@ -19,8 +19,16 @@ namespace Commissiestrijd.Controllers;
 [Route("[controller]")]
 public class PeriodController : Controller
 {
+    /// <summary>
+    /// The database context used to interact with the application's data.
+    /// </summary>
     private readonly AppDbContext _context;
 
+    /// <summary>
+    /// The logger used for logging information and errors in the controller.
+    /// This logger is used to log various events and errors that occur during the execution of the controller's actions,
+    /// helping with debugging and monitoring the application's behavior.
+    /// </summary>
     private readonly ILogger<PeriodController> _logger;
 
     /// <summary>
@@ -58,7 +66,6 @@ public class PeriodController : Controller
     /// <response code="500">
     /// If an error occurs while retrieving the periods, a 500 Internal Server Error response is returned.
     /// </response>
-    /// </summary>
     [HttpGet("GetPeriods")]
     [SwaggerOperation(Summary = "Get Periods", Description = "This endpoint retrieves all periods from the database and sorts them into future, current, and past periods based on the current date in the Netherlands timezone.")]
     [SwaggerResponse(200, "Returns a list of sorted periods.")]
@@ -217,7 +224,7 @@ public class PeriodController : Controller
     /// </response>
     /// <response code="500">
     /// If an error occurs while retrieving the period, a 500 Internal Server Error response is returned.
-    /// </summary>
+    /// </response>
     [HttpGet("GetPeriod")]
     [SwaggerOperation(Summary = "Get Period", Description = "This endpoint retrieves a specific period by its ID.")]
     [SwaggerResponse(200, "Returns the period if found.")]

@@ -315,6 +315,11 @@ public Task<IActionResult> DeletePeriod(Guid PeriodId)
 ---
 ###  GetPeriod\(Guid\)
 
+Retrieves a specific period by its ID.
+This method checks if the user is authorized before allowing access to the period.
+It validates that the period exists and returns it if found.
+If the period does not exist, it returns a NotFound response.
+
 ```csharp
 [HttpGet("GetPeriod")]
 [SwaggerOperation(null, null, Summary = "Get Period", Description = "This endpoint retrieves a specific period by its ID.")]
@@ -326,13 +331,22 @@ public IActionResult GetPeriod(Guid PeriodId)
 ```
 
 <h4 className='mb-0 ml-1'>Parameters</h4>
-<TypeTable types={[{"name":"PeriodId","type":"Guid","links":["https://learn.microsoft.com/dotnet/api/system.guid"],"description":""}]} />
+<TypeTable types={[{"name":"PeriodId","type":"Guid","links":["https://learn.microsoft.com/dotnet/api/system.guid"],"description":"The ID of the period to be retrieved."}]} />
 
 <h4 className='mb-0 ml-1'>Returns</h4>
-<TypeTable types={[{"name":"","type":"IActionResult","links":["https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.mvc.iactionresult"],"description":""}]} />
+<TypeTable types={[{"name":"","type":"IActionResult","links":["https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.mvc.iactionresult"],"description":"An IActionResult containing the period if found, or a NotFound response if the period does not exist."}]} />
+
+If an error occurs while retrieving the period, a 500 Internal Server Error response is returned.
 
 ---
 ###  GetPeriods\(\)
+
+Retrieves all periods from the database and sorts them into future, current, and past periods
+based on the current date in the Netherlands timezone.
+The future periods are sorted by start date and then by the duration of the period.
+The current periods are sorted by the duration of the period in descending order.
+The past periods are sorted by end date and then by the duration of the period in
+descending order.
 
 ```csharp
 [HttpGet("GetPeriods")]
@@ -344,7 +358,7 @@ public IActionResult GetPeriods()
 ```
 
 <h4 className='mb-0 ml-1'>Returns</h4>
-<TypeTable types={[{"name":"","type":"IActionResult","links":["https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.mvc.iactionresult"],"description":""}]} />
+<TypeTable types={[{"name":"","type":"IActionResult","links":["https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.mvc.iactionresult"],"description":"An IActionResult containing a list of sorted periods."}]} />
 
 ---
 ###  UpdatePeriod\(Guid, string, DateTime, DateTime\)

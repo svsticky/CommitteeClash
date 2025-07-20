@@ -19,11 +19,34 @@ namespace Commissiestrijd.Controllers;
 [Route("[controller]")]
 public class SubmittedTaskController : Controller
 {
+    /// <summary>
+    /// The database context used to interact with the application's data.
+    /// </summary>
     private readonly AppDbContext _context;
 
+    /// <summary>
+    /// The logger used for logging information and errors in the controller.
+    /// This logger is used to log various events and errors that occur during the execution of the controller's actions,
+    /// helping with debugging and monitoring the application's behavior.
+    /// </summary>
     private readonly ILogger<SubmittedTaskController> _logger;
 
+    /// <summary>
+    /// The list of allowed image file extensions for submitted tasks.
+    /// This list is used to validate the image files submitted by users,
+    /// ensuring that only valid image types are accepted.
+    /// It includes common image formats such as .jpg, .jpeg, .png, and .gif.
+    /// This helps prevent the submission of unsupported or potentially harmful file types.
+    /// </summary>
     private string[] imageExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
+
+    /// <summary>
+    /// The maximum file size allowed for submitted images.
+    /// This constant defines the maximum size of an image file that can be submitted by users.
+    /// It is set to 5 MB (5 * 1024 * 1024 bytes) to ensure that the images are not too large,
+    /// which helps maintain performance and storage efficiency.
+    /// This limit is enforced during the task submission process to prevent excessively large files from being uploaded.
+    /// </summary>
     private const long maxFileSize = 5 * 1024 * 1024; // 5 MB
 
     /// <summary>

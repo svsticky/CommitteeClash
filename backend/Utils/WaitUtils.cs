@@ -15,6 +15,7 @@ public static class WaitUtils
     /// normalizing it to ensure it is within the same day.
     /// If the current time is already past the specified time,
     /// it will wait until the next occurrence on the following day.
+    /// </summary>
     /// <param name="runTime">
     /// The time of day to wait until.
     /// </param>

@@ -45,6 +45,10 @@ public class PossibleTask
 ---
 ###  Description
 
+The description of the possible task.
+This property is required and has a maximum length of 500 characters.
+It provides a detailed explanation of what the task entails.
+
 ```csharp
 [Column("Description")]
 [StringLength(500, ErrorMessage = "Description cannot exceed 500 characters.")]
@@ -60,6 +64,9 @@ public required string Description { get; set; }
 ---
 ###  Id
 
+The unique identifier for the possible task.
+This property is required and serves as the primary key for the task.
+
 ```csharp
 [Column("Id")]
 [Key]
@@ -73,6 +80,9 @@ public required Guid Id { get; set; }
 
 ---
 ###  IsActive
+
+Indicates whether the possible task is currently active.
+This property is required and determines if the task can be submitted.
 
 ```csharp
 [Column("IsActive")]
@@ -88,6 +98,11 @@ public required bool IsActive { get; set; }
 ---
 ###  MaxPerPeriod
 
+The maximum number of times this task can be completed in a given period.
+This property is optional and can be null,
+indicating that there is no limit on the number of times the task can be completed.
+If specified, it must be a non-negative integer.
+
 ```csharp
 [Column("MaxPerPeriod")]
 public int? MaxPerPeriod { get; set; }
@@ -100,6 +115,10 @@ public int? MaxPerPeriod { get; set; }
 
 ---
 ###  Points
+
+The points awarded for completing the possible task.
+This property is required and must be greater than zero and a maximum of 100.
+It indicates the value of the task in terms of points that can be earned.
 
 ```csharp
 [Column("Points")]
@@ -115,6 +134,10 @@ public required int Points { get; set; }
 
 ---
 ###  ShortDescription
+
+The short description of the possible task.
+This property is required and has a maximum length of 50 characters.
+It provides a brief summary of the task for quick reference.
 
 ```csharp
 [Column("ShortDescription")]

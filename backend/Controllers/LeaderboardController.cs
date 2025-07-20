@@ -17,8 +17,16 @@ namespace Commissiestrijd.Controllers;
 [Route("[controller]")]
 public class LeaderboardController : Controller
 {
+    /// <summary>
+    /// The database context used to interact with the application's data.
+    /// </summary>
     private readonly AppDbContext _context;
 
+    /// <summary>
+    /// The logger used for logging information and errors in the controller.
+    /// This logger is used to log various events and errors that occur during the execution of the controller's actions,
+    /// helping with debugging and monitoring the application's behavior.
+    /// </summary>
     private readonly ILogger<LeaderboardController> _logger;
 
     /// <summary>

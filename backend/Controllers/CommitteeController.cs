@@ -20,8 +20,16 @@ using Swashbuckle.AspNetCore.Annotations;
 [Route("[controller]")]
 public class CommitteeController : Controller
 {
+    /// <summary>
+    /// The database context used to interact with the application's data.
+    /// </summary>
     private readonly AppDbContext _context;
 
+    /// <summary>
+    /// The logger used for logging information and errors in the controller.
+    /// This logger is used to log various events and errors that occur during the execution of the controller's actions,
+    /// helping with debugging and monitoring the application's behavior.
+    /// </summary>
     private ILogger<CommitteeController> _logger;
 
     /// <summary>
@@ -197,7 +205,7 @@ public class CommitteeController : Controller
             return Unauthorized("You do not have permission to delete committees.");
         }
 
-        /// Check if the committee exists
+        // Check if the committee exists
         Committee? committee = _context.Committees.FirstOrDefault(c => c.Name == name);
         if (committee == null)
         {

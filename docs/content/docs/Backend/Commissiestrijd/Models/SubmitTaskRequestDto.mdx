@@ -9,6 +9,10 @@ import { CSharpType } from "@/components/csharp_type"
 Namespace: <a href='../Models'>Commissiestrijd.Models</a>  
 Assembly: backend.dll  
 
+Represents a data transfer object (DTO) for submitting a task.
+This class is used to encapsulate the data required to submit a task,
+including the task ID, committee name, and the image file associated with the submission.
+
 ```csharp
 public class SubmitTaskRequestDto
 ```
@@ -35,6 +39,9 @@ public class SubmitTaskRequestDto
 ---
 ###  Committee
 
+The name of the committee to which the task is being submitted.
+This property is required and indicates which committee the task is being submitted to for review.
+
 ```csharp
 public required string Committee { get; set; }
 ```
@@ -47,6 +54,11 @@ public required string Committee { get; set; }
 ---
 ###  Image
 
+The image file associated with the task submission.
+This property is required and represents the image that the user uploads as part of the task
+submission process.
+It is expected to be an IFormFile, which allows for file uploads in ASP.NET Core applications.
+
 ```csharp
 public required IFormFile Image { get; set; }
 ```
@@ -58,6 +70,9 @@ public required IFormFile Image { get; set; }
 
 ---
 ###  TaskId
+
+The unique identifier for the task being submitted.
+This property is required and indicates which possible task the submission relates to.
 
 ```csharp
 public required Guid TaskId { get; set; }

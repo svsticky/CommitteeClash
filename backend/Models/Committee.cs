@@ -11,6 +11,10 @@ namespace Commissiestrijd.Models;
 /// </summary>
 public class Committee
 {
+    /// <summary>
+    /// The name of the committee.
+    /// This property is required and serves as the primary key for the committee.
+    /// </summary>
     [Column("Name")]
     [Key]
     public required string Name { get; set; }

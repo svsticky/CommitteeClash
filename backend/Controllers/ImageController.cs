@@ -19,8 +19,11 @@ namespace Commissiestrijd.Controllers;
 [Route("[controller]")]
 public class ImageController : Controller
 {
-    private readonly AppDbContext _context;
-
+    /// <summary>
+    /// The logger used for logging information and errors in the controller.
+    /// This logger is used to log various events and errors that occur during the execution of the controller's actions,
+    /// helping with debugging and monitoring the application's behavior.
+    /// </summary>
     private readonly ILogger<ImageController> _logger;
 
     /// <summary>
@@ -29,12 +32,8 @@ public class ImageController : Controller
     /// This constructor is used to set up the necessary dependencies for the controller,
     /// allowing it to access submitted task data and log information or errors during operations.
     /// </summary>
-    /// <param name="context">
-    /// The database context used to access the application's data.
-    /// </param>
-    public ImageController(AppDbContext context, ILogger<ImageController> logger)
+    public ImageController(ILogger<ImageController> logger)
     {
-        _context = context;
         _logger = logger;
     }
 

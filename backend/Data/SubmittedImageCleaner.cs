@@ -15,8 +15,18 @@ namespace Commissiestrijd.Data;
 /// </summary>
 public class SubmittedImageCleaningService : BackgroundService
 {
+    /// <summary>
+    /// The service provider used to create a scope for accessing the database context.
+    /// This service provider is used to resolve dependencies and access the application's services,
+    /// such as the database context for performing operations on submitted tasks.
+    /// </summary>
     private readonly IServiceProvider _serviceProvider;
 
+    /// <summary>
+    /// The logger used for logging information and errors in the service.
+    /// This logger is used to log various events and errors that occur during the execution of the service,
+    /// helping with debugging and monitoring the application's behavior.
+    /// </summary>
     private ILogger<SubmittedImageCleaningService> _logger;
 
     /// <summary>

@@ -16,6 +16,12 @@ namespace Commissiestrijd
     /// </summary>
     public class Program
     {
+        /// <summary>
+        /// The base URL for the frontend application.
+        /// This URL is used to allow cross-origin requests from the frontend to the backend.
+        /// It can be configured through the environment file,
+        /// and defaults to "http://localhost:3000" if not specified.
+        /// </summary>
         public static string HostUrl { get; private set; } = "http://localhost:3000";
 
         /// <summary>

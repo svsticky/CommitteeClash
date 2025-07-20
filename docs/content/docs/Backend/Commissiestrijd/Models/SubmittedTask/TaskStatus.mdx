@@ -9,6 +9,11 @@ import { CSharpType } from "@/components/csharp_type"
 Namespace: <a href='../../Models'>Commissiestrijd.Models</a>  
 Assembly: backend.dll  
 
+Represents the status of the submitted task.
+This enum defines the possible states of a submitted task:
+Pending, Approved, and Rejected.
+Each status indicates the current state of the task in the submission process.
+
 ```csharp
 public enum SubmittedTask.TaskStatus
 ```
@@ -17,7 +22,23 @@ public enum SubmittedTask.TaskStatus
 
 `Approved = 1` 
 
+Indicates that the task has been approved.
+This status is set when the task has been reviewed and accepted.
+
+
+
 `Pending = 0` 
 
+Indicates that the task is pending review.
+This status is set when the task has been submitted but not yet reviewed.
+
+
+
 `Rejected = 2` 
+
+Indicates that the task has been rejected.
+This status is set when the task has been reviewed and not accepted,
+and a reason for rejection may be provided.
+
+
 

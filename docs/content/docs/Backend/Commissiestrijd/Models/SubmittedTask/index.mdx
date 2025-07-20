@@ -55,6 +55,10 @@ public class SubmittedTask
 ---
 ###  Committee
 
+The committee to which the task was submitted.
+This property is required and serves as a foreign key linking to the Committee entity.
+It indicates which committee the task was submitted to for review.
+
 ```csharp
 [Column("Committee")]
 [ForeignKey("Committee")]
@@ -70,6 +74,9 @@ public required string Committee { get; set; }
 ---
 ###  Id
 
+The unique identifier for the submitted task.
+This property is required and serves as the primary key for the task.
+
 ```csharp
 [Column("Id")]
 [Key]
@@ -83,6 +90,10 @@ public required Guid Id { get; set; }
 
 ---
 ###  ImagePath
+
+The path to the image associated with the submission.
+This property is required and has a maximum length of 255 characters.
+It stores the file path or URL of the image that was uploaded with the task submission.
 
 ```csharp
 [Column("ImagePath")]
@@ -99,6 +110,11 @@ public required string ImagePath { get; set; }
 ---
 ###  MaxPerPeriod
 
+The maximum number of times this task can be completed in a given period.
+This property is optional and can be null,
+indicating that there is no limit on the number of times the task can be completed.
+If specified, it must be a non-negative integer.
+
 ```csharp
 [Column("MaxPerPeriod")]
 public int? MaxPerPeriod { get; set; }
@@ -111,6 +127,10 @@ public int? MaxPerPeriod { get; set; }
 
 ---
 ###  Points
+
+The points awarded for the submitted task.
+This property is required and indicates the number of points that the task has been awarded.
+It is used to track the points earned by the user for completing the task.
 
 ```csharp
 [Column("Points")]
@@ -127,6 +147,10 @@ public required int Points { get; set; }
 ---
 ###  PossibleTaskId
 
+The unique identifier for the possible task that this submission relates to.
+This property is required and serves as a foreign key linking to the PossibleTask entity.
+It indicates which possible task this submission is based on.
+
 ```csharp
 [Column("PossibleTaskId")]
 [ForeignKey("PossibleTask")]
@@ -142,6 +166,12 @@ public required Guid PossibleTaskId { get; set; }
 ---
 ###  RejectionReason
 
+The reason for rejection if the task was not approved.
+This property is optional and can be null.
+It provides a reason for why the task was rejected,
+allowing users to understand the feedback on their submission.
+If the task is approved or pending, this property can be left null.
+
 ```csharp
 [Column("RejectionReason")]
 [StringLength(500, ErrorMessage = "Rejection reason cannot exceed 500 characters.")]
@@ -155,6 +185,12 @@ public string? RejectionReason { get; set; }
 
 ---
 ###  Status
+
+The current status of the submitted task.
+This property is required and indicates the state of the task in the submission process.
+It can be one of the values defined in the TaskStatus enum (Pending, Approved
+or Rejected).
+///
 
 ```csharp
 [Column("Status")]
@@ -170,6 +206,10 @@ public required SubmittedTask.TaskStatus Status { get; set; }
 
 ---
 ###  SubmittedAt
+
+The date and time when the task was submitted.
+This property is required and indicates when the submission occurred.
+It is used to track the submission time for the task.
 
 ```csharp
 [Column("SubmittedAt")]

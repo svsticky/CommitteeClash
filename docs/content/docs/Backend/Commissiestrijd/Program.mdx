@@ -39,6 +39,11 @@ public class Program
 ---
 ###  HostUrl
 
+The base URL for the frontend application.
+This URL is used to allow cross-origin requests from the frontend to the backend.
+It can be configured through the environment file,
+and defaults to "http://localhost:3000" if not specified.
+
 ```csharp
 public static string HostUrl { get; }
 ```

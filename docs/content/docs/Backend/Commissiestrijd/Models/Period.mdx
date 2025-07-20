@@ -43,6 +43,10 @@ public class Period
 ---
 ###  EndDate
 
+The end date of the period.
+This property is required and indicates when the period ends.
+It must be after the start date.
+
 ```csharp
 [Column("EndDate")]
 [Required(ErrorMessage = "End date is required.")]
@@ -56,6 +60,9 @@ public required DateTime EndDate { get; set; }
 
 ---
 ###  Id
+
+The unique identifier for the period.
+This property is required and serves as the primary key for the period.
 
 ```csharp
 [Column("Id")]
@@ -71,6 +78,10 @@ public required Guid Id { get; set; }
 ---
 ###  Name
 
+The name of the period.
+This property is required and has a maximum length of 50 characters.
+It serves as a descriptive label for the period.
+
 ```csharp
 [Column("Name")]
 [StringLength(50, ErrorMessage = "Name cannot exceed 50 characters.")]
@@ -85,6 +96,9 @@ public required string Name { get; set; }
 
 ---
 ###  StartDate
+
+The start date of the period.
+This property is required and indicates when the period begins.
 
 ```csharp
 [Column("StartDate")]
