@@ -11,7 +11,7 @@ import { revalidatePath } from 'next/cache';
  *
  * @returns {Promise<Response<CommitteeList>>} - A promise that resolves to a response object containing the list of periods or an error message.
  */
-export const GetCommittees = async (): Promise<Response<CommitteeList>> => {
+export const GetPeriods = async (): Promise<Response<CommitteeList>> => {
   try {
     console.log('Getting periods...');
 
