@@ -34,7 +34,7 @@ You can find and test the Web API endpoints with the help of swagger when runnin
 
 # Documentation
 
-After starting up development, you can find the home page on http://localhost:3001.
+After starting up development, you can find the home page of the documentation website on http://localhost:3001.
 
 ## Update documentation
 
