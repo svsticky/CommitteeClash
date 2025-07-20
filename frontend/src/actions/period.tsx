@@ -1,6 +1,7 @@
 'use server';
 
 import { authOptions } from '@/lib/auth/authOptions';
+import { HandleUnauthorizedAccess, ThrowResponseError } from '@/lib/utils';
 import { CommitteeList } from '@/types/Committee';
 import { Response } from '@/types/Response';
 import { getServerSession } from 'next-auth';
@@ -28,8 +29,7 @@ export const GetPeriods = async (): Promise<Response<CommitteeList>> => {
 
     // Check if the response is ok (status code 200-299)
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(errorText);
+      await ThrowResponseError(response);
     }
 
     // Parse the JSON response
@@ -40,6 +40,11 @@ export const GetPeriods = async (): Promise<Response<CommitteeList>> => {
     return { succeed: true, data: result };
   } catch (error) {
     console.error('Error getting committees:', error);
+
+    // Handle unauthorized access
+    if (error instanceof Error) {
+      HandleUnauthorizedAccess(error);
+    }
 
     return {
       succeed: false,
@@ -80,8 +85,7 @@ export const CreatePeriodAction = async (
 
     // Check if the response is ok (status code 200-299)
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(errorText);
+      await ThrowResponseError(response);
     }
 
     // Parse the JSON response
@@ -95,6 +99,11 @@ export const CreatePeriodAction = async (
     return { succeed: true, data: result };
   } catch (error) {
     console.error('Error creating period:', error);
+
+    // Handle unauthorized access
+    if (error instanceof Error) {
+      HandleUnauthorizedAccess(error);
+    }
 
     return {
       succeed: false,
@@ -137,8 +146,7 @@ export const UpdatePeriod = async (
 
     // Check if the response is ok (status code 200-299)
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(errorText);
+      await ThrowResponseError(response);
     }
 
     console.log('Period updated succesfully:', response);
@@ -149,6 +157,11 @@ export const UpdatePeriod = async (
     return { succeed: true };
   } catch (error) {
     console.error('Error updating committee:', error);
+
+    // Handle unauthorized access
+    if (error instanceof Error) {
+      HandleUnauthorizedAccess(error);
+    }
 
     return {
       succeed: false,
@@ -183,8 +196,7 @@ export const DeletePeriod = async (id: string): Promise<Response<void>> => {
 
     // Check if the response is ok (status code 200-299)
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(errorText);
+      await ThrowResponseError(response);
     }
 
     console.log('Period deleted succesfully:', response);
@@ -195,6 +207,11 @@ export const DeletePeriod = async (id: string): Promise<Response<void>> => {
     return { succeed: true };
   } catch (error) {
     console.error('Error deleting period:', error);
+
+    // Handle unauthorized access
+    if (error instanceof Error) {
+      HandleUnauthorizedAccess(error);
+    }
 
     return {
       succeed: false,

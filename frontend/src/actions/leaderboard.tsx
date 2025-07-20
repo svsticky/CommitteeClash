@@ -1,6 +1,7 @@
 'use server';
 
 import { authOptions } from '@/lib/auth/authOptions';
+import { HandleUnauthorizedAccess, ThrowResponseError } from '@/lib/utils';
 import { LeaderboardList } from '@/types/Leaderboard';
 import { Period } from '@/types/Period';
 import { Response } from '@/types/Response';
@@ -34,8 +35,7 @@ export const GetLeaderboard = async (
 
     // Check if the response is ok (status code 200-299)
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(errorText);
+      await ThrowResponseError(response);
     }
 
     // Parse the JSON response
@@ -46,6 +46,11 @@ export const GetLeaderboard = async (
     return { succeed: true, data: result };
   } catch (error) {
     console.error('Error getting leaderboard:', error);
+
+    // Handle unauthorized access
+    if (error instanceof Error) {
+      HandleUnauthorizedAccess(error);
+    }
 
     return {
       succeed: false,

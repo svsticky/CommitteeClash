@@ -1,6 +1,7 @@
 'use server';
 
 import { authOptions } from '@/lib/auth/authOptions';
+import { HandleUnauthorizedAccess, ThrowResponseError } from '@/lib/utils';
 import { Response } from '@/types/Response';
 import { SubmittedTaskList } from '@/types/SubmittedTask';
 import { getServerSession } from 'next-auth';
@@ -44,8 +45,7 @@ export const SubmitTaskAction = async (
 
     // Check if the response is ok (status code 200-299)
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(errorText);
+      await ThrowResponseError(response);
     }
 
     // Parse the JSON response
@@ -56,6 +56,11 @@ export const SubmitTaskAction = async (
     return { succeed: true, data: result };
   } catch (error) {
     console.error('Error submitting task:', error);
+
+    // Handle unauthorized access
+    if (error instanceof Error) {
+      HandleUnauthorizedAccess(error);
+    }
 
     return {
       succeed: false,
@@ -92,8 +97,7 @@ export const GetSubmittedTasks = async (
 
     // Check if the response is ok (status code 200-299)
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(errorText);
+      await ThrowResponseError(response);
     }
 
     // Parse the JSON response
@@ -104,6 +108,11 @@ export const GetSubmittedTasks = async (
     return { succeed: true, data: result as SubmittedTaskList };
   } catch (error) {
     console.error('Error loading submitted tasks:', error);
+
+    // Handle unauthorized access
+    if (error instanceof Error) {
+      HandleUnauthorizedAccess(error);
+    }
 
     return {
       succeed: false,

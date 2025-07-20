@@ -81,7 +81,7 @@ async function main() {
         transform: (operation, _, doc) => {
             operation.summary = operation.operationId || operation.summary;
             return operation;
-        }
+        },
     });
 
     console.log("API documentation generated successfully!");

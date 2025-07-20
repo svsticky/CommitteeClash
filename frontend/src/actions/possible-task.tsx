@@ -1,6 +1,7 @@
 'use server';
 
 import { authOptions } from '@/lib/auth/authOptions';
+import { HandleUnauthorizedAccess, ThrowResponseError } from '@/lib/utils';
 import { PossibleTaskList } from '@/types/PossibleTask';
 import { Response } from '@/types/Response';
 import { getServerSession } from 'next-auth';
@@ -32,8 +33,7 @@ export const GetPossibleTasks = async (): Promise<
 
     // Check if the response is ok (status code 200-299)
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(errorText);
+      await ThrowResponseError(response);
     }
 
     // Parse the JSON response
@@ -44,6 +44,11 @@ export const GetPossibleTasks = async (): Promise<
     return { succeed: true, data: result };
   } catch (error) {
     console.error('Error getting possible tasks:', error);
+
+    // Handle unauthorized access
+    if (error instanceof Error) {
+      HandleUnauthorizedAccess(error);
+    }
 
     return {
       succeed: false,
@@ -88,8 +93,7 @@ export const CreatePossibleTask = async (
 
     // Check if the response is ok (status code 200-299)
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(errorText);
+      await ThrowResponseError(response);
     }
 
     // Parse the JSON response
@@ -100,6 +104,11 @@ export const CreatePossibleTask = async (
     return { succeed: true };
   } catch (error) {
     console.error('Error creating possible task:', error);
+
+    // Handle unauthorized access
+    if (error instanceof Error) {
+      HandleUnauthorizedAccess(error);
+    }
 
     return {
       succeed: false,
@@ -146,8 +155,7 @@ export const EditPossibleTaskAction = async (
 
     // Check if the response is ok (status code 200-299)
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(errorText);
+      await ThrowResponseError(response);
     }
 
     // Parse the JSON response
@@ -158,6 +166,11 @@ export const EditPossibleTaskAction = async (
     return { succeed: true };
   } catch (error) {
     console.error('Error editing possible task:', error);
+
+    // Handle unauthorized access
+    if (error instanceof Error) {
+      HandleUnauthorizedAccess(error);
+    }
 
     return {
       succeed: false,

@@ -1,6 +1,7 @@
 'use server';
 
 import { authOptions } from '@/lib/auth/authOptions';
+import { HandleUnauthorizedAccess, ThrowResponseError } from '@/lib/utils';
 import { Response } from '@/types/Response';
 import { getServerSession } from 'next-auth';
 
@@ -36,8 +37,7 @@ export const ApproveTask = async (
 
     // Check if the response is ok (status code 200-299)
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(errorText);
+      await ThrowResponseError(response);
     }
 
     console.log('Task approved successfully:', response);
@@ -45,6 +45,12 @@ export const ApproveTask = async (
     return { succeed: true };
   } catch (error) {
     console.error('Error approving task:', error);
+
+    // Handle unauthorized access
+    if (error instanceof Error) {
+      HandleUnauthorizedAccess(error);
+    }
+
     return {
       succeed: false,
       error: error instanceof Error ? error.message : 'Unknown error',
@@ -82,8 +88,7 @@ export const RejectTask = async (
 
     // Check if the response is ok (status code 200-299)
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(errorText);
+      await ThrowResponseError(response);
     }
 
     console.log('Task rejected successfully:', response);
@@ -91,6 +96,11 @@ export const RejectTask = async (
     return { succeed: true };
   } catch (error) {
     console.error('Error rejecting task:', error);
+
+    // Handle unauthorized access
+    if (error instanceof Error) {
+      HandleUnauthorizedAccess(error);
+    }
 
     return {
       succeed: false,
