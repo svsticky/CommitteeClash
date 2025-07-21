@@ -54,7 +54,7 @@ export function CodeBlock({
         >
             {parts.map((part, i) => {
                 if (part.type === "text") {
-                    // Highlight de tekst part
+                    // Highlight the text part with the specified language
                     return (
                         <SyntaxHighlighter
                             key={i}
