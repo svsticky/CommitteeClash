@@ -4,16 +4,7 @@ Welcome to the CommitteeClash repository. CommitteeClash is a website applicatio
 
 # Environment file
 
-To get everything to work, you have to create a .env file in the root of the repository. The .env file should contain the following variables:
-
-- HOST_URL: The url the website is running on
-- OAUTH_PROVIDER_URL: The OAUTH provider (e.g. https://koala.dev.svsticky.nl)
-- OAUTH_CLIENT_ID: The client id for the OAUTH
-- OAUTH_CLIENT_SECRET: The client secret for the OAUTH
-- POSTGRES_PASSWORD: The password for the database (only needed for production mode)
-
-For testing set the HOST_URL to http://localhost:3000.
-Sticky members can setup the OAUTH variables on https://koala.dev.svsticky.nl.
+To get the application working, you have to create a .env file in the root of the repository. Please copy the content of the sample.env and fill in the missing values.
 
 # Docker
 
