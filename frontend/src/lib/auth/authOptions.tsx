@@ -20,6 +20,7 @@ export const authOptions: NextAuthOptions = {
   ],
   pages: {
     signIn: '/login',
+    error: '/loginFailed',
   },
   callbacks: {
     async jwt({ token, account, profile }) {
