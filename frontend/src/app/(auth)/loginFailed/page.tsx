@@ -3,16 +3,18 @@
 import Header from '@/components/header';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
+import { redirect, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
 /**
- * LoginFailedPage component that displays a message after the login process has failed.
- * This is a client-side component that provides a button to log back in with Koala.
+ * LoginFailedContent component displays an error message when login fails.
+ * It provides a link to the OAuth provider and a button to redirect to the login page.
+ * It uses the search parameters to retrieve the error message.
  *
- * @returns {JSX.Element} A message indicating the login failure and a button to log in again.
- * */
-export default function LoginFailedPage() {
-  const searchParams = new URLSearchParams(window.location.search);
+ * @returns {JSX.Element} LoginFailedContent component
+ */
+function LoginFailedContent() {
+  const searchParams = useSearchParams();
   const errorMessage =
     searchParams.get('error') || 'Something went wrong during login.';
   console.error(errorMessage);
@@ -38,5 +40,19 @@ export default function LoginFailedPage() {
         </Button>
       </div>
     </>
+  );
+}
+
+/**
+ * LoginFailedPage component is the main entry point for the login failed page.
+ * It uses React's Suspense to handle loading states.
+ *
+ * @returns {JSX.Element} LoginFailedPage component
+ */
+export default function LoginFailedPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginFailedContent />
+    </Suspense>
   );
 }
