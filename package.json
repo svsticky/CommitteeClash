@@ -1,0 +1,8 @@
+{
+  "type": "module",
+  "scripts": {
+    "dev": "node run.mjs dev",
+    "prod": "node run.mjs prod",
+    "down": "docker compose down --rmi local"
+  }
+}

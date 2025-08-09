@@ -18,6 +18,10 @@ export const authOptions: NextAuthOptions = {
       issuer: process.env.NEXT_PUBLIC_OAUTH_PROVIDER_URL!,
     }),
   ],
+  pages: {
+    signIn: '/login',
+    error: '/loginFailed',
+  },
   callbacks: {
     async jwt({ token, account, profile }) {
       if (account && profile) {

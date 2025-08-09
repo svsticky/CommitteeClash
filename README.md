@@ -8,12 +8,12 @@ To get the application working, you have to create a .env file in the root of th
 
 # Docker
 
-To compose the services, use the following commands:
+The application works with docker. To compose the services, use the following commands:
 
-- For development: `docker compose -f docker-compose.dev.yml up --build`
-- For production: `docker compose -f docker-compose.prod.yml up --build`
+- For development: `npm run dev`
+- For production: `npm run prod`
 
-To delete images and containers, use the following command: `docker compose down --rmi local`
+To delete images and containers, use the following command: `npm run down`
 
 # Development
 
@@ -29,10 +29,4 @@ After starting up development, you can find the home page of the documentation w
 
 ## Update documentation
 
-There are scripts to generate automatic documentation based on summaries and function headers.
-To update the documentation site, please run the following commands before composing the docker containers:
-
-- Frontend: `node docs/scripts/generate-frontend-docs.mjs`
-- Backend: `node docs/scripts/generate-backend-docs.js`
-
-The API documentation is updated automatically when starting development.
+The frontend and backend documentation is updated automatically when running `npm run dev` or `npm run prod`. The api documentation is updated when running `npm run dev`.
