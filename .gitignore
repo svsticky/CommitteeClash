@@ -69,3 +69,5 @@ Thumbs.db
 # documentation files
 /docs/content/docs/*
 !/docs/content/docs/index.mdx
+!/docs/content/docs/(api)/
+!/docs/content/docs/(api)/**
