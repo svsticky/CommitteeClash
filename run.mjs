@@ -77,6 +77,21 @@ async function main() {
   await waitForHealthy(backendContainerName);
   console.info("Backend service is healthy.");
 
+  // 4. Generate the api documentation, but only if not in dev mode as it will already be generated live there after building
+  if (env !== "dev") {
+    console.info("Starting API documentation generation service...");
+    await runLive("docker", [
+      "compose",
+      "-f",
+      composeFile,
+      "run",
+      "--rm",
+      "--build",
+      "api-docs-generator",
+    ]);
+    console.info("API documentation generation is completed.");
+  }
+
   // 4. Generate backend docs
   console.info("Generating backend documentation...");
   await runLive("node", ["docs/scripts/generate-backend-docs.js"]);
