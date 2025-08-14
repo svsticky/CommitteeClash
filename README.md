@@ -13,7 +13,7 @@ The application works with docker. To compose the services, use the following co
 - For development: `npm run dev`
 - For production: `npm run prod`
 
-To delete images and containers, use the following command: `npm run down`
+To delete images and containers, use one of the following commands: `npm run down-dev` or `npm run down-prod`.
 
 # Development
 

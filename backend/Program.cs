@@ -17,14 +17,6 @@ namespace Commissiestrijd
     public class Program
     {
         /// <summary>
-        /// The base URL for the frontend application.
-        /// This URL is used to allow cross-origin requests from the frontend to the backend.
-        /// It can be configured through the environment file,
-        /// and defaults to "http://localhost:3000" if not specified.
-        /// </summary>
-        public static string HostUrl { get; private set; } = "http://localhost:3000";
-
-        /// <summary>
         /// The main entry point for the application.
         /// This method initializes the web application,
         /// configures services, logging, and middleware,
@@ -54,20 +46,6 @@ namespace Commissiestrijd
                 // CONNECTION_STRING is set in docker-compose.dev.yml file
                 options => options.UseNpgsql(builder.Configuration.GetValue<string>("CONNECTION_STRING")
             ));
-
-            HostUrl = builder.Configuration.GetValue<string>("HOST_URL") ?? HostUrl;
-
-            // CORS to allow Cross Origin Resource Sharing
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("AllowFrontend", policy =>
-                {
-                    policy.WithOrigins(HostUrl)
-                          .AllowAnyHeader()
-                          .AllowAnyMethod()
-                          .AllowCredentials();
-                });
-            });
 
             // # Authentication
             builder.Services.AddAuthentication("Bearer")

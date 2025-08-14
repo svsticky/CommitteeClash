@@ -3,6 +3,7 @@
   "scripts": {
     "dev": "node run.mjs dev",
     "prod": "node run.mjs prod",
-    "down": "docker compose down --rmi local"
+    "down-dev": "docker compose -f docker-compose.dev.yml down --rmi local",
+    "down-prod": "docker compose -f docker-compose.prod.yml down --rmi local"
   }
 }
