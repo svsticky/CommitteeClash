@@ -31,9 +31,9 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>
-        <main>{children}</main>
+    <html lang="en" className="w-full h-full">
+      <body className="w-full h-full">
+        <main className="w-full h-full">{children}</main>
       </body>
     </html>
   );
