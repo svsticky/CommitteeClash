@@ -30,7 +30,7 @@ services:
       dockerfile: Dockerfile
       target: development
     ports:
-      - "8080:8080"
+      - "${BACKEND_PORT:-8080}:8080"
     environment:
       - OAUTH_PROVIDER_URL=${OAUTH_PROVIDER_URL:-https://koala.dev.svsticky.nl}
       - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
@@ -48,7 +48,7 @@ services:
     networks:
       - my_network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/status"]
+      test: ["CMD", "curl", "-f", "http://backend:8080/status"]
       interval: 10s
       timeout: 10s
       retries: 5
@@ -62,7 +62,7 @@ services:
       target: development
       no_cache: true
     ports:
-      - "3000:3000"
+      - "${PORT:-3000}:3000"
     environment:
       - NEXT_PUBLIC_OAUTH_PROVIDER_URL=${OAUTH_PROVIDER_URL}
       - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
@@ -86,7 +86,7 @@ services:
       target: development
       no_cache: true
     ports:
-      - "3001:3001"
+      - "${DOCS_PORT:-3000}:3001"
     environment:
       - API_URL=http://backend:8080
       - NODE_ENV=development
