@@ -10,16 +10,20 @@ import Scorebar from './scorebar-component';
  * @param {Object} props - The properties passed to the component.
  * @param {LeaderboardItemComponent} props.leaderboardItem - The leaderboard item data to display.
  * @param {number} props.maxScore - The maximum score used to calculate the percentage.
+ * @param {string} [props.theme] - Optional theme for styling ('light' or 'dark').
  * @param {string} [props.className] - Optional additional class names for styling.
+ *
  * @returns {JSX.Element} A JSX element that represents a single leaderboard item.
  */
 export default function LeaderboardItem({
   leaderboardItem,
   maxScore,
+  theme = 'light',
   className = '',
 }: {
   leaderboardItem: LeaderboardItemComponent;
   maxScore: number;
+  theme?: 'light' | 'dark';
   className?: string;
 }) {
   return (

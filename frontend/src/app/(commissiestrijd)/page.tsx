@@ -1,4 +1,4 @@
-import LeaderboardComponent from '@/components/leaderboard/leaderboard-component';
+import LeaderboardOverviewComponent from '@/components/leaderboard/leaderboard-overview-component';
 import { FetchWithValidation } from '@/lib/fetchWithValidation';
 import { PeriodList, PeriodListSchema } from '@/types/Period';
 
@@ -37,7 +37,7 @@ export default async function Home() {
 
   return (
     <div className="flex flex-col items-center w-full">
-      <LeaderboardComponent periods={periods} />
+      <LeaderboardOverviewComponent periods={periods} />
     </div>
   );
 }
