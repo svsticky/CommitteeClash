@@ -3,7 +3,7 @@
 /.source/*
 !/.source/index.ts
 !/.source/source.config.mjs
-/content/docs/(api)/**
+/content/docs/api/**
 swagger.json
 /docfx-files
 /typedoc-files
