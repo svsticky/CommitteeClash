@@ -19,8 +19,6 @@ ENV PORT=3000
 # Create custom entrypoint script to run npm install as well to update everything
 ENTRYPOINT npm install && npm run dev
 
-
-
 # -- Build the app
 FROM base AS builder
 WORKDIR /app
