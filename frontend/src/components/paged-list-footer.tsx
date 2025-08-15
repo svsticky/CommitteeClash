@@ -24,12 +24,17 @@ export default function PagedListFooterComponent({
 }) {
   return (
     <div className={`flex justify-between items-center w-full ${className}`}>
+      {/* Previous button */}
       <Button onClick={() => updatePageAction(page - 1)} disabled={page === 1}>
         Previous
       </Button>
+
+      {/* Current page indicator */}
       <span>
         {page}/{pageAmount}
       </span>
+
+      {/* Next button */}
       <Button
         onClick={() => updatePageAction(page + 1)}
         disabled={page === pageAmount}

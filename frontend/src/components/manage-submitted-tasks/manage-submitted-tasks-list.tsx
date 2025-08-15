@@ -31,6 +31,7 @@ export default function ManageSubmittedTaskList({
   const [page, setPage] = useState(1);
   const [pageAmount, setPageAmount] = useState(1);
 
+  // Fetch submitted tasks when the page changes
   useEffect(() => {
     const fetchSubmittedTasks = async () => {
       setLoading(true);
@@ -68,10 +69,12 @@ export default function ManageSubmittedTaskList({
               />
             ))}
           </div>
+
           {/* Display a message if there are no tasks */}
           {submittedTasks.length === 0 && (
             <p className="text-gray-500">Er zijn geen opdrachten.</p>
           )}
+
           {/* Pagination footer */}
           <PagedListFooterComponent
             page={page}
