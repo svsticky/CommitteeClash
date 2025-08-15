@@ -1,6 +1,11 @@
+import { GetPossibleTasks } from '@/actions/possible-task';
+import {
+  GetApprovedTasks,
+  GetPendingTasks,
+  GetRejectedTasks,
+} from '@/actions/submit-task';
 import ManageSubmittedTaskList from '@/components/manage-submitted-tasks/manage-submitted-tasks-list';
-import { FetchWithValidation } from '@/lib/fetchWithValidation';
-import { SubmittedTaskListSchema } from '@/types/SubmittedTask';
+import { PossibleTaskList } from '@/types/PossibleTask';
 
 /**
  * ManageSubmittedTasks component that fetches and displays lists of submitted tasks
@@ -9,54 +14,44 @@ import { SubmittedTaskListSchema } from '@/types/SubmittedTask';
  * @returns {JSX.Element} A JSX element that contains the management interface for submitted tasks.
  */
 export default async function ManageSubmittedTasks() {
-  // Fetch the lists of pending tasks from the backend using the FetchWithValidation function
-  const pendingRes = await FetchWithValidation(
-    SubmittedTaskListSchema,
-    'http://backend:8080/SubmittedTask/GetPendingTasks'
-  );
+  // Fetch the possible tasks from the server
+  const res = await GetPossibleTasks();
 
-  // Fetch the lists of approved tasks from the backend using the FetchWithValidation function
-  const approvedRes = await FetchWithValidation(
-    SubmittedTaskListSchema,
-    'http://backend:8080/SubmittedTask/GetApprovedTasks'
-  );
-
-  // Fetch the lists of rejected tasks from the backend using the FetchWithValidation function
-  const rejectedRes = await FetchWithValidation(
-    SubmittedTaskListSchema,
-    'http://backend:8080/SubmittedTask/GetRejectedTasks'
-  );
-
-  // Check if any of the responses were unsuccessful, if so throw an error
-  if (!pendingRes.success || !approvedRes.success || !rejectedRes.success) {
-    throw new Error(
-      `Failed to load possible tasks: ${pendingRes.error ? pendingRes.error : approvedRes.error ? approvedRes.error : rejectedRes.error}`
-    );
+  // Check if the request was successful
+  if (!res.succeed) {
+    throw new Error(`Failed to load possible tasks: ${res.error}`);
   }
 
-  // Extract the lists of tasks from the response data
-  const pendingTasks = pendingRes.data;
-  const approvedTasks = approvedRes.data;
-  const rejectedTasks = rejectedRes.data;
+  // Extract the submitted tasks from the response
+  const possibleTasks = res.data as PossibleTaskList;
 
   return (
     <div className="flex flex-col gap-4">
       {/* Pending task list */}
       <div>
         <h1 className="text-2xl font-bold mb-2">Ingediende opdrachten</h1>
-        <ManageSubmittedTaskList submittedTasks={pendingTasks} />
+        <ManageSubmittedTaskList
+          possibleTasks={possibleTasks}
+          getSubmittedTasksAction={GetPendingTasks}
+        />
       </div>
 
       {/* Approved task list */}
       <div>
         <h1 className="text-2xl font-bold mb-2">Goedgekeurde opdrachten</h1>
-        <ManageSubmittedTaskList submittedTasks={approvedTasks} />
+        <ManageSubmittedTaskList
+          possibleTasks={possibleTasks}
+          getSubmittedTasksAction={GetApprovedTasks}
+        />
       </div>
 
       {/* Rejected task list */}
       <div>
         <h1 className="text-2xl font-bold mb-2">Afgekeurde opdrachten</h1>
-        <ManageSubmittedTaskList submittedTasks={rejectedTasks} />
+        <ManageSubmittedTaskList
+          possibleTasks={possibleTasks}
+          getSubmittedTasksAction={GetRejectedTasks}
+        />
       </div>
     </div>
   );
