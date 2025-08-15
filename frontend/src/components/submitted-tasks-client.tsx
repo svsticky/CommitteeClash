@@ -69,36 +69,36 @@ export default function SubmittedTasksClient({
   }, [committee, page]);
 
   return (
-    <div className="w-full">
-      <h1 className="text-2xl font-bold mb-4">Ingediende opdrachten</h1>
-      <div className="flex justify-between flex-col gap-4 w-full items-center">
-        {/* Dropdown to select the committee for which to view submitted tasks */}
-        <DropDown
-          title="Commissie"
-          options={committeeNames}
-          selected={committee ?? ''}
-          setSelected={setCommittee}
-        />
+    <div className="flex flex-col gap-4 w-full h-full">
+      <h1 className="text-2xl font-bold">Ingediende opdrachten</h1>
+      {/* Dropdown to select the committee for which to view submitted tasks */}
+      <DropDown
+        title="Commissie"
+        options={committeeNames}
+        selected={committee ?? ''}
+        setSelected={setCommittee}
+      />
 
-        {/* Display the list of submitted tasks or a loading message */}
-        {isLoading || !possibleTasks ? (
-          <p>Laden...</p>
-        ) : (
+      {/* Display the list of submitted tasks or a loading message */}
+      {isLoading || !possibleTasks ? (
+        <p>Laden...</p>
+      ) : (
+        <>
           <div className="flex flex-col gap-4 w-full">
             <TaskStatusList
               submittedTasks={submittedTasks}
               possibleTasks={possibleTasks}
             />
-
-            {/* Pagination controls */}
-            <PagedListFooterComponent
-              page={page}
-              pageAmount={totalPages}
-              updatePageAction={setPage}
-            />
           </div>
-        )}
-      </div>
+          {/* Pagination controls */}
+          <PagedListFooterComponent
+            className="mt-auto"
+            page={page}
+            pageAmount={totalPages}
+            updatePageAction={setPage}
+          />
+        </>
+      )}
     </div>
   );
 }

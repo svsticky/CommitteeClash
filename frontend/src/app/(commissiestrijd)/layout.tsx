@@ -36,20 +36,17 @@ export default async function CommissiestrijdLayout({
   }
 
   return (
-    <div className="flex flex-col w-screen h-screen">
+    <div className="flex flex-col w-full min-h-full">
       {/* Render the header */}
       <Header />
 
-      <div className="flex w-full overflow-auto">
+      <div className="flex w-full min-h-[calc(100vh-3rem)]">
         {/* Render the menu, passing the isAdmin prop based on the session */}
         <Menu isAdmin={session.is_admin} />
 
-        <div className="p-4 pb-0 w-full h-full">
+        <div className="p-4 w-full h-full">
           {/* Main content area with padding and scrollable content */}
           {children}
-
-          {/* Empty footer for bottom padding in scrollview */}
-          <div className="h-4 bg-transparent" />
         </div>
       </div>
     </div>

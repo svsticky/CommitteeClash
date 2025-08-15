@@ -55,7 +55,12 @@ export default function ManageSubmittedTaskList({
       {loading ? (
         <p className="text-gray-500">Laden...</p>
       ) : (
-        <div className="flex flex-col gap-4 w-full">
+        <div className="flex flex-col gap-2 w-full">
+          {/* Display a message if there are no tasks */}
+          {submittedTasks.length === 0 && (
+            <p className="text-gray-500">Er zijn geen opdrachten.</p>
+          )}
+
           <div className="flex flex-col gap-2">
             {submittedTasks.map((task) => (
               <ManageSubmittedTaskItem
@@ -69,11 +74,6 @@ export default function ManageSubmittedTaskList({
               />
             ))}
           </div>
-
-          {/* Display a message if there are no tasks */}
-          {submittedTasks.length === 0 && (
-            <p className="text-gray-500">Er zijn geen opdrachten.</p>
-          )}
 
           {/* Pagination footer */}
           <PagedListFooterComponent
