@@ -44,7 +44,7 @@ export default async function CommissiestrijdLayout({
         {/* Render the menu, passing the isAdmin prop based on the session */}
         <Menu isAdmin={session.is_admin} />
 
-        <div className="p-4 w-full min-h-screen">
+        <div className="p-4 w-full min-h-full">
           {/* Main content area with padding and scrollable content */}
           {children}
         </div>

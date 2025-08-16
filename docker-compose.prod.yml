@@ -72,6 +72,7 @@ services:
       dockerfile: Dockerfile
       target: production # Use production target
       args:
+        NEXT_PUBLIC_OAUTH_PROVIDER_NAME: ${OAUTH_PROVIDER_NAME:-Koala}
         NEXT_PUBLIC_OAUTH_PROVIDER_URL: ${OAUTH_PROVIDER_URL:-https://koala.svsticky.nl/}
     ports:
       - "${PORT:-3000}:3000"
