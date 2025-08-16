@@ -24,19 +24,19 @@ function LoginFailedContent() {
       <Header />
       <div className="flex flex-col p-4">
         <p className="mb-4">
-          Er is iets misgegaan met inloggen. Je kunt nu weer inloggen via Koala.
-          Blijf je op deze pagina terecht komen, probeer dan eerst uit te loggen
-          op{' '}
+          Er is iets misgegaan met inloggen. Je kunt nu weer inloggen via{' '}
+          {process.env.NEXT_PUBLIC_OAUTH_PROVIDER_NAME}. Blijf je op deze pagina
+          terecht komen, probeer dan eerst uit te loggen op{' '}
           <Link
             href={process.env.NEXT_PUBLIC_OAUTH_PROVIDER_URL!}
             className="text-theme hover:underline"
           >
-            Koala
+            {process.env.NEXT_PUBLIC_OAUTH_PROVIDER_NAME}
           </Link>
           .
         </p>
         <Button onClick={() => redirect('/login')} className="mb-4 sm:w-45">
-          Login met Koala
+          Login met {process.env.NEXT_PUBLIC_OAUTH_PROVIDER_NAME}
         </Button>
       </div>
     </>

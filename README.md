@@ -30,3 +30,9 @@ After starting up development, you can find the home page of the documentation w
 ## Update documentation
 
 The frontend and backend documentation is updated automatically when running `npm run dev` or `npm run prod`. The api documentation is updated when running `npm run dev`.
+
+# OAuth
+
+The application uses OAuth for authorization and authentication. You have to set up the following settings at your OAuth provider:
+
+- Callback Url: `<Your frontend url>/api/auth/callback/<Your OAUTH_PROVIDER_NAME in env file>`
