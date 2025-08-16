@@ -63,14 +63,10 @@ namespace Commissiestrijd
             WebApplication app = builder.Build();
 
             // # Middleware
-            if (app.Environment.IsDevelopment())
-            {
-                // Run only in development environment:
-                app.MapOpenApi();
-                app.UseSwagger();
-                app.UseSwaggerUI(ConfigureSwaggerUI);
-                app.UseDeveloperExceptionPage();
-            }
+            app.MapOpenApi();
+            app.UseSwagger();
+            app.UseSwaggerUI(ConfigureSwaggerUI);
+            app.UseDeveloperExceptionPage();
 
             app.UseHttpsRedirection();
             app.UseRouting();

@@ -57,19 +57,34 @@ async function main() {
   await runLive("node", ["docs/scripts/generate-frontend-docs.mjs"]);
   console.info("Frontend documentation generated.");
 
-  // 2. Start database, backend, frontend in background (live output)
-  console.info("Starting database, backend, and frontend services...");
-  runLive("docker", [
-    "compose",
-    "-f",
-    composeFile,
-    "up",
-    "--build",
-    "-d",
-    "database",
-    "backend",
-    "frontend",
-  ]);
+  // 2. Start database, backend in background (live output), and if production mode also start the api documentation generation service
+  if (env === "dev") {
+    console.info("Starting database, and backend services...");
+    runLive("docker", [
+      "compose",
+      "-f",
+      composeFile,
+      "up",
+      "--build",
+      "-d",
+      "database",
+      "backend",
+    ]);
+  } else {
+    console.info(
+      "Starting database, backend and API documentation generation services..."
+    );
+    await runLive("docker", [
+      "compose",
+      "-f",
+      composeFile,
+      "run",
+      "--rm",
+      "--build",
+      "api-docs-generator",
+    ]);
+    console.info("API documentation generation is completed.");
+  }
 
   // 3. Wait for backend service to be healthy
   console.info("Waiting for backend service to be healthy...");
@@ -91,6 +106,7 @@ async function main() {
     "up",
     "--build",
     "-d",
+    "frontend",
     "docs",
   ]);
   console.info("Documentation service started.");

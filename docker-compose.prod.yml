@@ -94,6 +94,20 @@ services:
         max-size: "10m"
         max-file: "5"
 
+  api-docs-generator:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - ./docs:/app
+    environment:
+      - API_URL=http://backend:8080
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - prod_network
+    command: ["node", "scripts/generate-api-docs.mjs"]
+
   docs:
     build:
       context: ./docs

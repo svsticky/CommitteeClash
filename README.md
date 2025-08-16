@@ -29,7 +29,7 @@ After starting up development, you can find the home page of the documentation w
 
 ## Update documentation
 
-The frontend and backend documentation is updated automatically when running `npm run dev` or `npm run prod`. The api documentation is updated when running `npm run dev`.
+The documentation is updated automatically when running `npm run dev` or `npm run prod`.
 
 # OAuth
 

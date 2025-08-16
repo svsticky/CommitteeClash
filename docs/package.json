@@ -6,8 +6,7 @@
         "dev": "node ./scripts/generate-api-docs.mjs && next dev",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint",
-        "build:docs": "node ./scripts/generate-api-docs.mjs"
+        "lint": "next lint"
     },
     "dependencies": {
         "@radix-ui/react-collapsible": "^1.1.4",

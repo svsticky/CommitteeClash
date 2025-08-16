@@ -2,7 +2,7 @@ import * as OpenAPI from "fumadocs-openapi";
 import fs from "node:fs/promises";
 import { rimrafSync } from "rimraf";
 
-const out = "./content/docs/(api)";
+const out = "./content/docs/api";
 const swaggerURL = `${process.env.API_URL}/swagger/v1/swagger.json`;
 const swaggerFilePath = "./swagger.json";
 
