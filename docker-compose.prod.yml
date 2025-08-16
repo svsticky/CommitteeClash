@@ -9,8 +9,6 @@ services:
     user: root
     privileged: true
     image: postgres:latest
-    ports:
-      - "5432:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres} # Use env var with fallback
