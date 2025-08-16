@@ -11,8 +11,8 @@ import IdentityServer4Provider from 'next-auth/providers/identity-server4';
 export const authOptions: NextAuthOptions = {
   providers: [
     IdentityServer4Provider({
-      id: 'sticky',
-      name: 'Sticky',
+      id: process.env.NEXT_PUBLIC_OAUTH_PROVIDER_NAME!,
+      name: process.env.NEXT_PUBLIC_OAUTH_PROVIDER_NAME!,
       clientId: process.env.OAUTH_CLIENT_ID!,
       clientSecret: process.env.OAUTH_CLIENT_SECRET!,
       issuer: process.env.NEXT_PUBLIC_OAUTH_PROVIDER_URL!,

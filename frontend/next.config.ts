@@ -4,6 +4,8 @@ const nextConfig: NextConfig = {
   // Environment variables to be used in the client-side code
   env: {
     NEXT_PUBLIC_OAUTH_PROVIDER_URL: process.env.NEXT_PUBLIC_OAUTH_PROVIDER_URL,
+    NEXT_PUBLIC_OAUTH_PROVIDER_NAME:
+      process.env.NEXT_PUBLIC_OAUTH_PROVIDER_NAME,
   },
 
   // Excludes pino and pino-pretty from the server bundle
