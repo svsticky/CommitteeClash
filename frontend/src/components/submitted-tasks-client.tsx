@@ -6,6 +6,7 @@ import { CommitteeList } from '@/types/Committee';
 import { PossibleTaskList } from '@/types/PossibleTask';
 import { SubmittedTaskList } from '@/types/SubmittedTask';
 import { useEffect, useState } from 'react';
+import PagedListFooterComponent from './paged-list-footer';
 import DropDown from './ui/drop-down';
 
 /**
@@ -33,6 +34,12 @@ export default function SubmittedTasksClient({
   // State to manage the list of submitted tasks
   const [submittedTasks, setSubmittedTasks] = useState<SubmittedTaskList>();
 
+  // State to manage the page
+  const [page, setPage] = useState<number>(1);
+
+  // State to manage total page amount
+  const [totalPages, setTotalPages] = useState<number>(1);
+
   // State to manage the loading state while fetching tasks
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -43,11 +50,12 @@ export default function SubmittedTasksClient({
       setIsLoading(true);
 
       // Call the action to get submitted tasks for the selected committee
-      const res = await GetSubmittedTasks(committee);
+      const res = await GetSubmittedTasks(page, committee);
 
       // Check if the response was successful and update the state accordingly
       if (res.succeed) {
-        setSubmittedTasks(res.data ?? []);
+        setSubmittedTasks(res.data?.submittedTasks ?? []);
+        setTotalPages(res.data?.pageAmount ?? 1);
       } else {
         throw new Error(`Failed to load submitted tasks: ${res.error}`);
       }
@@ -58,30 +66,39 @@ export default function SubmittedTasksClient({
 
     // Fetch the submitted tasks whenever the committee changes
     fetchSubmittedTasks();
-  }, [committee]);
+  }, [committee, page]);
 
   return (
-    <div className="w-full">
-      <h1 className="text-2xl font-bold mb-4">Ingediende opdrachten</h1>
-      <div className="flex flex-col gap-4 w-full items-center">
-        {/* Dropdown to select the committee for which to view submitted tasks */}
-        <DropDown
-          title="Commissie"
-          options={committeeNames}
-          selected={committee ?? ''}
-          setSelected={setCommittee}
-        />
+    <div className="flex flex-col gap-4 w-full h-full">
+      <h1 className="text-2xl font-bold">Ingediende opdrachten</h1>
+      {/* Dropdown to select the committee for which to view submitted tasks */}
+      <DropDown
+        title="Commissie"
+        options={committeeNames}
+        selected={committee ?? ''}
+        setSelected={setCommittee}
+      />
 
-        {/* Display the list of submitted tasks or a loading message */}
-        {isLoading || !possibleTasks ? (
-          <p>Loading tasks...</p>
-        ) : (
-          <TaskStatusList
-            submittedTasks={submittedTasks}
-            possibleTasks={possibleTasks}
+      {/* Display the list of submitted tasks or a loading message */}
+      {isLoading || !possibleTasks ? (
+        <p>Laden...</p>
+      ) : (
+        <>
+          <div className="flex flex-col gap-4 w-full">
+            <TaskStatusList
+              submittedTasks={submittedTasks}
+              possibleTasks={possibleTasks}
+            />
+          </div>
+          {/* Pagination controls */}
+          <PagedListFooterComponent
+            className="mt-auto"
+            page={page}
+            pageAmount={totalPages}
+            updatePageAction={setPage}
           />
-        )}
-      </div>
+        </>
+      )}
     </div>
   );
 }

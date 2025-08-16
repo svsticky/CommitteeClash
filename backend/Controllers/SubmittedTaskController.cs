@@ -89,8 +89,8 @@ public class SubmittedTaskController : Controller
     /// <response code="404">
     /// If the specified committee or task does not exist, a NotFound response is returned with an appropriate error message.
     /// </response>
-    /// <response code="500">
-    /// If an error occurs while processing the request, a 500 Internal Server Error response is
+    /// <response code="20">
+    /// If an error occurs while processing the request, a 20 Internal Server Error response is
     /// returned with an appropriate error message.
     /// </response>
     [HttpPost("SubmitTask")]
@@ -99,7 +99,7 @@ public class SubmittedTaskController : Controller
     [ProducesResponseType(typeof(SubmittedTask), 200)]
     [SwaggerResponse(400, "BadRequest if the request parameters are invalid, such as empty task ID, committee name, or missing image file.")]
     [SwaggerResponse(404, "NotFound if the specified committee or task does not exist.")]
-    [SwaggerResponse(500, "Internal Server Error if an error occurs while processing the request.")]
+    [SwaggerResponse(20, "Internal Server Error if an error occurs while processing the request.")]
     public async Task<IActionResult> SubmitTask([FromForm] SubmitTaskRequestDto SubmitTaskRequestDto)
     {
         _logger.LogInformation("Received task submission request for TaskId: {TaskId}, Committee: {Committee}",
@@ -231,8 +231,8 @@ public class SubmittedTaskController : Controller
     /// <response code="404">
     /// If the specified task does not exist, a NotFound response is returned with an appropriate error message.
     /// </response>
-    /// <response code="500">
-    /// If an error occurs while processing the request, a 500 Internal Server Error response is
+    /// <response code="20">
+    /// If an error occurs while processing the request, a 20 Internal Server Error response is
     /// returned with an appropriate error message.
     /// </response>
     [HttpPut("ApproveTask")]
@@ -242,7 +242,7 @@ public class SubmittedTaskController : Controller
     [SwaggerResponse(400, "BadRequest if the request parameters are invalid, such as empty task ID, invalid points value, or points exceeding the maximum limit.")]
     [SwaggerResponse(401, "Unauthorized if the user is not an admin.")]
     [SwaggerResponse(404, "NotFound if the specified task does not exist.")]
-    [SwaggerResponse(500, "Internal Server Error if an error occurs while processing the request.")]
+    [SwaggerResponse(20, "Internal Server Error if an error occurs while processing the request.")]
     public async Task<IActionResult> ApproveTask([FromQuery] Guid TaskId, [FromQuery] int Points, [FromQuery] int? MaxPerPeriod = null)
     {
         _logger.LogInformation("ApproveTask called with TaskId: {TaskId}, Points: {Points}, MaxPerPeriod: {MaxPerPeriod}",
@@ -323,8 +323,8 @@ public class SubmittedTaskController : Controller
     /// <response code="404">
     /// If the specified task does not exist, a NotFound response is returned with an appropriate error message.
     /// </response>
-    /// <response code="500">
-    /// If an error occurs while processing the request, a 500 Internal Server Error response is
+    /// <response code="20">
+    /// If an error occurs while processing the request, a 20 Internal Server Error response is
     /// returned with an appropriate error message.
     /// </response>
     [HttpPut("RejectTask")]
@@ -334,7 +334,7 @@ public class SubmittedTaskController : Controller
     [SwaggerResponse(400, "BadRequest if the request parameters are invalid, such as empty task ID or reason.")]
     [SwaggerResponse(401, "Unauthorized if the user is not an admin.")]
     [SwaggerResponse(404, "NotFound if the specified task does not exist.")]
-    [SwaggerResponse(500, "Internal Server Error if an error occurs while processing the request.")]
+    [SwaggerResponse(20, "Internal Server Error if an error occurs while processing the request.")]
     public async Task<IActionResult> RejectTask([FromQuery] Guid TaskId, string Reason)
     {
         _logger.LogInformation("RejectTask called with TaskId: {TaskId}, Reason: {Reason}", TaskId, Reason);
@@ -379,33 +379,36 @@ public class SubmittedTaskController : Controller
     }
 
     /// <summary>
-    /// Retrieves a list of all submitted tasks.
-    /// This method allows users to retrieve a list of all submitted tasks,
-    /// optionally filtered by committee.
-    /// It returns the tasks ordered by submission date in descending order.
+    /// Retrieves a paginated list of submitted tasks.
+    /// This method allows users to retrieve a list of tasks that have been submitted,
+    /// with optional filtering by committee.
     /// </summary>
+    /// <param name="page">
+    /// The page number to retrieve.
+    /// </param>
+    /// <param name="pageSize">
+    /// The number of tasks to retrieve per page.
+    /// This parameter is optional and will be defaulted to 50.
+    /// </param>
     /// <param name="committee">
     /// The name of the committee to filter the tasks by.
     /// This parameter is optional.
     /// </param>
     /// <returns>
-    /// An IActionResult containing a list of submitted tasks or an empty list if no tasks are found.
+    /// A paginated list of submitted tasks.
     /// </returns>
-    /// <response code="200">
-    /// Returns a list of submitted tasks, ordered by submission date in descending order.
-    /// </response>
-    /// <response code="500">
-    /// If an error occurs while processing the request, a 500 Internal Server Error response is
-    /// returned with an appropriate error message.
-    /// </response>
     [HttpGet("GetSubmittedTasks")]
     [SwaggerOperation(Summary = "Get Submitted Tasks", Description = "This endpoint retrieves all submitted tasks from the database.")]
     [SwaggerResponse(200, "Returns a list of submitted tasks.")]
+    [SwaggerResponse(400, "Bad Request if the request parameters are invalid.")]
     [ProducesResponseType(typeof(List<SubmittedTask>), 200)]
-    [SwaggerResponse(500, "Internal Server Error if an error occurs while retrieving the tasks.")]
-    public IActionResult GetSubmittedTasks([FromQuery] string? committee = null)
+    [SwaggerResponse(20, "Internal Server Error if an error occurs while retrieving the tasks.")]
+    public IActionResult GetSubmittedTasks([FromQuery] int page, [FromQuery] int pageSize = 50, [FromQuery] string? committee = null)
     {
-        _logger.LogInformation("GetSubmittedTasks called with Committee: {Committee}", committee);
+        _logger.LogInformation("GetSubmittedTasks called with Page: {Page}, PageSize: {PageSize}, Committee: {Committee}", page, pageSize, committee);
+
+        // Check if the requested page is valid
+        if (page < 1 || pageSize < 1) return BadRequest("Invalid page number or page size.");
 
         // Load the submitted tasks from the database
         IQueryable<SubmittedTask> query = _context.SubmittedTasks
@@ -418,12 +421,24 @@ public class SubmittedTaskController : Controller
                 .Where(t => t.Committee == committee);
         }
 
+        // Calculate how many records we need to skip
+        int skip = (page - 1) * pageSize;
+
         // Execute the query and convert the result to a list
-        List<SubmittedTask> submittedTasks = query.ToList();
+        List<SubmittedTask> submittedTasks = query
+            .Skip(skip)
+            .Take(pageSize)
+            .ToList();
+
+        // Calculate the total number of pages
+        int pageAmount = Math.Max(1, (int)Math.Ceiling((double)query.Count() / pageSize));
+
+        // Check if the requested page is valid
+        if (page > pageAmount && page != 1) return BadRequest("Invalid page number.");
 
         _logger.LogInformation("Retrieved {Count} submitted tasks for Committee: {Committee}", submittedTasks.Count, committee);
 
-        return Ok(submittedTasks);
+        return Ok(new { submittedTasks = submittedTasks, pageAmount = pageAmount });
     }
 
     /// <summary>
@@ -449,8 +464,8 @@ public class SubmittedTaskController : Controller
     /// <response code="404">
     /// If the specified task does not exist, a NotFound response is returned with an appropriate error message.
     /// </response>
-    /// <response code="500">
-    /// If an error occurs while processing the request, a 500 Internal Server Error response is
+    /// <response code="20">
+    /// If an error occurs while processing the request, a 20 Internal Server Error response is
     /// returned with an appropriate error message.
     /// </response>
     [HttpGet("GetSubmittedTask")]
@@ -459,7 +474,7 @@ public class SubmittedTaskController : Controller
     [ProducesResponseType(typeof(SubmittedTask), 200)]
     [SwaggerResponse(400, "BadRequest if the request parameters are invalid, such as an empty task ID.")]
     [SwaggerResponse(404, "NotFound if the specified task does not exist.")]
-    [SwaggerResponse(500, "Internal Server Error if an error occurs while processing the request.")]
+    [SwaggerResponse(20, "Internal Server Error if an error occurs while processing the request.")]
     public IActionResult GetSubmittedTask([FromQuery] Guid TaskId)
     {
         _logger.LogInformation("GetSubmittedTask called with TaskId: {TaskId}", TaskId);
@@ -485,34 +500,47 @@ public class SubmittedTaskController : Controller
     }
 
     /// <summary>
-    /// Retrieves a list of pending tasks.
-    /// This method allows users to retrieve a list of tasks that are currently pending approval,
+    /// Retrieves a list of submitted tasks.
+    /// This method allows users to retrieve a list of tasks that have been submitted,
     /// optionally filtered by committee.
-    /// It returns the pending tasks ordered by submission date in descending order.
+    /// It returns the submitted tasks ordered by submission date in descending order.
     /// </summary>
+    /// <param name="page">
+    /// The page number to retrieve.
+    /// </param>
+    /// <param name="pageSize">
+    /// The number of items to retrieve per page.
+    /// This parameter is optional and defaults to 5.
+    /// </param>
     /// <param name="committee">
     /// The name of the committee to filter the tasks by.
     /// This parameter is optional.
     /// </param>
     /// <returns>
-    /// An IActionResult containing a list of pending tasks or an empty list if no tasks are
-    /// found.
+    /// A list of pending tasks, ordered by submission date in descending order.
     /// </returns>
     /// <response code="200">
     /// Returns a list of pending tasks, ordered by submission date in descending order.
     /// </response>
-    /// <response code="500">
-    /// If an error occurs while processing the request, a 500 Internal Server Error response is
+    /// <response code="400">
+    /// If the request parameters are invalid, a 400 Bad Request response is returned.
+    /// </response>
+    /// <response code="20">
+    /// If an error occurs while processing the request, a 20 Internal Server Error response is
     /// returned with an appropriate error message.
     /// </response>
     [HttpGet("GetPendingTasks")]
     [SwaggerOperation(Summary = "Get Pending Tasks", Description = "This endpoint retrieves all pending tasks from the database.")]
     [SwaggerResponse(200, "Returns a list of pending tasks.")]
+    [SwaggerResponse(400, "BadRequest if the request parameters are invalid.")]
     [ProducesResponseType(typeof(List<SubmittedTask>), 200)]
-    [SwaggerResponse(500, "Internal Server Error if an error occurs while retrieving the tasks.")]
-    public IActionResult GetPendingTasks([FromQuery] string? committee = null)
+    [SwaggerResponse(20, "Internal Server Error if an error occurs while retrieving the tasks.")]
+    public IActionResult GetPendingTasks([FromQuery] int page = 1, [FromQuery] int pageSize = 5, [FromQuery] string? committee = null)
     {
-        _logger.LogInformation("GetPendingTasks called with Committee: {Committee}", committee);
+        _logger.LogInformation("GetPendingTasks called with Committee: {Committee}, Page: {Page}, PageSize: {PageSize}", committee, page, pageSize);
+
+        // Check if the requested page is valid
+        if (page < 1) return BadRequest("Invalid page number.");
 
         // Load the pending tasks from the database
         IQueryable<SubmittedTask> query = _context.SubmittedTasks
@@ -525,43 +553,68 @@ public class SubmittedTaskController : Controller
             query = query.Where(t => t.Committee == committee);
         }
 
+        // Calculate how many records we need to skip
+        int skip = (page - 1) * pageSize;
+
         // Execute the query and convert the result to a list
-        List<SubmittedTask> pendingTasks = query.ToList();
+        List<SubmittedTask> pendingTasks = query
+            .Skip(skip)
+            .Take(pageSize)
+            .ToList();
+
+        // Calculate the total number of pages
+        int pageAmount = Math.Max(1, (int)Math.Ceiling((double)query.Count() / pageSize));
+
+        // Check if the requested page is valid
+        if (page > pageAmount && page != 1) return BadRequest("Invalid page number.");
 
         _logger.LogInformation("Retrieved {Count} pending tasks for Committee: {Committee}", pendingTasks.Count, committee);
 
-        return Ok(pendingTasks);
+        return Ok(new { PendingTasks = pendingTasks, PageAmount = pageAmount });
     }
 
     /// <summary>
-    /// Retrieves a list of approved tasks.
-    /// This method allows users to retrieve a list of tasks that have been approved,
+    /// Retrieves a list of rejected tasks.
+    /// This method allows users to retrieve a list of tasks that have been rejected,
     /// optionally filtered by committee.
-    /// It returns the approved tasks ordered by submission date in descending order.
+    /// It returns the rejected tasks ordered by submission date in descending order.
     /// </summary>
+    /// <param name="page">
+    /// The page number to retrieve.
+    /// </param>
+    /// <param name="pageSize">
+    /// The number of items to retrieve per page.
+    /// This parameter is optional and defaults to 5.
+    /// </param>
     /// <param name="committee">
     /// The name of the committee to filter the tasks by.
     /// This parameter is optional.
     /// </param>
     /// <returns>
-    /// An IActionResult containing a list of approved tasks or an empty list if no tasks are
+    /// An IActionResult containing a list of rejected tasks or an empty list if no tasks are
     /// found.
     /// </returns>
     /// <response code="200">
     /// Returns a list of approved tasks, ordered by submission date in descending order.
     /// </response>
-    /// <response code="500">
-    /// If an error occurs while processing the request, a 500 Internal Server Error response is
+    /// <response code="400">
+    /// If the page number or page size is invalid, a 400 Bad Request response is returned.
+    /// </response>
+    /// <response code="20">
+    /// If an error occurs while processing the request, a 20 Internal Server Error response is
     /// returned with an appropriate error message.
     /// </response>
     [HttpGet("GetApprovedTasks")]
     [SwaggerOperation(Summary = "Get Approved Tasks", Description = "This endpoint retrieves all approved tasks from the database.")]
     [SwaggerResponse(200, "Returns a list of approved tasks.")]
     [ProducesResponseType(typeof(List<SubmittedTask>), 200)]
-    [SwaggerResponse(500, "Internal Server Error if an error occurs while retrieving the tasks.")]
-    public IActionResult GetApprovedTasks([FromQuery] string? committee = null)
+    [SwaggerResponse(20, "Internal Server Error if an error occurs while retrieving the tasks.")]
+    public IActionResult GetApprovedTasks([FromQuery] int page, [FromQuery] int pageSize = 5, [FromQuery] string? committee = null)
     {
-        _logger.LogInformation("GetApprovedTasks called with Committee: {Committee}", committee);
+        _logger.LogInformation("GetApprovedTasks called with Page: {Page}, PageSize: {PageSize}, Committee: {Committee}", page, pageSize, committee);
+
+        // Check if the requested page is valid
+        if (page < 1 || pageSize < 1) return BadRequest("Invalid page number or page size.");
 
         // Load the approved tasks from the database
         IQueryable<SubmittedTask> query = _context.SubmittedTasks
@@ -574,13 +627,26 @@ public class SubmittedTaskController : Controller
             query = query.Where(t => t.Committee == committee);
         }
 
+        // Calculate how many records we need to skip
+        int skip = (page - 1) * pageSize;
+
         // Execute the query and convert the result to a list
-        List<SubmittedTask> approvedTasks = query.ToList();
+        List<SubmittedTask> approvedTasks = query
+            .Skip(skip)
+            .Take(pageSize)
+            .ToList();
+
+        // Calculate the total number of pages
+        int pageAmount = Math.Max(1, (int)Math.Ceiling((double)query.Count() / pageSize));
+
+        // Check if the requested page is valid
+        if (page > pageAmount && page != 1) return BadRequest("Invalid page number.");
 
         _logger.LogInformation("Retrieved {Count} approved tasks for Committee: {Committee}", approvedTasks.Count, committee);
 
         return Ok(approvedTasks);
     }
+
 
     /// <summary>
     /// Retrieves a list of rejected tasks.
@@ -588,29 +654,41 @@ public class SubmittedTaskController : Controller
     /// optionally filtered by committee.
     /// It returns the rejected tasks ordered by submission date in descending order.
     /// </summary>
+    /// <param name="page">
+    /// The page number to retrieve.
+    /// </param>
+    /// <param name="pageSize">
+    /// The number of items to retrieve per page.
+    /// This parameter is optional and defaults to 5.
+    /// </param>
     /// <param name="committee">
     /// The name of the committee to filter the tasks by.
     /// This parameter is optional.
     /// </param>
     /// <returns>
-    /// An IActionResult containing a list of rejected tasks or an empty list if no tasks are
-    /// found.
+    /// A list of rejected tasks, ordered by submission date in descending order.
     /// </returns>
     /// <response code="200">
     /// Returns a list of rejected tasks, ordered by submission date in descending order.
     /// </response>
-    /// <response code="500">
-    /// If an error occurs while processing the request, a 500 Internal Server Error response is
+    /// <response code="400">
+    /// If the page number or page size is invalid, a 400 Bad Request response is returned.
+    /// </response>
+    /// <response code="20">
+    /// If an error occurs while processing the request, a 20 Internal Server Error response is
     /// returned with an appropriate error message.
     /// </response> 
     [HttpGet("GetRejectedTasks")]
     [SwaggerOperation(Summary = "Get Rejected Tasks", Description = "This endpoint retrieves all rejected tasks from the database.")]
     [SwaggerResponse(200, "Returns a list of rejected tasks.")]
     [ProducesResponseType(typeof(List<SubmittedTask>), 200)]
-    [SwaggerResponse(500, "Internal Server Error if an error occurs while retrieving the tasks.")]
-    public IActionResult GetRejectedTasks([FromQuery] string? committee = null)
+    [SwaggerResponse(20, "Internal Server Error if an error occurs while retrieving the tasks.")]
+    public IActionResult GetRejectedTasks([FromQuery] int page, [FromQuery] int pageSize = 5, [FromQuery] string? committee = null)
     {
-        _logger.LogInformation("GetRejectedTasks called with Committee: {Committee}", committee);
+        _logger.LogInformation("GetRejectedTasks called with Page: {Page}, PageSize: {PageSize}, Committee: {Committee}", page, pageSize, committee);
+
+        // Check if the requested page is valid
+        if (page < 1 || pageSize < 1) return BadRequest("Invalid page number or page size.");
 
         // Load the rejected tasks from the database
         IQueryable<SubmittedTask> query = _context.SubmittedTasks
@@ -623,8 +701,20 @@ public class SubmittedTaskController : Controller
             query = query.Where(t => t.Committee == committee);
         }
 
+        // Calculate how many records we need to skip
+        int skip = (page - 1) * pageSize;
+
         // Execute the query and convert the result to a list
-        List<SubmittedTask> rejectedTasks = query.ToList();
+        List<SubmittedTask> rejectedTasks = query
+            .Skip(skip)
+            .Take(pageSize)
+            .ToList();
+
+        // Calculate the total number of pages
+        int pageAmount = Math.Max(1, (int)Math.Ceiling((double)query.Count() / pageSize));
+
+        // Check if the requested page is valid
+        if (page > pageAmount && page != 1) return BadRequest("Invalid page number.");
 
         _logger.LogInformation("Retrieved {Count} rejected tasks for Committee: {Committee}", rejectedTasks.Count, committee);
 

@@ -41,6 +41,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Production
       - CONNECTION_STRING=Host=database;Port=5432;Username=postgres;Password=${POSTGRES_PASSWORD:-postgres};Database=postgres;
       - HOST_URL=${HOST_URL:-http://localhost:3000}
+      - OAUTH_PROVIDER_NAME=${OAUTH_PROVIDER_NAME:-Koala}
       - OAUTH_PROVIDER_URL=${OAUTH_PROVIDER_URL:-https://koala.svsticky.nl/}
       - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
       - OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET}
@@ -76,6 +77,7 @@ services:
       - "${PORT:-3000}:3000"
     environment:
       - NODE_ENV=production
+      - NEXT_PUBLIC_OAUTH_PROVIDER_NAME=${OAUTH_PROVIDER_NAME:-Koala}
       - NEXT_PUBLIC_OAUTH_PROVIDER_URL=${OAUTH_PROVIDER_URL:-https://koala.svsticky.nl/}
       - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
       - OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET}

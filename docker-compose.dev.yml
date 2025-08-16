@@ -32,6 +32,7 @@ services:
     ports:
       - "${BACKEND_PORT:-8080}:8080"
     environment:
+      - OAUTH_PROVIDER_NAME=${OAUTH_PROVIDER_NAME:-Koala}
       - OAUTH_PROVIDER_URL=${OAUTH_PROVIDER_URL:-https://koala.dev.svsticky.nl}
       - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
       - OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET}
@@ -64,6 +65,7 @@ services:
     ports:
       - "${PORT:-3000}:3000"
     environment:
+      - NEXT_PUBLIC_OAUTH_PROVIDER_NAME=${OAUTH_PROVIDER_NAME:-Koala}
       - NEXT_PUBLIC_OAUTH_PROVIDER_URL=${OAUTH_PROVIDER_URL}
       - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
       - OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET}
