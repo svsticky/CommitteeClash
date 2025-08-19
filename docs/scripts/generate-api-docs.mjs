@@ -1,76 +1,16 @@
+import { readdir, rename, rm, rmdir } from "fs/promises";
 import * as OpenAPI from "fumadocs-openapi";
-import fs from "node:fs/promises";
-import { rimrafSync } from "rimraf";
+import path from "path";
+import { generateIndexFiles } from "./generate-index-files.mjs";
 
-const out = "./content/docs/api";
-const swaggerURL = `${process.env.API_URL}/swagger/v1/swagger.json`;
+const out = "./content/docs/API";
 const swaggerFilePath = "./swagger.json";
 
-// Fetch Swagger JSON from the API endpoint, with delay because the API may not be ready yet.
-async function fetchSwaggerJSON() {
-    const MAX_RETRIES = 20;
-    const RETRY_DELAY = 2000;
-
-    for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-        try {
-            console.log(
-                `Fetching Swagger JSON from ${swaggerURL} (attempt ${attempt}/${MAX_RETRIES})...`,
-            );
-            const response = await fetch(swaggerURL);
-
-            if (!response.ok) {
-                throw new Error(
-                    `Failed to fetch Swagger JSON: ${response.statusText}`,
-                );
-            }
-
-            const swaggerData = await response.json();
-
-            await fs.writeFile(
-                swaggerFilePath,
-                JSON.stringify(swaggerData, null, 2),
-            );
-
-            console.log(`Swagger JSON saved to ${swaggerFilePath}`);
-
-            return true;
-        } catch (error) {
-            console.error(
-                `Error fetching Swagger JSON (attempt ${attempt}/${MAX_RETRIES}): ${error.message}`,
-            );
-            if (attempt < MAX_RETRIES) {
-                console.log(`Retrying in ${RETRY_DELAY / 1000} seconds...`);
-                await new Promise((resolve) =>
-                    setTimeout(resolve, RETRY_DELAY),
-                );
-            } else {
-                console.error("Max retry attempts reached. Giving up.");
-                return false;
-            }
-        }
-    }
-
-    return false;
-}
-
 // Clean generated files
-rimrafSync(out, {
-    filter(v) {
-        return !v.endsWith("index.mdx") && !v.endsWith("meta.json");
-    },
-});
+await rm(out, { recursive: true, force: true });
 
 // Fetch swagger.json and generate documentation
 async function main() {
-    const success = await fetchSwaggerJSON();
-
-    if (!success) {
-        console.error(
-            `Failed to fetch Swagger JSON. Make sure the API is running at ${process.env.API_URL}`,
-        );
-        process.exit(1);
-    }
-
     console.log("Generating API documentation...");
     await OpenAPI.generateFiles({
         // input files
@@ -78,13 +18,76 @@ async function main() {
         output: out,
         per: "operation",
         groupBy: "tag",
-        transform: (operation, _, doc) => {
-            operation.summary = operation.operationId || operation.summary;
+        transform: (operation) => {
+            operation.summary = `${operation.method.toUpperCase()} ${operation.operationId || operation.summary}`;
+
+            operation.slug =
+                `${operation.tags?.[0] || "default"}-${operation.operationId || operation.method}`.toLowerCase();
+
             return operation;
         },
     });
 
+    await flattenMDXFiles(out);
+    await renameControllerFolderNames(out);
+    generateIndexFiles(out, "Controllers", true);
+
     console.log("API documentation generated successfully!");
+}
+
+// Function for moving mdx files one file up and give them the name of the folder they were in
+async function flattenMDXFiles(baseDir) {
+    const controllers = (
+        await readdir(baseDir, { withFileTypes: true })
+    ).filter((dirent) => dirent.isDirectory());
+
+    for (const controller of controllers) {
+        const controllerPath = path.join(baseDir, controller.name);
+
+        const endpoints = (
+            await readdir(controllerPath, { withFileTypes: true })
+        ).filter((dirent) => dirent.isDirectory());
+
+        for (const endpoint of endpoints) {
+            const endpointPath = path.join(controllerPath, endpoint.name);
+
+            // find mdx file in endpoint folder
+            const mdxFiles = (await readdir(endpointPath)).filter((f) =>
+                f.endsWith(".mdx"),
+            );
+
+            if (mdxFiles.length === 0) continue;
+
+            const mdxFile = mdxFiles[0]; // take the file
+            const oldPath = path.join(endpointPath, mdxFile);
+            const newPath = path.join(controllerPath, `${endpoint.name}.mdx`); // Rename the file to the endpoint name
+
+            // Move it to the controller folder
+            await rename(oldPath, newPath);
+
+            // Remove the old folder
+            await rmdir(endpointPath);
+        }
+    }
+}
+
+// Function for fixing controller folder names
+async function renameControllerFolderNames(baseDir) {
+    const controllers = (
+        await readdir(baseDir, { withFileTypes: true })
+    ).filter((dirent) => dirent.isDirectory());
+
+    for (const controller of controllers) {
+        const newName = controller.name
+            .split("-")
+            .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+            .join("");
+
+        await rename(
+            path.join(baseDir, controller.name),
+            path.join(baseDir, newName),
+        );
+    }
 }
 
 // Run the main function

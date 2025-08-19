@@ -48,12 +48,13 @@ namespace Commissiestrijd
             ));
 
             // # Authentication
+            bool docsGeneration = builder.Configuration.GetValue<string>("DOTNET_ENVIRONMENT") == "docs";
             builder.Services.AddAuthentication("Bearer")
                 .AddOAuth2Introspection("Bearer", options =>
                 {
-                    options.Authority = builder.Configuration.GetValue<string>("OAUTH_PROVIDER_URL");
-                    options.ClientId = builder.Configuration.GetValue<string>("OAUTH_CLIENT_ID");
-                    options.ClientSecret = builder.Configuration.GetValue<string>("OAUTH_CLIENT_SECRET");
+                    options.Authority = docsGeneration ? "" : builder.Configuration.GetValue<string>("OAUTH_PROVIDER_URL");
+                    options.ClientId = docsGeneration ? "" : builder.Configuration.GetValue<string>("OAUTH_CLIENT_ID");
+                    options.ClientSecret = docsGeneration ? "" : builder.Configuration.GetValue<string>("OAUTH_CLIENT_SECRET");
                 });
 
             // # Cleanup
@@ -63,22 +64,27 @@ namespace Commissiestrijd
             WebApplication app = builder.Build();
 
             // # Middleware
-            app.MapOpenApi();
-            app.UseSwagger();
-            app.UseSwaggerUI(ConfigureSwaggerUI);
-            app.UseDeveloperExceptionPage();
+            if(app.Environment.IsDevelopment() || docsGeneration)
+            {
+                app.MapOpenApi();
+                app.UseSwagger();
+                app.UseSwaggerUI(ConfigureSwaggerUI);
+                app.UseDeveloperExceptionPage();
+            }
 
             app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseCors("AllowFrontend");
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
 
-            using (var scope = app.Services.CreateScope())
+            if (!app.Environment.IsEnvironment("docs"))
             {
-                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                db.Database.Migrate();
+                using (var scope = app.Services.CreateScope())
+                {
+                    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                    db.Database.Migrate();
+                }
             }
 
             AdminUtils.Setup(new Uri(builder.Configuration["OAUTH_PROVIDER_URL"] ?? "https://koala.dev.svsticky.nl"));

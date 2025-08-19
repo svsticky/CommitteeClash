@@ -83,22 +83,20 @@ services:
 
   docs:
     build:
-      context: ./docs
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: docs/Dockerfile
       target: development
       no_cache: true
     ports:
       - "${DOCS_PORT:-3000}:3001"
     environment:
-      - API_URL=http://backend:8080
       - NODE_ENV=development
       - WATCHPACK_POLLING=true
     volumes:
-      - ./docs:/app
+      - ./docs:/app/docs
+      - ./backend:/app/backend
+      - ./frontend:/app/frontend
       - /app/node_modules
       - /app/.next
-    depends_on:
-      backend:
-        condition: service_healthy
     networks:
       - my_network

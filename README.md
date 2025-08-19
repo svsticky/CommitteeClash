@@ -8,12 +8,10 @@ To get the application working, you have to create a .env file in the root of th
 
 # Docker
 
-The application works with docker. To compose the services, use the following commands:
+The application works with docker. Make sure you have docker installed and running. To compose the services, use the following commands:
 
-- For development: `npm run dev`
-- For production: `npm run prod`
-
-To delete images and containers, use one of the following commands: `npm run down-dev` or `npm run down-prod`.
+- For development: `docker compose -f docker-compose.dev.yml up --build`
+- For production: `docker compose -f docker-compose.prod.yml up --build`
 
 # Development
 
@@ -25,11 +23,7 @@ You can find and test the Web API endpoints with the help of swagger when runnin
 
 # Documentation
 
-After starting up development, you can find the home page of the documentation website on http://localhost:3001.
-
-## Update documentation
-
-The documentation is updated automatically when running `npm run dev` or `npm run prod`.
+The project generates documentation automatically. After starting the project, you can find the home page of the documentation website on http://localhost:3001.
 
 # OAuth
 

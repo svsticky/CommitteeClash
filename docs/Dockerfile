@@ -1,34 +1,66 @@
-# Base image with Node.js LTS on Alpine Linux
-FROM node:lts-alpine AS base
-
-# -- Install dependencies
-FROM base AS deps
+# -- Generation dependencies with .net, nodejs and npm and all packages for documentation generation
+FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS generation-deps
 WORKDIR /app
-COPY package.json package-lock.json* source.config.ts ./
+RUN apk add --no-cache bash nodejs npm
+RUN dotnet new tool-manifest --name dotnet-tools
+RUN dotnet tool install --global Swashbuckle.AspNetCore.Cli
+RUN dotnet tool install -g NSwag.ConsoleCore
+ENV PATH="$PATH:/root/.dotnet/tools"
+RUN dotnet tool install -g docfx
+
+# -- Install node dependencies for the project
+FROM node:lts-alpine AS project-deps
+WORKDIR /app
+COPY docs/package.json docs/package-lock.json* docs/source.config.ts ./
 RUN npm install
 
 # -- Development
-FROM deps AS development
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+FROM generation-deps AS development
+WORKDIR /app/docs
 ENV NODE_ENV=development
 ENV NEXT_TELEMETRY_DISABLED=1
 EXPOSE 3001
 ENV PORT=3001
+ENV DOTNET_ENVIRONMENT=docs
+
 # Create custom entrypoint script to run npm install as well to update everything
 ENTRYPOINT npm install && npm run dev --turbopack
 
-# -- Build the app
-FROM base AS builder
+# -- Docs generator for production
+FROM generation-deps AS docs-generator
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+
+# Copy the content
+COPY docs ./docs
+COPY backend ./backend
+COPY frontend ./frontend
+
+# Generate documentation
+WORKDIR /app/docs
+ENV DOTNET_ENVIRONMENT=docs
+RUN npm run build-docs
+
+# -- Build the app for production
+FROM generation-deps AS builder
+WORKDIR /app
+
+# Copy the generated dependencies for the project
+COPY --from=project-deps /app/node_modules ./node_modules
+
+# Copy the docs next project
+COPY docs .
+
+# Copy the generated documentation
+COPY --from=docs-generator /app/docs/content/docs/API ./content/docs/API
+COPY --from=docs-generator /app/docs/content/docs/backend ./content/docs/backend
+COPY --from=docs-generator /app/docs/content/docs/frontend ./content/docs/frontend
+
+# Build the next project
 ENV NEXT_TELEMETRY_DISABLED=1 
 RUN npm run build
 
-
-# -- Run the app
-FROM base AS production
+# -- Run the app as production
+FROM node:lts-alpine AS production
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -41,6 +73,7 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=docs-generator /app/docs/swagger.json ./swagger.json
 
 USER nextjs
 EXPOSE 3001
