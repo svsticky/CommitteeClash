@@ -1,6 +1,6 @@
 'use server';
 
-import { authOptions } from '@/lib/auth/authOptions';
+import { createAuthOptions } from '@/lib/auth/authOptions';
 import { HandleUnauthorizedAccess, ThrowResponseError } from '@/lib/utils';
 import { CommitteeList } from '@/types/Committee';
 import { Response } from '@/types/Response';
@@ -17,7 +17,7 @@ export const GetCommittees = async (): Promise<Response<CommitteeList>> => {
     console.log('Getting committees...');
 
     // Get the session to retrieve the access token
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(createAuthOptions());
 
     // Make a GET request to the backend to fetch committees
     const response = await fetch(
@@ -69,7 +69,7 @@ export const CreateCommitteeAction = async (
     console.log('Creating committee...');
 
     // Get the session to retrieve the access token
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(createAuthOptions());
 
     // Make a POST request to the backend to create a committee
     const response = await fetch(
@@ -125,7 +125,7 @@ export const RenameCommitteeAction = async (
     console.log('Renaming committee...');
 
     // Get the session to retrieve the access token
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(createAuthOptions());
 
     // Make a PUT request to the backend to rename the committee
     const response = await fetch(
@@ -177,7 +177,7 @@ export const DeleteCommittee = async (
     console.log('Deleting committee...');
 
     // Get the session to retrieve the access token
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(createAuthOptions());
 
     // Make a DELETE request to the backend to delete the committee
     const response = await fetch(

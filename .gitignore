@@ -66,6 +66,9 @@ Thumbs.db
 # Environment variables
 .env
 
-# documentation files
+# Documentation files
 /docs/content/docs/*
 !/docs/content/docs/index.mdx
+
+# Secrets
+*.secret

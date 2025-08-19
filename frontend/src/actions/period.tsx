@@ -1,6 +1,6 @@
 'use server';
 
-import { authOptions } from '@/lib/auth/authOptions';
+import { createAuthOptions } from '@/lib/auth/authOptions';
 import { HandleUnauthorizedAccess, ThrowResponseError } from '@/lib/utils';
 import { CommitteeList } from '@/types/Committee';
 import { Response } from '@/types/Response';
@@ -17,7 +17,7 @@ export const GetPeriods = async (): Promise<Response<CommitteeList>> => {
     console.log('Getting periods...');
 
     // Get the session to retrieve the access token
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(createAuthOptions());
 
     // Make a GET request to the backend to fetch periods
     const response = await fetch('http://backend:8080/Period/GetPeriods', {
@@ -70,7 +70,7 @@ export const CreatePeriodAction = async (
     console.log('Creating period...');
 
     // Get the session to retrieve the access token
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(createAuthOptions());
 
     // Make a POST request to the backend to create a new period
     const response = await fetch(
@@ -131,7 +131,7 @@ export const UpdatePeriod = async (
     console.log('Renaming committee...');
 
     // Get the session to retrieve the access token
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(createAuthOptions());
 
     // Make a PUT request to the backend to update the period
     const response = await fetch(
@@ -181,7 +181,7 @@ export const DeletePeriod = async (id: string): Promise<Response<void>> => {
     console.log('Deleting period...');
 
     // Get the session to retrieve the access token
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(createAuthOptions());
 
     // Make a DELETE request to the backend to delete the period
     const response = await fetch(

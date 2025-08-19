@@ -1,6 +1,6 @@
 'use server';
 
-import { authOptions } from '@/lib/auth/authOptions';
+import { createAuthOptions } from '@/lib/auth/authOptions';
 import { HandleUnauthorizedAccess, ThrowResponseError } from '@/lib/utils';
 import { Response } from '@/types/Response';
 import { SubmittedTaskList } from '@/types/SubmittedTask';
@@ -29,7 +29,7 @@ export const SubmitTaskAction = async (
     formData.append('Image', photo);
 
     // Get the session to retrieve the access token
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(createAuthOptions());
 
     // Make a POST request to the backend to submit the task
     const response = await fetch(
@@ -86,7 +86,7 @@ export const GetSubmittedTasks = async (
     console.log('Getting submitted tasks...');
 
     // Get the session to retrieve the access token
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(createAuthOptions());
 
     // Make a GET request to the backend to fetch submitted tasks for the specified committee
     const response = await fetch(
@@ -143,7 +143,7 @@ export const GetPendingTasks = async (
     console.log('Getting pending tasks...');
 
     // Get the session to retrieve the access token
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(createAuthOptions());
 
     // Make a GET request to the backend to fetch pending tasks for the specified committee
     const response = await fetch(
@@ -203,7 +203,7 @@ export const GetApprovedTasks = async (
     console.log('Getting approved tasks...');
 
     // Get the session to retrieve the access token
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(createAuthOptions());
 
     // Make a GET request to the backend to fetch approved tasks for the specified committee
     const response = await fetch(
@@ -263,7 +263,7 @@ export const GetRejectedTasks = async (
     console.log('Getting rejected tasks...');
 
     // Get the session to retrieve the access token
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(createAuthOptions());
 
     // Make a GET request to the backend to fetch rejected tasks for the specified committee
     const response = await fetch(

@@ -1,6 +1,6 @@
 'use server';
 
-import { authOptions } from '@/lib/auth/authOptions';
+import { createAuthOptions } from '@/lib/auth/authOptions';
 import { HandleUnauthorizedAccess, ThrowResponseError } from '@/lib/utils';
 import { Response } from '@/types/Response';
 import { getServerSession } from 'next-auth';
@@ -22,7 +22,7 @@ export const ApproveTask = async (
     console.log('Approving task...');
 
     // Get the session to retrieve the access token
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(createAuthOptions());
 
     // Make a PUT request to the backend to approve the task
     const response = await fetch(
@@ -73,7 +73,7 @@ export const RejectTask = async (
     console.log('Rejecting task...');
 
     // Get the session to retrieve the access token
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(createAuthOptions());
 
     // Make a PUT request to the backend to reject the task
     const response = await fetch(

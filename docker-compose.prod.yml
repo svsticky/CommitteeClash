@@ -3,6 +3,12 @@ networks:
     name: prod_network
     driver: bridge
 
+secrets:
+  oauth_client_secret:
+    file: ./oauth_client_secret.secret
+  postgres_password:
+    file: ./postgres_password.secret
+
 services:
   # Production database with persistent volume
   database:
@@ -11,8 +17,10 @@ services:
     image: postgres:latest
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres} # Use env var with fallback
       - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+    secrets:
+      - postgres_password
     volumes:
       - postgres_data:/var/lib/postgresql/data # Persistent volume
     networks:
@@ -39,12 +47,13 @@ services:
       target: production # Use production target
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - CONNECTION_STRING=Host=database;Port=5432;Username=postgres;Password=${POSTGRES_PASSWORD:-postgres};Database=postgres;
-      - HOST_URL=${HOST_URL:-http://localhost:3000}
+      - CONNECTION_STRING=Host=database;Port=5432;Username=postgres;Password=<PASSWORD>;Database=postgres;
       - OAUTH_PROVIDER_NAME=${OAUTH_PROVIDER_NAME:-Koala}
       - OAUTH_PROVIDER_URL=${OAUTH_PROVIDER_URL:-https://koala.svsticky.nl/}
       - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
-      - OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET}
+    secrets:
+      - oauth_client_secret
+      - postgres_password
     depends_on:
       database:
         condition: service_healthy
@@ -81,7 +90,8 @@ services:
       - NEXT_PUBLIC_OAUTH_PROVIDER_NAME=${OAUTH_PROVIDER_NAME:-Koala}
       - NEXT_PUBLIC_OAUTH_PROVIDER_URL=${OAUTH_PROVIDER_URL:-https://koala.svsticky.nl/}
       - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
-      - OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET}
+    secrets:
+      - oauth_client_secret
     depends_on:
       backend:
         condition: service_healthy

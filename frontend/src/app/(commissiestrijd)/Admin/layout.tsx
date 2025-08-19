@@ -1,4 +1,4 @@
-import { authOptions } from '@/lib/auth/authOptions';
+import { createAuthOptions } from '@/lib/auth/authOptions';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 
@@ -16,7 +16,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   // Get the current session to check if the user is an admin
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(createAuthOptions());
 
   // If the user is not an admin, redirect to the home page
   if (!session?.is_admin) {

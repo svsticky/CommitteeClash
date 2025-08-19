@@ -1,6 +1,6 @@
 import Header from '@/components/header';
 import Menu from '@/components/menu/menu';
-import { authOptions } from '@/lib/auth/authOptions';
+import { createAuthOptions } from '@/lib/auth/authOptions';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 
@@ -18,7 +18,7 @@ export default async function CommissiestrijdLayout({
   children: React.ReactNode;
 }>) {
   // Get the current session to check if the user is authenticated
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(createAuthOptions());
 
   // If the user is not authenticated, redirect to the login page
   if (session === null) {

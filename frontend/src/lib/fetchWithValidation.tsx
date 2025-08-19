@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import type { z } from 'zod';
-import { authOptions } from './auth/authOptions';
+import { createAuthOptions } from './auth/authOptions';
 
 /**
  * Fetches data from a specified URL and validates it against a provided Zod schema.
@@ -22,7 +22,7 @@ export async function FetchWithValidation<T>(
   url: string
 ): Promise<z.SafeParseReturnType<T, T>> {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(createAuthOptions());
 
     // Fetch the data from the backend
     const cookieHeader = await cookies();

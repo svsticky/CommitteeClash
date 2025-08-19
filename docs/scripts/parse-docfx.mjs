@@ -184,25 +184,22 @@ Object.entries(fileLocations).forEach(([className, file]) => {
     content = escapeHTMLExceptCodeBlocks(content);
 
     // Update links to point to the new location
-    content = content.replace(
-        /\[(.*?)\]\((.*?)\)/g,
-        (match, p1, p2, offset) => {
-            const _className = p2.slice(0, -3).replace(/\\/g, "");
+    content = content.replace(/\[(.*?)\]\((.*?)\)/g, (match, p1, p2) => {
+        const _className = p2.slice(0, -3).replace(/\\/g, "");
 
-            if (!(_className in fileLocations)) return match;
+        if (!(_className in fileLocations)) return match;
 
-            let relativePath = relative(file, fileLocations[_className])
-                .replace(/\\/g, "/")
-                .replace("../", "")
-                .replace("index", "../" + _className.split(".").at(-1))
-                .replace(".mdx", "");
+        let relativePath = relative(file, fileLocations[_className])
+            .replace(/\\/g, "/")
+            .replace("../", "")
+            .replace("index", "../" + _className.split(".").at(-1))
+            .replace(".mdx", "");
 
-            if (file.includes("index"))
-                relativePath = className.split(".").at(-1) + "/" + relativePath;
+        if (file.includes("index"))
+            relativePath = className.split(".").at(-1) + "/" + relativePath;
 
-            return `<a href='./${relativePath}'>${p1.replace(/\\/g, "")}</a>`;
-        },
-    );
+        return `<a href='./${relativePath}'>${p1.replace(/\\/g, "")}</a>`;
+    });
 
     // Process the content to place it in nice components
     const lines = content.split("\n");

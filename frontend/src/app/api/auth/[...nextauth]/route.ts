@@ -1,7 +1,7 @@
-import { authOptions } from '@/lib/auth/authOptions';
+import { createAuthOptions } from '@/lib/auth/authOptions';
 import NextAuth from 'next-auth';
 
-const handler = NextAuth(authOptions);
+const handler = NextAuth(createAuthOptions());
 
 /**
  * API route for NextAuth authentication.

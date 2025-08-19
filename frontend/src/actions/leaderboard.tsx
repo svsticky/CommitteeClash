@@ -1,6 +1,6 @@
 'use server';
 
-import { authOptions } from '@/lib/auth/authOptions';
+import { createAuthOptions } from '@/lib/auth/authOptions';
 import { HandleUnauthorizedAccess, ThrowResponseError } from '@/lib/utils';
 import { LeaderboardList } from '@/types/Leaderboard';
 import { Period } from '@/types/Period';
@@ -20,7 +20,7 @@ export const GetLeaderboard = async (
     console.log('Getting leaderboard...');
 
     // Get the session to retrieve the access token
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(createAuthOptions());
 
     // Make a GET request to the backend to fetch the leaderboard
     const response = await fetch(

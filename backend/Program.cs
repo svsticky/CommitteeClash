@@ -40,12 +40,16 @@ namespace Commissiestrijd
             builder.Services.AddOpenApi();
             builder.Services.AddSwaggerGen(ConfigureSwagger);
 
+            // # Read secrets and environment variables
+            builder.Configuration.AddKeyPerFile(directoryPath: "/run/secrets", optional: true);
+            builder.Configuration.AddEnvironmentVariables();
 
             // # Database context
             builder.Services.AddDbContext<AppDbContext>(
                 // CONNECTION_STRING is set in docker-compose.dev.yml file
-                options => options.UseNpgsql(builder.Configuration.GetValue<string>("CONNECTION_STRING")
-            ));
+                options => options.UseNpgsql(builder.Configuration.GetValue<string>("CONNECTION_STRING", "")?
+                    .Replace("<PASSWORD>", builder.Configuration.GetValue<string>("postgres_password", "")))
+            );
 
             // # Authentication
             bool docsGeneration = builder.Configuration.GetValue<string>("DOTNET_ENVIRONMENT") == "docs";
@@ -54,7 +58,7 @@ namespace Commissiestrijd
                 {
                     options.Authority = docsGeneration ? "" : builder.Configuration.GetValue<string>("OAUTH_PROVIDER_URL");
                     options.ClientId = docsGeneration ? "" : builder.Configuration.GetValue<string>("OAUTH_CLIENT_ID");
-                    options.ClientSecret = docsGeneration ? "" : builder.Configuration.GetValue<string>("OAUTH_CLIENT_SECRET");
+                    options.ClientSecret = docsGeneration ? "" : builder.Configuration.GetValue<string>("oauth_client_secret");
                 });
 
             // # Cleanup

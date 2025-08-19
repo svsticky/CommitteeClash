@@ -1,4 +1,4 @@
-import { authOptions } from '@/lib/auth/authOptions';
+import { createAuthOptions } from '@/lib/auth/authOptions';
 import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
 
   try {
     // Get the session to retrieve the access token
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(createAuthOptions());
 
     // Construct the backend URL to fetch the image
     const backendUrl = `http://backend:8080/Image/GetImage/${encodeURIComponent(filename)}`;

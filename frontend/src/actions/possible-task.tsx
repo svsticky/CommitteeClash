@@ -1,6 +1,6 @@
 'use server';
 
-import { authOptions } from '@/lib/auth/authOptions';
+import { createAuthOptions } from '@/lib/auth/authOptions';
 import { HandleUnauthorizedAccess, ThrowResponseError } from '@/lib/utils';
 import { PossibleTaskList } from '@/types/PossibleTask';
 import { Response } from '@/types/Response';
@@ -18,7 +18,7 @@ export const GetPossibleTasks = async (): Promise<
     console.log('Getting possible tasks...');
 
     // Get the session to retrieve the access token
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(createAuthOptions());
 
     // Make a GET request to the backend to fetch possible tasks
     const response = await fetch(
@@ -78,7 +78,7 @@ export const CreatePossibleTask = async (
     console.log('Creating possible task...');
 
     // Get the session to retrieve the access token
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(createAuthOptions());
 
     // Make a POST request to the backend to create a new possible task
     const response = await fetch(
@@ -140,7 +140,7 @@ export const EditPossibleTaskAction = async (
     console.log('Editing possible task...');
 
     // Get the session to retrieve the access token
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(createAuthOptions());
 
     // Make a PUT request to the backend to edit the possible task
     const response = await fetch(
