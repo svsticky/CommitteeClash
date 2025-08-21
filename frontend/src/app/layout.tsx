@@ -1,3 +1,4 @@
+import { CSSCustomProperties } from '@/types/CSS-Custom-Properties';
 import './globals.css';
 
 export const metadata = {
@@ -30,9 +31,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Get the theme color from the environment varialbles
+  const style: CSSCustomProperties = {
+    '--theme': process.env.THEME_COLOR!,
+  };
+
   return (
     <html lang="en" className="w-full h-full">
-      <body className="w-full h-full">
+      <body className="w-full h-full" style={style}>
         <main className="w-full h-full">{children}</main>
       </body>
     </html>

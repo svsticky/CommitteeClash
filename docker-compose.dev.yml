@@ -1,6 +1,6 @@
 networks:
-  my_network:
-    name: my_network
+  dev_network:
+    name: dev_network
     driver: bridge
 
 secrets:
@@ -24,7 +24,7 @@ services:
     tmpfs:
       - /var/lib/postgresql/data
     networks:
-      - my_network
+      - dev_network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -56,7 +56,7 @@ services:
       database:
         condition: service_healthy
     networks:
-      - my_network
+      - dev_network
     healthcheck:
       test: ["CMD", "curl", "-f", "http://backend:8080/status"]
       interval: 10s
@@ -75,10 +75,11 @@ services:
       - "${PORT:-3000}:3000"
     environment:
       - NEXT_PUBLIC_OAUTH_PROVIDER_NAME=${OAUTH_PROVIDER_NAME:-Koala}
-      - NEXT_PUBLIC_OAUTH_PROVIDER_URL=${OAUTH_PROVIDER_URL}
+      - NEXT_PUBLIC_OAUTH_PROVIDER_URL=${OAUTH_PROVIDER_URL:-https://koala.svsticky.nl/}
       - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
       - NODE_ENV=development
       - WATCHPACK_POLLING=true
+      - THEME_COLOR=${THEME_COLOR:-#FF7F00}
     secrets:
       - oauth_client_secret
     volumes:
@@ -89,7 +90,7 @@ services:
       backend:
         condition: service_healthy
     networks:
-      - my_network
+      - dev_network
 
   docs:
     build:
@@ -109,4 +110,4 @@ services:
       - /app/node_modules
       - /app/.next
     networks:
-      - my_network
+      - dev_network
