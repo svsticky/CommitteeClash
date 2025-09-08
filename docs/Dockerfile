@@ -38,6 +38,7 @@ COPY frontend ./frontend
 # Generate documentation
 WORKDIR /app/docs
 ENV DOTNET_ENVIRONMENT=docs
+RUN npm install
 RUN npm run build-docs
 
 # -- Build the app for production
