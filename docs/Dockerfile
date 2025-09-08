@@ -35,6 +35,10 @@ COPY docs ./docs
 COPY backend ./backend
 COPY frontend ./frontend
 
+# install modules for frontend
+WORKDIR /app/frontend
+RUN npm install
+
 # Generate documentation
 WORKDIR /app/docs
 ENV DOTNET_ENVIRONMENT=docs
