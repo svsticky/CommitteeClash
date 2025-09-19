@@ -61,6 +61,8 @@ services:
         condition: service_healthy
     networks:
       - prod_network
+    extra_hosts: # Maps dev.svsticky.nl to the host network
+      - "dev.svsticky.nl:host.docker.internal"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://backend:8080/status"]
       interval: 10s
