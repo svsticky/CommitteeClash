@@ -80,6 +80,7 @@ services:
       - NODE_ENV=development
       - WATCHPACK_POLLING=true
       - THEME_COLOR=${THEME_COLOR:-#FA6B20}
+      - PORT=${PORT:-3000}
     secrets:
       - oauth_client_secret
     volumes:
@@ -107,7 +108,10 @@ services:
       - ./docs:/app/docs
       - ./backend:/app/backend
       - ./frontend:/app/frontend
-      - /app/node_modules
-      - /app/.next
+      - docs_node_modules:/app/docs/node_modules
+      - docs_next:/app/docs/.next
     networks:
       - dev_network
+volumes:
+  docs_node_modules:
+  docs_next:

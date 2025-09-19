@@ -64,6 +64,21 @@ namespace Commissiestrijd
             // # Cleanup
             builder.Services.AddHostedService<SubmittedImageCleaningService>();
 
+            // Allow localhost if development
+            if (builder.Environment.IsDevelopment())
+            {
+                builder.Services.AddCors(options =>
+                {
+                    options.AddPolicy("AllowFrontend", policy =>
+                    {
+                        policy.WithOrigins($"http://localhost:{builder.Configuration.GetValue<string>("PORT")}")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();
+                    });
+                });
+            }
+
             // # Application
             WebApplication app = builder.Build();
 

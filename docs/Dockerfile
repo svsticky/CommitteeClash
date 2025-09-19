@@ -24,7 +24,7 @@ ENV PORT=3001
 ENV DOTNET_ENVIRONMENT=docs
 
 # Create custom entrypoint script to run npm ci as well to update everything
-ENTRYPOINT npm ci --ignore-scripts && npm run dev --turbopack
+ENTRYPOINT ["/bin/sh", "-c", "npm ci --ignore-scripts && npm run dev --turbopack"]
 
 # -- Docs generator for production
 FROM generation-deps AS docs-generator
