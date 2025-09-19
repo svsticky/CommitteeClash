@@ -5,7 +5,7 @@ FROM node:lts-alpine AS base
 FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json* ./
-RUN npm install
+RUN npm ci --ignore-scripts
 
 # -- Development
 FROM deps AS development
@@ -15,8 +15,8 @@ ENV NODE_ENV=development
 ENV NEXT_TELEMETRY_DISABLED=1
 EXPOSE 3000
 ENV PORT=3000
-# Create custom entrypoint script to run npm install as well to update everything
-ENTRYPOINT npm install && npm run dev
+# Create custom entrypoint script to run npm ci as well to update everything
+ENTRYPOINT npm ci --ignore-scripts && npm run dev
 
 # -- Build the app
 FROM base AS builder
