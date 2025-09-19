@@ -25,7 +25,7 @@ public class AdminUtils
         try
         {
             Uri target = new Uri(provider, ".well-known/openid-configuration");
-            Console.WriteLine(target.AbsoluteURI);
+            Console.WriteLine(target.AbsoluteUri);
             var discoveryJson = await client.GetStringAsync(target);
             using var doc = JsonDocument.Parse(discoveryJson);
             _userInfoUrl = doc.RootElement.GetProperty("userinfo_endpoint").GetString() ?? "";
