@@ -24,7 +24,9 @@ public class AdminUtils
         var client = new HttpClient();
         try
         {
-            var discoveryJson = await client.GetStringAsync(new Uri(provider, ".well-known/openid-configuration"));
+            Uri target = new Uri(provider, ".well-known/openid-configuration");
+            Console.WriteLine(target.AbsoluteURI)
+            var discoveryJson = await client.GetStringAsync(target);
             using var doc = JsonDocument.Parse(discoveryJson);
             _userInfoUrl = doc.RootElement.GetProperty("userinfo_endpoint").GetString() ?? "";
         }
