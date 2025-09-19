@@ -12,7 +12,7 @@ RUN dotnet tool install -g docfx
 FROM node:lts-alpine AS project-deps
 WORKDIR /app
 COPY docs/package.json docs/package-lock.json* docs/source.config.ts ./
-RUN npm install
+RUN npm ci --ignore-scripts
 
 # -- Development
 FROM generation-deps AS development
@@ -23,8 +23,8 @@ EXPOSE 3001
 ENV PORT=3001
 ENV DOTNET_ENVIRONMENT=docs
 
-# Create custom entrypoint script to run npm install as well to update everything
-ENTRYPOINT npm install && npm run dev --turbopack
+# Create custom entrypoint script to run npm ci as well to update everything
+ENTRYPOINT npm ci --ignore-scripts && npm run dev --turbopack
 
 # -- Docs generator for production
 FROM generation-deps AS docs-generator
