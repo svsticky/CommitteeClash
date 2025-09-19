@@ -30,10 +30,7 @@ public class AdminUtils
         }
         catch (HttpRequestException e)
         {
-            Uri target = new Uri(provider, ".well-known/openid-configuration");
-            Console.WriteLine(target.AbsoluteUri);
-            Console.WriteLine(provider.AbsoluteUri);
-            Console.WriteLine("Failed to retrieve OpenID configuration: " + e.Message + " " + e.StatusCode);
+            Console.WriteLine("Failed to retrieve OpenID configuration: " + e.Message + " " + e.StatusCode + "\n\n\n\n----------");
         }
     }
 
