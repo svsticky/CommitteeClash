@@ -22,9 +22,16 @@ public class AdminUtils
     public static async void Setup(Uri provider)
     {
         var client = new HttpClient();
-        var discoveryJson = await client.GetStringAsync(new Uri(provider, ".well-known/openid-configuration"));
-        using var doc = JsonDocument.Parse(discoveryJson);
-        _userInfoUrl = doc.RootElement.GetProperty("userinfo_endpoint").GetString() ?? "";
+        try
+        {
+            var discoveryJson = await client.GetStringAsync(new Uri(provider, ".well-known/openid-configuration"));
+            using var doc = JsonDocument.Parse(discoveryJson);
+            _userInfoUrl = doc.RootElement.GetProperty("userinfo_endpoint").GetString() ?? "";
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine("Failed to retrieve OpenID configuration: " + e.Message + "\n" + e.StatusCode);
+        }
     }
 
     /// <summary>
