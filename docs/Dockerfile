@@ -78,7 +78,6 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --from=docs-generator /app/docs/swagger.json ./swagger.json
 
 USER nextjs
 EXPOSE 3001

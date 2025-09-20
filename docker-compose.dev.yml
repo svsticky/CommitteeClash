@@ -80,6 +80,7 @@ services:
       - NODE_ENV=development
       - WATCHPACK_POLLING=true
       - THEME_COLOR=${THEME_COLOR:-#FA6B20}
+      - NEXTAUTH_URL=${HOST_URL:-http://localhost:3000}
     secrets:
       - oauth_client_secret
     volumes:
