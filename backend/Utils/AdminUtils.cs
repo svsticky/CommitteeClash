@@ -24,15 +24,13 @@ public class AdminUtils
         var client = new HttpClient();
         try
         {
-            Uri target = new Uri(provider, ".well-known/openid-configuration");
-            Console.WriteLine(target.AbsoluteUri);
-            var discoveryJson = await client.GetStringAsync(target);
+            var discoveryJson = await client.GetStringAsync(new Uri(provider, ".well-known/openid-configuration"));
             using var doc = JsonDocument.Parse(discoveryJson);
             _userInfoUrl = doc.RootElement.GetProperty("userinfo_endpoint").GetString() ?? "";
         }
         catch (HttpRequestException e)
         {
-            Console.WriteLine("Failed to retrieve OpenID configuration: " + e.Message + "\n" + e.StatusCode);
+            Console.WriteLine("Failed to retrieve OpenID configuration: " + e.Message + " " + e.StatusCode + "\n\n\n\n----------");
         }
     }
 

@@ -61,6 +61,8 @@ services:
         condition: service_healthy
     networks:
       - prod_network
+    extra_hosts:
+      - "dev.svsticky.nl:172.17.0.1"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://backend:8080/status"]
       interval: 10s
