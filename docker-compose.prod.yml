@@ -57,6 +57,8 @@ services:
     secrets:
       - oauth_client_secret
       - postgres_password
+    extra_hosts:
+      - "koala.dev.svsticky.nl:host-gateway"
     depends_on:
       database:
         condition: service_healthy
