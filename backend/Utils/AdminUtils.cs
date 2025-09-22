@@ -14,17 +14,21 @@ public class AdminUtils
 {
     private static string _userInfoUrl = "";
 
+    private static string _adminClaim = "is_admin";
+
     /// <summary>
     /// Sets up the admin utilities by retrieving the user info endpoint from the OpenID Connect provider
     /// using the provided provider URI.
     /// This method should be called during application startup to ensure the user info URL is set correctly.
     /// </summary>
-    public static async void Setup(Uri provider)
+    public static async void Setup(Uri provider, string adminClaim = "is_admin")
     {
         var client = new HttpClient();
         var discoveryJson = await client.GetStringAsync(new Uri(provider, ".well-known/openid-configuration"));
         using var doc = JsonDocument.Parse(discoveryJson);
         _userInfoUrl = doc.RootElement.GetProperty("userinfo_endpoint").GetString() ?? "";
+
+        _adminClaim = adminClaim;
     }
 
     /// <summary>
@@ -52,7 +56,7 @@ public class AdminUtils
             // Read the content and parse it as JSON
             var content = await response.Content.ReadAsStringAsync();
             var profile = JsonDocument.Parse(content);
-            if (profile.RootElement.TryGetProperty("is_admin", out var isAdminProp))
+            if (profile.RootElement.TryGetProperty(_adminClaim, out var isAdminProp))
             {
                 return isAdminProp.GetBoolean();
             }

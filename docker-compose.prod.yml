@@ -53,6 +53,7 @@ services:
       - OAUTH_PROVIDER_NAME=${OAUTH_PROVIDER_NAME:-Koala}
       - OAUTH_PROVIDER_URL=${OAUTH_PROVIDER_URL:-https://koala.svsticky.nl/}
       - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
+      - ADMIN_CLAIM=${ADMIN_CLAIM:-is_admin}
     secrets:
       - oauth_client_secret
       - postgres_password
@@ -61,8 +62,6 @@ services:
         condition: service_healthy
     networks:
       - prod_network
-    extra_hosts:
-      - "dev.svsticky.nl:172.17.0.1"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://backend:8080/status"]
       interval: 10s
