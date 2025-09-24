@@ -37,8 +37,8 @@ export default async function RootLayout({
   };
 
   return (
-    <html lang="en" className="w-full h-full">
-      <body className="w-full h-full" style={style}>
+    <html lang="en" className="w-full h-full" style={style}>
+      <body className="w-full h-full">
         <main className="w-full h-full">{children}</main>
       </body>
     </html>
