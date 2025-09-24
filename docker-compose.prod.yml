@@ -99,6 +99,8 @@ services:
       - NEXTAUTH_URL=${HOST_URL:-http://localhost:3000}
     secrets:
       - oauth_client_secret
+    extra_hosts:
+      - "koala.dev.svsticky.nl:5.75.177.125"
     depends_on:
       backend:
         condition: service_healthy
