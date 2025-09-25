@@ -54,7 +54,7 @@ export default async function SubmitTask() {
             {index + 1}. {task.description}
             {task.maxPerPeriod &&
               task.maxPerPeriod !== null &&
-              `Maximaal ${task.maxPerPeriod} keer`}{' '}
+              ` Maximaal ${task.maxPerPeriod} keer`}{' '}
             ({task.points} punten)
           </p>
         ))
