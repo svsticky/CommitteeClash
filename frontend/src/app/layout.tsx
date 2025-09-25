@@ -33,7 +33,7 @@ export default async function RootLayout({
 }>) {
   // Get the theme color from the environment varialbles
   const style: CSSCustomProperties = {
-    '--theme': process.env.THEME_COLOR!,
+    '--theme': process.env.NEXT_PUBLIC_THEME_COLOR!,
   };
 
   return (

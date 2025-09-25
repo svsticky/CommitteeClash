@@ -1,5 +1,3 @@
-import '../globals.css';
-
 /**
  * AuthLayout component that serves as a layout for authentication-related pages.
  * This component is used to wrap the content of authentication pages
