@@ -45,15 +45,20 @@ services:
       context: ./backend
       dockerfile: Dockerfile
       target: production # Use production target
+    ports:
+      - "${BACKEND_PORT:-8080}:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - CONNECTION_STRING=Host=database;Port=5432;Username=postgres;Password=<PASSWORD>;Database=postgres;
       - OAUTH_PROVIDER_NAME=${OAUTH_PROVIDER_NAME:-Koala}
       - OAUTH_PROVIDER_URL=${OAUTH_PROVIDER_URL:-https://koala.svsticky.nl/}
       - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
+      - ADMIN_CLAIM=${ADMIN_CLAIM:-is_admin}
     secrets:
       - oauth_client_secret
       - postgres_password
+    extra_hosts:
+      - "koala.dev.svsticky.nl:5.75.177.125"
     depends_on:
       database:
         condition: service_healthy
@@ -83,6 +88,7 @@ services:
       args:
         NEXT_PUBLIC_OAUTH_PROVIDER_NAME: ${OAUTH_PROVIDER_NAME:-Koala}
         NEXT_PUBLIC_OAUTH_PROVIDER_URL: ${OAUTH_PROVIDER_URL:-https://koala.svsticky.nl/}
+        NEXT_PUBLIC_THEME_COLOR: ${THEME_COLOR:-#FA6B20}
     ports:
       - "${PORT:-3000}:3000"
     environment:
@@ -90,9 +96,12 @@ services:
       - NEXT_PUBLIC_OAUTH_PROVIDER_NAME=${OAUTH_PROVIDER_NAME:-Koala}
       - NEXT_PUBLIC_OAUTH_PROVIDER_URL=${OAUTH_PROVIDER_URL:-https://koala.svsticky.nl/}
       - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
-      - THEME_COLOR=${THEME_COLOR:-#FA6B20}
+      - NEXT_PUBLIC_THEME_COLOR=${THEME_COLOR:-#FA6B20}
+      - NEXTAUTH_URL=${HOST_URL:-http://localhost:3000}
     secrets:
       - oauth_client_secret
+    extra_hosts:
+      - "koala.dev.svsticky.nl:5.75.177.125"
     depends_on:
       backend:
         condition: service_healthy

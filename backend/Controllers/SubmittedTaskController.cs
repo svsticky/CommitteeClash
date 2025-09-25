@@ -644,7 +644,7 @@ public class SubmittedTaskController : Controller
 
         _logger.LogInformation("Retrieved {Count} approved tasks for Committee: {Committee}", approvedTasks.Count, committee);
 
-        return Ok(approvedTasks);
+        return Ok(new { ApprovedTasks = approvedTasks, PageAmount = pageAmount });
     }
 
 
@@ -718,6 +718,6 @@ public class SubmittedTaskController : Controller
 
         _logger.LogInformation("Retrieved {Count} rejected tasks for Committee: {Committee}", rejectedTasks.Count, committee);
 
-        return Ok(rejectedTasks);
+        return Ok(new { RejectedTasks = rejectedTasks, PageAmount = pageAmount });
     }
 }

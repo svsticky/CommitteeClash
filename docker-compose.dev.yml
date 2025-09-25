@@ -45,6 +45,7 @@ services:
       - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
       - ASPNETCORE_ENVIRONMENT=Development
       - CONNECTION_STRING=Host=database;Port=5432;Username=postgres;Password=<PASSWORD>;Database=postgres;Include Error Detail=true
+      - ADMIN_CLAIM=${ADMIN_CLAIM:-is_admin}
     secrets:
       - oauth_client_secret
       - postgres_password
@@ -79,7 +80,8 @@ services:
       - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
       - NODE_ENV=development
       - WATCHPACK_POLLING=true
-      - THEME_COLOR=${THEME_COLOR:-#FA6B20}
+      - NEXT_PUBLIC_THEME_COLOR=${THEME_COLOR:-#FA6B20}
+      - NEXTAUTH_URL=${HOST_URL:-http://localhost:3000}
     secrets:
       - oauth_client_secret
     volumes:

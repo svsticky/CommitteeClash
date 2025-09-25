@@ -34,7 +34,7 @@ export default function Scorebar({
       <div
         style={{
           width: `${clampedPercentage}%`,
-          backgroundColor: 'var(--color-theme)',
+          backgroundColor: 'var(--theme)',
           height: '100%',
           transition: 'width 0.3s ease-in-out',
         }}

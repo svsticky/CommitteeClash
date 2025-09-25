@@ -33,12 +33,12 @@ export default async function RootLayout({
 }>) {
   // Get the theme color from the environment varialbles
   const style: CSSCustomProperties = {
-    '--theme': process.env.THEME_COLOR!,
+    '--theme': process.env.NEXT_PUBLIC_THEME_COLOR!,
   };
 
   return (
-    <html lang="en" className="w-full h-full">
-      <body className="w-full h-full" style={style}>
+    <html lang="en" className="w-full h-full" style={style}>
+      <body className="w-full h-full">
         <main className="w-full h-full">{children}</main>
       </body>
     </html>

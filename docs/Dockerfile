@@ -35,9 +35,14 @@ COPY docs ./docs
 COPY backend ./backend
 COPY frontend ./frontend
 
+# install modules for frontend
+WORKDIR /app/frontend
+RUN npm install
+
 # Generate documentation
 WORKDIR /app/docs
 ENV DOTNET_ENVIRONMENT=docs
+RUN npm install
 RUN npm run build-docs
 
 # -- Build the app for production
@@ -73,7 +78,6 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --from=docs-generator /app/docs/swagger.json ./swagger.json
 
 USER nextjs
 EXPOSE 3001
