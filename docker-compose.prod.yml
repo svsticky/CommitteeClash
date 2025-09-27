@@ -64,6 +64,8 @@ services:
         condition: service_healthy
     networks:
       - prod_network
+    volumes:
+      - ./backend/submittedimages:/app/submittedimages # Persist submitted images
     healthcheck:
       test: ["CMD", "curl", "-f", "http://backend:8080/status"]
       interval: 10s
