@@ -83,7 +83,7 @@ public class LeaderboardController : Controller
     [HttpGet("GetLeaderboard")]
     [SwaggerOperation(Summary = "Get Leaderboard", Description = "This endpoint allows users to get the leaderboard by providing a start and end date for the period they want to analyze.")]
     [SwaggerResponse(200, "Returns the leaderboard data as a list of anonymous objects containing committee names and their total points within the specified date range.")]
-    [ProducesResponseType(typeof(IEnumerable<object>), 200)]
+    [ProducesResponseType(typeof(List<object>), 200)]
     [SwaggerResponse(400, "BadRequest if the start date is after the end date.")]
     [SwaggerResponse(500, "Internal Server Error if an error occurs while processing the request.")]
     public IActionResult GetLeaderboard([FromQuery] DateTime StartDate, [FromQuery] DateTime EndDate)
@@ -162,6 +162,7 @@ public class LeaderboardController : Controller
     [HttpGet("GetLeaderboardByPeriodName")]
     [SwaggerOperation(Summary = "Get Leaderboard by Period Name", Description = "This endpoint allows users to get the leaderboard by providing a period name.")]
     [SwaggerResponse(200, "Returns the leaderboard data as a list of anonymous objects containing committee names and their total points for the specified period.")]
+    [ProducesResponseType(typeof(List<object>), 200)]
     [SwaggerResponse(400, "BadRequest if the period name is invalid.")]
     [SwaggerResponse(404, "NotFound if no periods are found with the specified name.")]
     [SwaggerResponse(500, "Internal Server Error if an error occurs while processing the request.")]

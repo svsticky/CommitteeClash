@@ -69,6 +69,7 @@ public class CommitteeController : Controller
     /// Internal server error if there is an issue retrieving the committees.
     /// </response>
     [HttpGet("GetCommittees")]
+    [ProducesResponseType(typeof(List<Committee>), 200)]
     [SwaggerOperation(Summary = "Get Committees", Description = "This endpoint returns a list of committees ordered by their names. It does not require any parameters and is accessible to all authenticated users. Returns a JSON response containing the list of committees.")]
     public IActionResult GetCommittees()
     {
@@ -190,6 +191,7 @@ public class CommitteeController : Controller
     [HttpDelete("DeleteCommittee")]
     [SwaggerOperation(Summary = "Delete Committee", Description = "This endpoint allows an admin user to delete a committee with a specified name.")]
     [SwaggerResponse(200, "Returns a success message if the committee is deleted successfully.")]
+    [ProducesResponseType(typeof(string), 200)]
     [SwaggerResponse(401, "Unauthorized if the user is not an admin.")]
     [SwaggerResponse(404, "NotFound if the committee does not exist.")]
     [SwaggerResponse(500, "Internal server error if there is an issue deleting the committee.")]
@@ -261,6 +263,7 @@ public class CommitteeController : Controller
     [HttpPut("RenameCommittee")]
     [SwaggerOperation(Summary = "Rename Committee", Description = "This endpoint allows an admin user to rename a committee.")]
     [SwaggerResponse(200, "Returns the new name of the committee if renamed successfully.")]
+    [ProducesResponseType(typeof(string), 200)]
     [SwaggerResponse(400, "BadRequest if the new name is empty or already exists.")]
     [SwaggerResponse(401, "Unauthorized if the user is not an admin.")]
     [SwaggerResponse(404, "NotFound if the committee does not exist.")]

@@ -89,8 +89,8 @@ public class SubmittedTaskController : Controller
     /// <response code="404">
     /// If the specified committee or task does not exist, a NotFound response is returned with an appropriate error message.
     /// </response>
-    /// <response code="20">
-    /// If an error occurs while processing the request, a 20 Internal Server Error response is
+    /// <response code="500">
+    /// If an error occurs while processing the request, a 500 Internal Server Error response is
     /// returned with an appropriate error message.
     /// </response>
     [HttpPost("SubmitTask")]
@@ -99,7 +99,7 @@ public class SubmittedTaskController : Controller
     [ProducesResponseType(typeof(SubmittedTask), 200)]
     [SwaggerResponse(400, "BadRequest if the request parameters are invalid, such as empty task ID, committee name, or missing image file.")]
     [SwaggerResponse(404, "NotFound if the specified committee or task does not exist.")]
-    [SwaggerResponse(20, "Internal Server Error if an error occurs while processing the request.")]
+    [SwaggerResponse(500, "Internal Server Error if an error occurs while processing the request.")]
     public async Task<IActionResult> SubmitTask([FromForm] SubmitTaskRequestDto SubmitTaskRequestDto)
     {
         _logger.LogInformation("Received task submission request for TaskId: {TaskId}, Committee: {Committee}",
@@ -231,8 +231,8 @@ public class SubmittedTaskController : Controller
     /// <response code="404">
     /// If the specified task does not exist, a NotFound response is returned with an appropriate error message.
     /// </response>
-    /// <response code="20">
-    /// If an error occurs while processing the request, a 20 Internal Server Error response is
+    /// <response code="500">
+    /// If an error occurs while processing the request, a 500 Internal Server Error response is
     /// returned with an appropriate error message.
     /// </response>
     [HttpPut("ApproveTask")]
@@ -242,7 +242,7 @@ public class SubmittedTaskController : Controller
     [SwaggerResponse(400, "BadRequest if the request parameters are invalid, such as empty task ID, invalid points value, or points exceeding the maximum limit.")]
     [SwaggerResponse(401, "Unauthorized if the user is not an admin.")]
     [SwaggerResponse(404, "NotFound if the specified task does not exist.")]
-    [SwaggerResponse(20, "Internal Server Error if an error occurs while processing the request.")]
+    [SwaggerResponse(500, "Internal Server Error if an error occurs while processing the request.")]
     public async Task<IActionResult> ApproveTask([FromQuery] Guid TaskId, [FromQuery] int Points, [FromQuery] int? MaxPerPeriod = null)
     {
         _logger.LogInformation("ApproveTask called with TaskId: {TaskId}, Points: {Points}, MaxPerPeriod: {MaxPerPeriod}",
@@ -323,8 +323,8 @@ public class SubmittedTaskController : Controller
     /// <response code="404">
     /// If the specified task does not exist, a NotFound response is returned with an appropriate error message.
     /// </response>
-    /// <response code="20">
-    /// If an error occurs while processing the request, a 20 Internal Server Error response is
+    /// <response code="500">
+    /// If an error occurs while processing the request, a 500 Internal Server Error response is
     /// returned with an appropriate error message.
     /// </response>
     [HttpPut("RejectTask")]
@@ -334,7 +334,7 @@ public class SubmittedTaskController : Controller
     [SwaggerResponse(400, "BadRequest if the request parameters are invalid, such as empty task ID or reason.")]
     [SwaggerResponse(401, "Unauthorized if the user is not an admin.")]
     [SwaggerResponse(404, "NotFound if the specified task does not exist.")]
-    [SwaggerResponse(20, "Internal Server Error if an error occurs while processing the request.")]
+    [SwaggerResponse(500, "Internal Server Error if an error occurs while processing the request.")]
     public async Task<IActionResult> RejectTask([FromQuery] Guid TaskId, string Reason)
     {
         _logger.LogInformation("RejectTask called with TaskId: {TaskId}, Reason: {Reason}", TaskId, Reason);
@@ -400,9 +400,9 @@ public class SubmittedTaskController : Controller
     [HttpGet("GetSubmittedTasks")]
     [SwaggerOperation(Summary = "Get Submitted Tasks", Description = "This endpoint retrieves all submitted tasks from the database.")]
     [SwaggerResponse(200, "Returns a list of submitted tasks.")]
+    [ProducesResponseType(typeof(PageResponse<SubmittedTask>), 200)]
     [SwaggerResponse(400, "Bad Request if the request parameters are invalid.")]
-    [ProducesResponseType(typeof(List<SubmittedTask>), 200)]
-    [SwaggerResponse(20, "Internal Server Error if an error occurs while retrieving the tasks.")]
+    [SwaggerResponse(500, "Internal Server Error if an error occurs while retrieving the tasks.")]
     public IActionResult GetSubmittedTasks([FromQuery] int page, [FromQuery] int pageSize = 50, [FromQuery] string? committee = null)
     {
         _logger.LogInformation("GetSubmittedTasks called with Page: {Page}, PageSize: {PageSize}, Committee: {Committee}", page, pageSize, committee);
@@ -438,7 +438,7 @@ public class SubmittedTaskController : Controller
 
         _logger.LogInformation("Retrieved {Count} submitted tasks for Committee: {Committee}", submittedTasks.Count, committee);
 
-        return Ok(new { submittedTasks = submittedTasks, pageAmount = pageAmount });
+        return Ok(new PageResponse<SubmittedTask>(submittedTasks, pageSize));
     }
 
     /// <summary>
@@ -464,8 +464,8 @@ public class SubmittedTaskController : Controller
     /// <response code="404">
     /// If the specified task does not exist, a NotFound response is returned with an appropriate error message.
     /// </response>
-    /// <response code="20">
-    /// If an error occurs while processing the request, a 20 Internal Server Error response is
+    /// <response code="500">
+    /// If an error occurs while processing the request, a 500 Internal Server Error response is
     /// returned with an appropriate error message.
     /// </response>
     [HttpGet("GetSubmittedTask")]
@@ -474,7 +474,7 @@ public class SubmittedTaskController : Controller
     [ProducesResponseType(typeof(SubmittedTask), 200)]
     [SwaggerResponse(400, "BadRequest if the request parameters are invalid, such as an empty task ID.")]
     [SwaggerResponse(404, "NotFound if the specified task does not exist.")]
-    [SwaggerResponse(20, "Internal Server Error if an error occurs while processing the request.")]
+    [SwaggerResponse(500, "Internal Server Error if an error occurs while processing the request.")]
     public IActionResult GetSubmittedTask([FromQuery] Guid TaskId)
     {
         _logger.LogInformation("GetSubmittedTask called with TaskId: {TaskId}", TaskId);
@@ -525,16 +525,16 @@ public class SubmittedTaskController : Controller
     /// <response code="400">
     /// If the request parameters are invalid, a 400 Bad Request response is returned.
     /// </response>
-    /// <response code="20">
-    /// If an error occurs while processing the request, a 20 Internal Server Error response is
+    /// <response code="500">
+    /// If an error occurs while processing the request, a 500 Internal Server Error response is
     /// returned with an appropriate error message.
     /// </response>
     [HttpGet("GetPendingTasks")]
     [SwaggerOperation(Summary = "Get Pending Tasks", Description = "This endpoint retrieves all pending tasks from the database.")]
     [SwaggerResponse(200, "Returns a list of pending tasks.")]
+    [ProducesResponseType(typeof(PageResponse<SubmittedTask>), 200)]
     [SwaggerResponse(400, "BadRequest if the request parameters are invalid.")]
-    [ProducesResponseType(typeof(List<SubmittedTask>), 200)]
-    [SwaggerResponse(20, "Internal Server Error if an error occurs while retrieving the tasks.")]
+    [SwaggerResponse(500, "Internal Server Error if an error occurs while retrieving the tasks.")]
     public IActionResult GetPendingTasks([FromQuery] int page = 1, [FromQuery] int pageSize = 5, [FromQuery] string? committee = null)
     {
         _logger.LogInformation("GetPendingTasks called with Committee: {Committee}, Page: {Page}, PageSize: {PageSize}", committee, page, pageSize);
@@ -570,7 +570,7 @@ public class SubmittedTaskController : Controller
 
         _logger.LogInformation("Retrieved {Count} pending tasks for Committee: {Committee}", pendingTasks.Count, committee);
 
-        return Ok(new { PendingTasks = pendingTasks, PageAmount = pageAmount });
+        return Ok(new PageResponse<SubmittedTask>(pendingTasks, pageSize));
     }
 
     /// <summary>
@@ -600,15 +600,16 @@ public class SubmittedTaskController : Controller
     /// <response code="400">
     /// If the page number or page size is invalid, a 400 Bad Request response is returned.
     /// </response>
-    /// <response code="20">
-    /// If an error occurs while processing the request, a 20 Internal Server Error response is
+    /// <response code="500">
+    /// If an error occurs while processing the request, a 500 Internal Server Error response is
     /// returned with an appropriate error message.
     /// </response>
     [HttpGet("GetApprovedTasks")]
     [SwaggerOperation(Summary = "Get Approved Tasks", Description = "This endpoint retrieves all approved tasks from the database.")]
     [SwaggerResponse(200, "Returns a list of approved tasks.")]
-    [ProducesResponseType(typeof(List<SubmittedTask>), 200)]
-    [SwaggerResponse(20, "Internal Server Error if an error occurs while retrieving the tasks.")]
+    [ProducesResponseType(typeof(PageResponse<SubmittedTask>), 200)]
+    [SwaggerResponse(400, "BadRequest if the request parameters are invalid.")]
+    [SwaggerResponse(500, "Internal Server Error if an error occurs while retrieving the tasks.")]
     public IActionResult GetApprovedTasks([FromQuery] int page, [FromQuery] int pageSize = 5, [FromQuery] string? committee = null)
     {
         _logger.LogInformation("GetApprovedTasks called with Page: {Page}, PageSize: {PageSize}, Committee: {Committee}", page, pageSize, committee);
@@ -644,7 +645,7 @@ public class SubmittedTaskController : Controller
 
         _logger.LogInformation("Retrieved {Count} approved tasks for Committee: {Committee}", approvedTasks.Count, committee);
 
-        return Ok(new { ApprovedTasks = approvedTasks, PageAmount = pageAmount });
+        return Ok(new PageResponse<SubmittedTask>(approvedTasks, pageSize));
     }
 
 
@@ -674,15 +675,16 @@ public class SubmittedTaskController : Controller
     /// <response code="400">
     /// If the page number or page size is invalid, a 400 Bad Request response is returned.
     /// </response>
-    /// <response code="20">
-    /// If an error occurs while processing the request, a 20 Internal Server Error response is
+    /// <response code="500">
+    /// If an error occurs while processing the request, a 500 Internal Server Error response is
     /// returned with an appropriate error message.
     /// </response> 
     [HttpGet("GetRejectedTasks")]
     [SwaggerOperation(Summary = "Get Rejected Tasks", Description = "This endpoint retrieves all rejected tasks from the database.")]
     [SwaggerResponse(200, "Returns a list of rejected tasks.")]
-    [ProducesResponseType(typeof(List<SubmittedTask>), 200)]
-    [SwaggerResponse(20, "Internal Server Error if an error occurs while retrieving the tasks.")]
+    [ProducesResponseType(typeof(PageResponse<SubmittedTask>), 200)]
+    [SwaggerResponse(400, "BadRequest if the request parameters are invalid.")]
+    [SwaggerResponse(500, "Internal Server Error if an error occurs while retrieving the tasks.")]
     public IActionResult GetRejectedTasks([FromQuery] int page, [FromQuery] int pageSize = 5, [FromQuery] string? committee = null)
     {
         _logger.LogInformation("GetRejectedTasks called with Page: {Page}, PageSize: {PageSize}, Committee: {Committee}", page, pageSize, committee);
@@ -718,6 +720,6 @@ public class SubmittedTaskController : Controller
 
         _logger.LogInformation("Retrieved {Count} rejected tasks for Committee: {Committee}", rejectedTasks.Count, committee);
 
-        return Ok(new { RejectedTasks = rejectedTasks, PageAmount = pageAmount });
+        return Ok(new PageResponse<SubmittedTask>(rejectedTasks, pageSize));
     }
 }
