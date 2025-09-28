@@ -140,7 +140,7 @@ export default function ReviewSubmittedTaskForm({
 
           {/* Display the submitted image using Next.js Image component */}
           <Image
-            src={`/api/image-proxy?filename=${encodeURIComponent(submittedTask.imagePath)}`}
+            src={`${process.env.NEXT_PUBLIC_HOST_URL}/api/image-proxy?filename=${encodeURIComponent(submittedTask.imagePath)}`}
             alt="Ingediende afbeelding"
             fill
             className="object-contain"
@@ -148,6 +148,7 @@ export default function ReviewSubmittedTaskForm({
             onLoad={() => setLoading(false)}
             hidden={isLoading}
             priority
+            unoptimized
           />
         </div>
 

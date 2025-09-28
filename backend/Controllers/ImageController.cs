@@ -82,6 +82,7 @@ public class ImageController : Controller
 
         // Get the path to the uploaded images folder
         string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "submittedimages");
+        _logger.LogInformation("Uploads folder path: {UploadsFolder}", uploadsFolder);
         string filePath = Path.Combine(uploadsFolder, filename);
 
         // Check if the file exists
