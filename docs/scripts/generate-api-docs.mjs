@@ -1,4 +1,4 @@
-import { readdir, rename, rm, rmdir } from "fs/promises";
+import { readdir, readFile, rename, rm, rmdir, writeFile } from "fs/promises";
 import * as OpenAPI from "fumadocs-openapi";
 import path from "path";
 import { generateIndexFiles } from "./generate-index-files.mjs";

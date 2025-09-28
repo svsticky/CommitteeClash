@@ -37,12 +37,12 @@ COPY frontend ./frontend
 
 # install modules for frontend
 WORKDIR /app/frontend
-RUN npm install
+RUN npm ci --ignore-scripts
 
 # Generate documentation
 WORKDIR /app/docs
 ENV DOTNET_ENVIRONMENT=docs
-RUN npm install
+RUN npm ci --ignore-scripts
 RUN npm run build-docs
 
 # -- Build the app for production
@@ -59,6 +59,7 @@ COPY docs .
 COPY --from=docs-generator /app/docs/content/docs/API ./content/docs/API
 COPY --from=docs-generator /app/docs/content/docs/backend ./content/docs/backend
 COPY --from=docs-generator /app/docs/content/docs/frontend ./content/docs/frontend
+COPY --from=docs-generator /app/docs/swagger.json ./swagger.json
 
 # Build the next project
 ENV NEXT_TELEMETRY_DISABLED=1 

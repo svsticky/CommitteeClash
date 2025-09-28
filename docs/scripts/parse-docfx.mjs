@@ -97,7 +97,9 @@ function escapeHTMLExceptCodeBlocks(content) {
         // Add text before the code block (with < escaped)
         if (match.index > lastIndex) {
             let textPart = content.substring(lastIndex, match.index);
-            textPart = textPart.replace(/</g, "\\<");
+            textPart = textPart
+                .replace(/</g, "\\<")
+                .replace(/<([^>]+)>/g, (_, inner) => `&lt;${inner}&gt;`);
             parts.push(textPart);
         }
 
@@ -110,7 +112,9 @@ function escapeHTMLExceptCodeBlocks(content) {
     // Add any remaining text after the last code block (with < escaped)
     if (lastIndex < content.length) {
         let textPart = content.substring(lastIndex);
-        textPart = textPart.replace(/</g, "\\<");
+        textPart = textPart
+            .replace(/</g, "\\<")
+            .replace(/<([^>]+)>/g, (_, inner) => `&lt;${inner}&gt;`);
         parts.push(textPart);
     }
 
@@ -166,7 +170,8 @@ Object.entries(fileLocations).forEach(([className, file]) => {
     let content = fs.readFileSync(file, "utf-8");
 
     // Add frontmatter heading (required for fumadocs)
-    const frontmatter = `---\ntitle: ${className.split(".").at(-1)}\n---\n`;
+    const cleanName = className.split(".").at(-1).replace(/-\d+$/, "");
+    const frontmatter = `---\ntitle: ${cleanName}\n---\n`;
     // Add imports
     const imports = [
         `import { CollapsibleInherited } from "@/components/collapsible"`,
@@ -174,13 +179,13 @@ Object.entries(fileLocations).forEach(([className, file]) => {
         `import { CSharpType } from "@/components/csharp_type"`,
     ];
 
-    // Remove all HTML anchors
-    content = content.replace(/<a\b[^>]*>(.*?)<\/a>/g, "");
+    // Remove all HTML anchors but keep inner text
+    content = content.replace(/<a\b[^>]*>(.*?)<\/a>/g, "$1");
 
     // Remove the big heading (single #)
     content = content.replace(/^#(?![#]).*$/m, "");
 
-    // Escape all < characters (required for fumadocs)
+    // Escape all other < characters outside code blocks
     content = escapeHTMLExceptCodeBlocks(content);
 
     // Update links to point to the new location

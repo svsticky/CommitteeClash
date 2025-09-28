@@ -485,6 +485,7 @@ public class PossibleTaskController : Controller
     [HttpPost("SetPossibleTaskState")]
     [SwaggerOperation(Summary = "Set Possible Task State", Description = "This endpoint allows an admin user to activate or deactivate a possible task.")]
     [SwaggerResponse(204, "NoContent if the task state is successfully updated.")]
+    [ProducesResponseType(typeof(void), 204)]
     [SwaggerResponse(400, "BadRequest if the task ID is empty.")]
     [SwaggerResponse(401, "Unauthorized if the user is not an admin.")]
     [SwaggerResponse(404, "NotFound if the task is not found.")]

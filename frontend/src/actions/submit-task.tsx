@@ -105,13 +105,16 @@ export const GetSubmittedTasks = async (
     }
 
     // Parse the JSON response
-    const result = await response.json();
+    const result = (await response.json()) as {
+      items: SubmittedTaskList;
+      pageAmount: number;
+    };
 
     console.log('Loaded submitted tasks successfully:', result);
 
     return {
       succeed: true,
-      data: result as { submittedTasks: SubmittedTaskList; pageAmount: number },
+      data: { submittedTasks: result.items, pageAmount: result.pageAmount },
     };
   } catch (error) {
     console.error('Error loading submitted tasks:', error);
@@ -163,7 +166,7 @@ export const GetPendingTasks = async (
 
     // Parse the JSON response
     const result = (await response.json()) as {
-      pendingTasks: SubmittedTaskList;
+      items: SubmittedTaskList;
       pageAmount: number;
     };
 
@@ -171,7 +174,7 @@ export const GetPendingTasks = async (
 
     return {
       succeed: true,
-      data: { tasks: result.pendingTasks, pageAmount: result.pageAmount },
+      data: { tasks: result.items, pageAmount: result.pageAmount },
     };
   } catch (error) {
     console.error('Error loading pending tasks:', error);
@@ -223,7 +226,7 @@ export const GetApprovedTasks = async (
 
     // Parse the JSON response
     const result = (await response.json()) as {
-      approvedTasks: SubmittedTaskList;
+      items: SubmittedTaskList;
       pageAmount: number;
     };
 
@@ -231,7 +234,7 @@ export const GetApprovedTasks = async (
 
     return {
       succeed: true,
-      data: { tasks: result.approvedTasks, pageAmount: result.pageAmount },
+      data: { tasks: result.items, pageAmount: result.pageAmount },
     };
   } catch (error) {
     console.error('Error loading approved tasks:', error);
@@ -283,7 +286,7 @@ export const GetRejectedTasks = async (
 
     // Parse the JSON response
     const result = (await response.json()) as {
-      rejectedTasks: SubmittedTaskList;
+      items: SubmittedTaskList;
       pageAmount: number;
     };
 
@@ -291,7 +294,7 @@ export const GetRejectedTasks = async (
 
     return {
       succeed: true,
-      data: { tasks: result.rejectedTasks, pageAmount: result.pageAmount },
+      data: { tasks: result.items, pageAmount: result.pageAmount },
     };
   } catch (error) {
     console.error('Error loading rejected tasks:', error);
