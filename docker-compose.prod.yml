@@ -65,7 +65,7 @@ services:
     networks:
       - prod_network
     volumes:
-      - ./backend/submittedimages:/app/submittedimages # Persist submitted images
+      - submittedimages:/app/submittedimages # Persist submitted images
     healthcheck:
       test: ["CMD", "curl", "-f", "http://backend:8080/status"]
       interval: 10s
@@ -136,3 +136,4 @@ services:
 
 volumes:
   postgres_data: # Persistent volume for database
+  submittedimages: # Persistent volume for submitted images
