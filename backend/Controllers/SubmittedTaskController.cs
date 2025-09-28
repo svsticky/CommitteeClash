@@ -439,7 +439,7 @@ public class SubmittedTaskController : Controller
 
         _logger.LogInformation("Retrieved {Count} submitted tasks for Committee: {Committee}", submittedTasks.Count, committee);
 
-        return Ok(new PageResponse<SubmittedTask>(submittedTasks, pageSize));
+        return Ok(new PageResponse<SubmittedTask>(submittedTasks, pageAmount));
     }
 
     /// <summary>
@@ -571,7 +571,7 @@ public class SubmittedTaskController : Controller
 
         _logger.LogInformation("Retrieved {Count} pending tasks for Committee: {Committee}", pendingTasks.Count, committee);
 
-        return Ok(new PageResponse<SubmittedTask>(pendingTasks, pageSize));
+        return Ok(new PageResponse<SubmittedTask>(pendingTasks, pageAmount));
     }
 
     /// <summary>
@@ -646,7 +646,7 @@ public class SubmittedTaskController : Controller
 
         _logger.LogInformation("Retrieved {Count} approved tasks for Committee: {Committee}", approvedTasks.Count, committee);
 
-        return Ok(new PageResponse<SubmittedTask>(approvedTasks, pageSize));
+        return Ok(new PageResponse<SubmittedTask>(approvedTasks, pageAmount));
     }
 
 
@@ -721,6 +721,6 @@ public class SubmittedTaskController : Controller
 
         _logger.LogInformation("Retrieved {Count} rejected tasks for Committee: {Committee}", rejectedTasks.Count, committee);
 
-        return Ok(new PageResponse<SubmittedTask>(rejectedTasks, pageSize));
+        return Ok(new PageResponse<SubmittedTask>(rejectedTasks, pageAmount));
     }
 }

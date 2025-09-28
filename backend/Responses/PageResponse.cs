@@ -27,9 +27,9 @@ public class PageResponse<T>
     /// This constructor takes a list of items and a page size as parameters,
     /// and calculates the total number of pages based on the number of items and the specified page size.
     /// </summary>
-    public PageResponse(List<T> items, int pageSize)
+    public PageResponse(List<T> items, int pageAmount)
     {
         Items = items;
-        PageAmount = (int)Math.Ceiling((double)items.Count / pageSize);
+        PageAmount = pageAmount;
     }
 }
