@@ -570,7 +570,7 @@ public class SubmittedTaskController : Controller
         if (page > pageAmount && page != 1) return BadRequest("Invalid page number.");
 
         _logger.LogInformation("Retrieved {Count} pending tasks for Committee: {Committee}", pendingTasks.Count, committee);
-
+        
         return Ok(new PageResponse<SubmittedTask>(pendingTasks, pageAmount));
     }
 
@@ -645,7 +645,7 @@ public class SubmittedTaskController : Controller
         if (page > pageAmount && page != 1) return BadRequest("Invalid page number.");
 
         _logger.LogInformation("Retrieved {Count} approved tasks for Committee: {Committee}", approvedTasks.Count, committee);
-
+        
         return Ok(new PageResponse<SubmittedTask>(approvedTasks, pageAmount));
     }
 
