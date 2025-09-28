@@ -37,12 +37,12 @@ COPY frontend ./frontend
 
 # install modules for frontend
 WORKDIR /app/frontend
-RUN npm install
+RUN npm ci --ignore-scripts
 
 # Generate documentation
 WORKDIR /app/docs
 ENV DOTNET_ENVIRONMENT=docs
-RUN npm install
+RUN npm ci --ignore-scripts
 RUN npm run build-docs
 
 # -- Build the app for production
