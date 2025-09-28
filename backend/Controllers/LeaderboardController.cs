@@ -124,7 +124,7 @@ public class LeaderboardController : Controller
                 // If the count is less than MaxPerPeriod, we can add the task
                 // Else, it exceeds the limit and we skip it
                 int countBefore = validTasks
-                    .Count(t => t.PossibleTaskId == task.PossibleTaskId);
+                    .Count(t => t.PossibleTaskId == task.PossibleTaskId && t.Committee == task.Committee);
 
                 if (countBefore < task.MaxPerPeriod)
                 {
@@ -189,14 +189,38 @@ public class LeaderboardController : Controller
         }
 
         // Get all approved tasks for the specified period
-        var periodTasks = _context.SubmittedTasks
+        var allTasksInPeriod = _context.SubmittedTasks
             .Where(t => t.Status == SubmittedTask.TaskStatus.Approved &&
                         t.SubmittedAt >= periods.StartDate &&
                         t.SubmittedAt <= periods.EndDate)
             .ToList();
 
+        // Filter tasks that exceed the MaxPerPeriod limit
+        var validTasks = new List<SubmittedTask>();
+        foreach (var task in allTasksInPeriod)
+        {
+            // If MaxPerPeriod is null, it means no limit, so we can add the task
+            if (task.MaxPerPeriod == null)
+            {
+                validTasks.Add(task);
+            }
+            else
+            {
+                // Else, count how many tasks with the same ID are already submitted before this one
+                // If the count is less than MaxPerPeriod, we can add the task
+                // Else, it exceeds the limit and we skip it
+                int countBefore = validTasks
+                    .Count(t => t.PossibleTaskId == task.PossibleTaskId && t.Committee == task.Committee);
+
+                if (countBefore < task.MaxPerPeriod)
+                {
+                    validTasks.Add(task);
+                }
+            }
+        }
+
         // Group by committee and sum points, then order by points descending
-        var leaderboard = periodTasks
+        var leaderboard = allTasksInPeriod
             .GroupBy(t => t.Committee)
             .Select(g => new
             {
