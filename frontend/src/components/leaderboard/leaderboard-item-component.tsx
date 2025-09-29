@@ -30,7 +30,7 @@ export default function LeaderboardItem({
     <div className={cn('flex items-center', className)}>
       <div className="w-full flex flex-col sm:flex-row sm:items-center">
         {/* Display the committee name with a minimum width for consistency */}
-        <h2 className="text-s font-semibold min-w-[180px]">
+        <h2 className="text-xl font-semibold min-w-[180px]">
           {leaderboardItem.committee}
         </h2>
 
@@ -42,8 +42,8 @@ export default function LeaderboardItem({
           />
 
           {/* Display the points scored by the committee */}
-          <div className="w-15 text-right">
-            <span className="text-s font-bold">{leaderboardItem.points}</span>
+          <div className="w-15 text-right content-center">
+            <span className="text-xl font-bold">{leaderboardItem.points}</span>
           </div>
         </div>
       </div>
