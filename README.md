@@ -30,7 +30,7 @@ You can find and test the Web API endpoints with the help of swagger when runnin
 
 # Documentation
 
-The project generates documentation automatically. After starting the project, you can find the home page of the documentation website on http://localhost:3001.
+The project generates documentation automatically. The documentation can be found on https://docs.committeeclash.svsticky.nl/. After starting the project, you can find the home page of the documentation website on http://localhost:3001.
 
 # OAuth
 
