@@ -12,7 +12,7 @@
  */
 export default function Scorebar({
   score,
-  height = 20,
+  height = 30,
   className = '',
 }: {
   score: number;
@@ -37,6 +37,7 @@ export default function Scorebar({
           backgroundColor: 'var(--theme)',
           height: '100%',
           transition: 'width 0.3s ease-in-out',
+          borderRadius: '10px'
         }}
       />
     </div>
