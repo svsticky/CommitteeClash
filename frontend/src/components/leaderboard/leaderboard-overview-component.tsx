@@ -134,7 +134,7 @@ export default function LeaderboardOverviewComponent({
         /* If loaded, show the leaderboard */
         <>
           {/* The podium */}
-          <Podium className="max-w-200 mt-10" leaderboard={leaderboard} />
+          <Podium className="max-w-200 mb-10" leaderboard={leaderboard} />
 
           {/* The leaderboard */}
           <LeaderboardComponent leaderboard={leaderboard} />
