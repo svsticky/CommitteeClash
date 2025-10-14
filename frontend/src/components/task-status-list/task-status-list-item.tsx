@@ -47,7 +47,7 @@ export default function TaskStatusListItem({
       {/* Display the rejection reason if rejected */}
       {submittedTask.status === 'Rejected' && (
         <p className="whitespace-break-spaces">
-          Rede van afwijzing: {submittedTask.rejectionReason}
+          Reden van afkeuren: {submittedTask.rejectionReason}
         </p>
       )}
     </div>
