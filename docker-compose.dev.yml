@@ -12,7 +12,7 @@ secrets:
 services:
   # Start database
   database:
-    image: postgres:latest
+    image: postgres:18
     ports:
       - "5432:5432"
     environment:
@@ -22,7 +22,7 @@ services:
     secrets:
       - postgres_password
     tmpfs:
-      - /var/lib/postgresql/data
+      - /var/lib/postgresql
     networks:
       - dev_network
     healthcheck:
