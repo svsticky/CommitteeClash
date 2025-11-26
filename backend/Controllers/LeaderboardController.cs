@@ -220,7 +220,7 @@ public class LeaderboardController : Controller
         }
 
         // Group by committee and sum points, then order by points descending
-        var leaderboard = allTasksInPeriod
+        var leaderboard = validTasks
             .GroupBy(t => t.Committee)
             .Select(g => new
             {
