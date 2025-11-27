@@ -2,7 +2,7 @@ name: Build and Push Docker Image of Backend
 
 on:
   push:
-    branches: [ main, development, chore/docker-workflow ] # TODO remove the latter branch
+    branches: [ main, development ] # TODO remove the latter branch
     paths:
       - '.github/workflows/docker-build-and-push-backend.yml'
       - 'backend/**'
