@@ -95,22 +95,22 @@ services:
     networks:
       - dev_network
 
-  docs:
-    build:
-      context: .
-      dockerfile: docs/Dockerfile
-      target: development
-      no_cache: true
-    ports:
-      - "${DOCS_PORT:-3000}:3001"
-    environment:
-      - NODE_ENV=development
-      - WATCHPACK_POLLING=true
-    volumes:
-      - ./docs:/app/docs
-      - ./backend:/app/backend
-      - ./frontend:/app/frontend
-      - /app/node_modules
-      - /app/.next
-    networks:
-      - dev_network
+  # docs:
+  #   build:
+  #     context: .
+  #     dockerfile: docs/Dockerfile
+  #     target: development
+  #     no_cache: true
+  #   ports:
+  #     - "${DOCS_PORT:-3000}:3001"
+  #   environment:
+  #     - NODE_ENV=development
+  #     - WATCHPACK_POLLING=true
+  #   volumes:
+  #     - ./docs:/app/docs
+  #     - ./backend:/app/backend
+  #     - ./frontend:/app/frontend
+  #     - /app/node_modules
+  #     - /app/.next
+  #   networks:
+  #     - dev_network
