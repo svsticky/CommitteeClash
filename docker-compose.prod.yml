@@ -118,23 +118,23 @@ services:
         max-size: "10m"
         max-file: "5"
 
-  docs:
-    build:
-      context: .
-      dockerfile: docs/Dockerfile
-      target: production # Use production target
-    ports:
-      - "${DOCS_PORT:-3001}:3001"
-    environment:
-      - NODE_ENV=production
-    networks:
-      - prod_network
-    restart: unless-stopped
-    logging:
-      driver: "local"
-      options:
-        max-size: "10m"
-        max-file: "5"
+  # docs:
+  #   build:
+  #     context: .
+  #     dockerfile: docs/Dockerfile
+  #     target: production # Use production target
+  #   ports:
+  #     - "${DOCS_PORT:-3001}:3001"
+  #   environment:
+  #     - NODE_ENV=production
+  #   networks:
+  #     - prod_network
+  #   restart: unless-stopped
+  #   logging:
+  #     driver: "local"
+  #     options:
+  #       max-size: "10m"
+  #       max-file: "5"
 
 volumes:
   postgres_data: # Persistent volume for database
