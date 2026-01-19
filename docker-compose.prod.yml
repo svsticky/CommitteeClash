@@ -41,10 +41,7 @@ services:
   backend:
     user: root
     privileged: true
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-      target: production # Use production target
+    image: ghcr.io/svsticky/committeeclash/backend:f87b2b78edde66a958e7d81891b43c08597f80f0 # version gets updated automatically by CICD
     ports:
       - "${BACKEND_PORT:-8080}:8080"
     environment:
@@ -83,15 +80,7 @@ services:
   frontend:
     user: root
     privileged: true
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-      target: production # Use production target
-      args:
-        NEXT_PUBLIC_OAUTH_PROVIDER_NAME: ${OAUTH_PROVIDER_NAME:-Koala}
-        NEXT_PUBLIC_OAUTH_PROVIDER_URL: ${OAUTH_PROVIDER_URL:-https://koala.svsticky.nl/}
-        NEXT_PUBLIC_THEME_COLOR: ${THEME_COLOR:-#FA6B20}
-        NEXT_PUBLIC_HOST_URL: ${HOST_URL:-http://localhost:3000}
+    image: ghcr.io/svsticky/committeeclash/frontend:f87b2b78edde66a958e7d81891b43c08597f80f0 # version gets updated automatically by CICD
     ports:
       - "${PORT:-3000}:3000"
     environment:
@@ -119,10 +108,7 @@ services:
         max-file: "5"
 
   # docs:
-  #   build:
-  #     context: .
-  #     dockerfile: docs/Dockerfile
-  #     target: production # Use production target
+  #   image: ghcr.io/svsticky/committeeclash/docs:f87b2b78edde66a958e7d81891b43c08597f80f0 # version gets updated automatically by CICD
   #   ports:
   #     - "${DOCS_PORT:-3001}:3001"
   #   environment:

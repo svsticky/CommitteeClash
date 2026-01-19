@@ -10,6 +10,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
 
     permissions:
       contents: read
@@ -17,9 +18,9 @@ jobs:
 
     env:
       NEXT_PUBLIC_OAUTH_PROVIDER_NAME: Koala
-      NEXT_PUBLIC_OAUTH_PROVIDER_URL: https://koala.dev.svsticky.nl/
-      NEXT_PUBLIC_THEME_COLOR: "#FA6B20"
-      NEXT_PUBLIC_HOST_URL: https://koala.dev.svsticky.nl
+      NEXT_PUBLIC_OAUTH_PROVIDER_URL:   ${{ secrets.NEXT_PUBLIC_OAUTH_PROVIDER_URL }}
+      NEXT_PUBLIC_THEME_COLOR:          ${{ vars.NEXT_PUBLIC_THEME_COLOR }}
+      NEXT_PUBLIC_HOST_URL:             ${{ vars.NEXT_PUBLIC_HOST_URL }}
 
     steps:
       - uses: actions/checkout@v4
