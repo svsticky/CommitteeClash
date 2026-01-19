@@ -3,7 +3,7 @@ name: Build and Push Images
 on:
   push:
     branches:
-      - "**"
+      - "CICD/do-not-build-on-prod-server"
   workflow_dispatch:
 
 
