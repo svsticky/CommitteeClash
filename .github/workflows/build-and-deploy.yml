@@ -48,12 +48,12 @@ jobs:
           npm run build
 
       # ---------- Docs ----------
-      - name: Build docs
-        run: |
-          cd docs
-          npm ci --ignore-scripts
-          npm run build-docs
-          npm run build
+      # - name: Build docs
+      #   run: |
+      #     cd docs
+      #     npm ci --ignore-scripts
+      #     npm run build-docs
+      #     npm run build
 
       # ---------- Docker ----------
       - uses: docker/login-action@v3
