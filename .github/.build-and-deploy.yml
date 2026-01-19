@@ -1,0 +1,90 @@
+name: Build and Push Images
+
+on:
+  push:
+    branches: [ 
+      "main",
+      "CICD/do-not-build-on-prod-server"
+       ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    env:
+      NEXT_PUBLIC_OAUTH_PROVIDER_NAME: Koala
+      NEXT_PUBLIC_OAUTH_PROVIDER_URL: https://koala.dev.svsticky.nl/
+      NEXT_PUBLIC_THEME_COLOR: "#FA6B20"
+      NEXT_PUBLIC_HOST_URL: https://koala.dev.svsticky.nl
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # ---------- Tooling ----------
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+
+      # ---------- Backend ----------
+      - name: Publish backend
+        run: |
+          cd backend
+          dotnet restore backend.csproj
+          dotnet publish backend.csproj -c Release -o publish /p:UseAppHost=false
+
+      # ---------- Frontend ----------
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm ci --ignore-scripts
+          npm run build
+
+      # ---------- Docs ----------
+      - name: Build docs
+        run: |
+          cd docs
+          npm ci --ignore-scripts
+          npm run build-docs
+          npm run build
+
+      # ---------- Docker ----------
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build & push backend image
+        uses: docker/build-push-action@v6
+        with:
+          context: backend
+          push: true
+          tags: |
+            ghcr.io/svsticky/committeeclash/backend:latest
+            ghcr.io/svsticky/committeeclash/backend:${{ github.sha }}
+
+      - name: Build & push frontend image
+        uses: docker/build-push-action@v6
+        with:
+          context: frontend
+          push: true
+          tags: |
+            ghcr.io/svsticky/committeeclash/frontend:latest
+            ghcr.io/svsticky/committeeclash/frontend:${{ github.sha }}
+
+      - name: Build & push docs image
+        uses: docker/build-push-action@v6
+        with:
+          context: docs
+          push: true
+          tags: |
+            ghcr.io/svsticky/committeeclash/docs:latest
+            ghcr.io/svsticky/committeeclash/docs:${{ github.sha }}
