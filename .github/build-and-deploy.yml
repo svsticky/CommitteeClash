@@ -2,6 +2,7 @@ name: Build and Push Images
 
 on:
   push:
+  workflow_dispatch: # For manual dispatch on GitHub, and webhooks from Contentful
     branches: [ 
       "main",
       "CICD/do-not-build-on-prod-server"
