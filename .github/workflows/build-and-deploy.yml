@@ -80,11 +80,11 @@ jobs:
             ghcr.io/svsticky/committeeclash/frontend:latest
             ghcr.io/svsticky/committeeclash/frontend:${{ github.sha }}
 
-      - name: Build & push docs image
-        uses: docker/build-push-action@v6
-        with:
-          context: docs
-          push: true
-          tags: |
-            ghcr.io/svsticky/committeeclash/docs:latest
-            ghcr.io/svsticky/committeeclash/docs:${{ github.sha }}
+      # - name: Build & push docs image
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: docs
+      #     push: true
+      #     tags: |
+      #       ghcr.io/svsticky/committeeclash/docs:latest
+      #       ghcr.io/svsticky/committeeclash/docs:${{ github.sha }}
