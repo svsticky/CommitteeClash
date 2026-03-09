@@ -36,6 +36,7 @@ services:
       - prod_network
     volumes:
       - submittedimages:/app/submittedimages # Persist submitted images
+      - /var/run/postgresql/.s.PGSQL.5432:/var/run/postgresql/.s.PGSQL.5432
     healthcheck:
       test: ["CMD", "curl", "-f", "http://backend:8080/status"]
       interval: 10s
