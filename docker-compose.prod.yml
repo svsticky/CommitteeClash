@@ -10,33 +10,6 @@ secrets:
     file: ./postgres_password.secret
 
 services:
-  # Production database with persistent volume
-  database:
-    user: root
-    privileged: true
-    image: postgres:18
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=postgres
-      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
-    secrets:
-      - postgres_password
-    volumes:
-      - postgres_data:/var/lib/postgresql # Persistent volume
-    networks:
-      - prod_network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    restart: unless-stopped
-    logging:
-      driver: "local"
-      options:
-        max-size: "10m"
-        max-file: "5"
-
   # Production backend
   backend:
     user: root
@@ -49,7 +22,7 @@ services:
       - "${BACKEND_PORT:-8080}:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - CONNECTION_STRING=Host=database;Port=5432;Username=postgres;Password=<PASSWORD>;Database=postgres;
+      - CONNECTION_STRING=Host=/run/postgresql/;Port=5432;Username=committeeclash;Password=<PASSWORD>;Database=committeeclash
       - OAUTH_PROVIDER_NAME=${OAUTH_PROVIDER_NAME:-Koala}
       - OAUTH_PROVIDER_URL=${OAUTH_PROVIDER_URL:-https://koala.svsticky.nl/}
       - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
@@ -59,9 +32,6 @@ services:
       - postgres_password
     extra_hosts:
       - "koala.dev.svsticky.nl:5.75.177.125"
-    depends_on:
-      database:
-        condition: service_healthy
     networks:
       - prod_network
     volumes:
