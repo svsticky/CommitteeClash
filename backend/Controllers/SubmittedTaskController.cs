@@ -44,11 +44,11 @@ public class SubmittedTaskController : Controller
     /// <summary>
     /// The maximum file size allowed for submitted images.
     /// This constant defines the maximum size of an image file that can be submitted by users.
-    /// It is set to 5 MB (5 * 1024 * 1024 bytes) to ensure that the images are not too large,
+    /// It is set to 10 MB (10 * 1024 * 1024 bytes) to ensure that the images are not too large,
     /// which helps maintain performance and storage efficiency.
     /// This limit is enforced during the task submission process to prevent excessively large files from being uploaded.
     /// </summary>
-    private const long maxFileSize = 5 * 1024 * 1024; // 5 MB
+    private const long maxFileSize = 10 * 1024 * 1024; // 10 MB
 
     /// <summary>
     /// Constructor for the SubmittedTaskController.
@@ -144,9 +144,9 @@ public class SubmittedTaskController : Controller
         // validate size of image
         if (SubmitTaskRequestDto.Image.Length > maxFileSize)
         {
-            _logger.LogWarning("Image file size exceeds the maximum limit of 5 MB. Size: {FileSize} bytes",
+            _logger.LogWarning("Image file size exceeds the maximum limit of 10 MB. Size: {FileSize} bytes",
                 SubmitTaskRequestDto.Image.Length);
-            return BadRequest("Image file size exceeds the maximum limit of 5 MB.");
+            return BadRequest("Image file size exceeds the maximum limit of 10 MB.");
         }
 
         // Check if the task exists
