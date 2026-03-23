@@ -32,7 +32,7 @@ services:
       - ./backend:/app
       - /app/bin
       - /app/obj
-      - /var/run/postgresql/.s.PGSQL.5432:/var/run/postgresql/.s.PGSQL.5432
+      - /run/postgresql/.s.PGSQL.5432:/run/postgresql/.s.PGSQL.5432
     networks:
       - dev_network
     healthcheck:
