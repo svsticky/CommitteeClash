@@ -31,7 +31,7 @@ services:
       - oauth_client_secret
       - postgres_password
     extra_hosts:
-      - "koala.dev.svsticky.nl:5.75.177.125"
+      - "koala.dev.svsticky.nl:49.13.151.68"
     networks:
       - prod_network
     volumes:
