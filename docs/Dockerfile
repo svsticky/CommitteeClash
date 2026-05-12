@@ -1,5 +1,5 @@
 # -- Generation dependencies with .net, nodejs and npm and all packages for documentation generation
-FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS generation-deps
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS generation-deps
 WORKDIR /app
 RUN apk add --no-cache bash nodejs npm
 RUN dotnet new tool-manifest --name dotnet-tools
