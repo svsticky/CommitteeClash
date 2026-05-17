@@ -19,10 +19,6 @@ const nextConfig: NextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
 
-  // Disable ESLint during production builds
-  eslint: {
-    ignoreDuringBuilds: process.env.NODE_ENV === 'production', // Disable ESLint in production
-  },
 
   // Enable backend images
   images: {

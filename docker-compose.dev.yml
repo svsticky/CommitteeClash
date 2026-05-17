@@ -10,27 +10,6 @@ secrets:
     file: ./postgres_password.secret
 
 services:
-  # Start database
-  database:
-    image: postgres:18
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=postgres
-      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
-    secrets:
-      - postgres_password
-    tmpfs:
-      - /var/lib/postgresql
-    networks:
-      - dev_network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
   # Start backend after database
   backend:
     build:
@@ -44,7 +23,7 @@ services:
       - OAUTH_PROVIDER_URL=${OAUTH_PROVIDER_URL:-https://koala.dev.svsticky.nl}
       - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
       - ASPNETCORE_ENVIRONMENT=Development
-      - CONNECTION_STRING=Host=database;Port=5432;Username=postgres;Password=<PASSWORD>;Database=postgres;Include Error Detail=true
+      - CONNECTION_STRING=Host=/run/postgresql/;Port=5432;Username=committeeclash;Password=<PASSWORD>;Database=committeeclash;Include Error Detail=true
       - ADMIN_CLAIM=${ADMIN_CLAIM:-is_admin}
     secrets:
       - oauth_client_secret
@@ -53,9 +32,7 @@ services:
       - ./backend:/app
       - /app/bin
       - /app/obj
-    depends_on:
-      database:
-        condition: service_healthy
+      - /run/postgresql/.s.PGSQL.5432:/run/postgresql/.s.PGSQL.5432
     networks:
       - dev_network
     healthcheck:

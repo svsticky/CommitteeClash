@@ -1,4 +1,5 @@
 import { CSSCustomProperties } from '@/types/CSS-Custom-Properties';
+import { ToastContainer } from 'react-toastify';
 import './globals.css';
 
 export const metadata = {
@@ -39,7 +40,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className="w-full h-full" style={style}>
       <body className="w-full h-full">
-        <main className="w-full h-full">{children}</main>
+        <main className="w-full h-full">{children}<ToastContainer /></main>
       </body>
     </html>
   );

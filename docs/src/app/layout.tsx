@@ -1,4 +1,4 @@
-import { RootProvider } from "fumadocs-ui/provider";
+import { RootProvider } from 'fumadocs-ui/provider/next';
 import { Inter } from "next/font/google";
 import "./globals.css";
 
