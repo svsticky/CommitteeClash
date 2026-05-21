@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "dev": "npm run build-docs && next dev",
-        "build": "next build",
+        "build": "fumadocs-mdx && next build",
         "start": "next start",
         "lint": "next lint",
         "build-docs": "npm run prepare-for-build-api-docs && node scripts/generate-api-docs.mjs && node scripts/generate-backend-docs.js && node scripts/generate-frontend-docs.mjs",
