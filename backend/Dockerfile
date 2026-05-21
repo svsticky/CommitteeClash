@@ -20,7 +20,6 @@ ENTRYPOINT ["dotnet", "watch", "--project", "backend.csproj", "run", "--urls", "
 # Production stage - Builds and runs the application for production
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS production
 WORKDIR /app
-COPY submittedimages ./submittedimages
 RUN apt-get update && apt-get install -y wget curl && rm -rf /var/lib/apt/lists/*
 RUN rm -rf Migrations
 COPY --from=build /app/publish .
