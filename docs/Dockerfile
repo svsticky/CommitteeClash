@@ -9,11 +9,12 @@ ENV PATH="$PATH:/root/.dotnet/tools"
 RUN dotnet tool install -g docfx
 
 # -- Install node dependencies for the project
+# -- Install node dependencies for the project
 FROM node:lts-alpine AS project-deps
 WORKDIR /app
 
-COPY docs/package.json ./
-COPY docs/package-lock.json ./
+COPY docs/package.json ./ 
+COPY docs/package-lock.json ./ 
 COPY docs/source.config.ts ./
 
 RUN npm ci --ignore-scripts
