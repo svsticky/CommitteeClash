@@ -28,10 +28,6 @@ After starting up development, you can find the home page on http://localhost:30
 
 You can find and test the Web API endpoints with the help of swagger when running development mode. Swagger is accessable on http://localhost:8080/docs.
 
-# Documentation
-
-The project generates documentation automatically. The documentation can be found on https://docs.committeeclash.svsticky.nl/. After starting the project, you can find the home page of the documentation website on http://localhost:3001.
-
 # OAuth
 
 The application uses OAuth for authorization and authentication. You have to set up the following set `<Your frontend url>/api/auth/callback/<Your OAUTH_PROVIDER_NAME in env file>` as callback url at your OAuth provider.
