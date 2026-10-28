@@ -38,7 +38,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: Backend/Dockerfile
+          file: ./backend/Dockerfile
           push: true
           tags: |
             ${{ github.ref == 'refs/heads/main' && format('{0}:latest', env.IMAGE_BACKEND) || '' }}
@@ -48,8 +48,8 @@ jobs:
       - name: Build and push Frontend
         uses: docker/build-push-action@v5
         with:
-          context: ./Frontend
-          file: ./Frontend/Dockerfile
+          context: ./frontend
+          file: ./frontend/Dockerfile
           push: true
           tags: |
             ${{ github.ref == 'refs/heads/main' && format('{0}:latest', env.IMAGE_FRONTEND) || '' }}
