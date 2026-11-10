@@ -10,7 +10,7 @@ import { createAuthOptions } from './auth/authOptions';
  * @template T - The type of the data to be validated.
  * @param {z.ZodSchema<T>} schema - The Zod schema to validate the fetched data against.
  * @param {string} url - The URL to fetch data from.
- * @returns {Promise<z.SafeParseReturnType<T, T>>} - A promise that resolves to a SafeParseReturnType containing the validated data or an error.
+ * @returns {Promise<z.ZodSafeParseResult<T>>} - A promise that resolves to a ZodSafeParseResult containing the validated data or an error.
  *
  * @remarks
  * If the fetch request fails (response.ok is false), the function will return an error object
@@ -20,7 +20,7 @@ import { createAuthOptions } from './auth/authOptions';
 export async function FetchWithValidation<T>(
   schema: z.ZodSchema<T>,
   url: string
-): Promise<z.SafeParseReturnType<T, T>> {
+): Promise<z.ZodSafeParseResult<T>> {
   try {
     const session = await getServerSession(createAuthOptions());
 
@@ -44,7 +44,7 @@ export async function FetchWithValidation<T>(
       const fetchErrorResponse = {
         success: false,
         error: new Error(await response.text()),
-      } as z.SafeParseReturnType<T, T>;
+      } as z.ZodSafeParseResult<T>;
       return fetchErrorResponse;
     }
 
@@ -66,7 +66,7 @@ export async function FetchWithValidation<T>(
     const fetchErrorResponse = {
       success: false,
       error: error instanceof Error ? error : new Error('Unknown error'),
-    } as z.SafeParseReturnType<T, T>;
+    } as z.ZodSafeParseResult<T>;
     return fetchErrorResponse;
   }
 }

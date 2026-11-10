@@ -4,9 +4,6 @@ multi-ecosystem-groups:
   frontend:
     schedule:
       interval: "weekly"
-  docs:
-    schedule:
-      interval: "weekly"
   backend:
     schedule:
       interval: "weekly"
@@ -23,15 +20,6 @@ updates:
     directory: "/frontend"
     patterns: ["*"]
     multi-ecosystem-group: "frontend"
-    
-  - package-ecosystem: "docker"
-    directory: "/docs"
-    patterns: ["*"]
-    multi-ecosystem-group: "docs"
-  - package-ecosystem: "npm"
-    directory: "/docs"
-    patterns: ["*"]
-    multi-ecosystem-group: "docs"
     
   - package-ecosystem: "docker"
     directory: "/backend"
